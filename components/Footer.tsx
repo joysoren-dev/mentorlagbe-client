@@ -107,7 +107,7 @@ export default function Footer() {
         </div>
 
         <div className="mt-10 flex flex-col items-center justify-between gap-4 border-t border-slate-800 pt-6 text-xs text-slate-400 sm:flex-row">
-          <p>© {new Date().getFullYear()} MentorLagbe. All rights reserved.</p>
+          <p>© 2026 MentorLagbe. All rights reserved.</p>
           <p>Built for students, mentors, and modern learning communities.</p>
         </div>
       </div>
