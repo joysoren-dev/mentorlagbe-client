@@ -14,6 +14,7 @@ import {
   Sparkles,
   Users,
 } from "lucide-react";
+import FeaturedTuitions from "@/components/FeaturedTuitions";
 
 interface HeroSlide {
   id: number;
@@ -329,6 +330,8 @@ export default function HomePage() {
           </div>
         </div>
       </section>
+      {/* Featured Tuitions Section */}
+      <FeaturedTuitions />
     </div>
   );
 }
