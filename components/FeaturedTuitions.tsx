@@ -23,8 +23,10 @@ interface TuitionItem {
   location?: string;
   monthlyFee: number;
   schedule?: string;
-  tutorName?: string;
+  daysPerWeek?: number;
   status?: string;
+  approvalStatus?: string;
+  isActive?: boolean;
 }
 
 export default function FeaturedTuitions() {
@@ -37,7 +39,7 @@ export default function FeaturedTuitions() {
     const loadFeatured = async () => {
       try {
         setLoading(true);
-        const payload = await apiRequest<unknown>("/tuitions");
+        const payload = await apiRequest<unknown>("/api/tuitions");
         const dataObj =
           payload && typeof payload === "object"
             ? (payload as { tuitions?: unknown; data?: unknown })
@@ -53,10 +55,11 @@ export default function FeaturedTuitions() {
 
         const typedList = rawList as TuitionItem[];
         const approvedOnly = typedList.filter((item) => {
-          if (!item.status) return true;
+          if (item.isActive === false) return false;
+          const st = item.approvalStatus || item.status;
+          if (!st) return true;
           return (
-            item.status.toLowerCase() === "approved" ||
-            item.status.toLowerCase() === "active"
+            st.toLowerCase() === "approved" || st.toLowerCase() === "active"
           );
         });
 
@@ -75,7 +78,7 @@ export default function FeaturedTuitions() {
           setLoading(false);
         }
       }
-    }
+    };
 
     loadFeatured();
     return () => {
@@ -86,16 +89,15 @@ export default function FeaturedTuitions() {
   return (
     <section className="border-t border-slate-200 bg-slate-50 py-16 dark:border-slate-800 dark:bg-[#070d19] sm:py-20">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        {/* Section Header */}
         <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-end">
-          <div className="space-y-2">
+          <div className="space-y-1.5">
             <p className="text-xs font-semibold uppercase tracking-wider text-blue-600 dark:text-blue-400">
               Featured Listings
             </p>
             <h2 className="text-2xl font-bold tracking-tight text-slate-900 dark:text-white sm:text-3xl">
               Popular Tuitions &amp; Mentorship Batches
             </h2>
-            <p className="max-w-2xl text-sm text-slate-600 dark:text-slate-400 sm:text-base">
+            <p className="text-sm text-slate-600 dark:text-slate-400 sm:text-base">
               Explore active batches across subjects, class levels, and online
               or local learning modes.
             </p>
@@ -103,20 +105,19 @@ export default function FeaturedTuitions() {
 
           <Link
             href="/tuitions"
-            className="inline-flex items-center gap-2 self-start rounded-xl border border-slate-300 bg-white px-4 py-2.5 text-sm font-semibold text-slate-800 transition hover:border-blue-600 hover:text-blue-600 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100 dark:hover:border-blue-400 dark:hover:text-blue-400 sm:self-auto"
+            className="inline-flex items-center gap-1.5 self-start rounded-xl border border-slate-300 bg-white px-4 py-2.5 text-sm font-semibold text-slate-800 transition hover:border-blue-500 hover:text-blue-600 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200 dark:hover:border-blue-500 dark:hover:text-blue-400 sm:self-auto"
           >
             <span>View All Tuitions</span>
             <ArrowRight className="h-4 w-4" />
           </Link>
         </div>
 
-        {/* Loading Skeleton Grid */}
         {loading && (
-          <div className="mt-10 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {Array.from({ length: 6 }).map((_, idx) => (
+          <div className="mt-8 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            {Array.from({ length: 3 }).map((_, idx) => (
               <div
                 key={idx}
-                className="flex h-64 flex-col justify-between rounded-2xl border border-slate-200 bg-white p-6 dark:border-slate-800 dark:bg-slate-900"
+                className="flex h-60 flex-col justify-between rounded-2xl border border-slate-200 bg-white p-6 dark:border-slate-800 dark:bg-slate-900"
               >
                 <div className="space-y-3">
                   <div className="h-5 w-24 animate-pulse rounded-full bg-slate-200 dark:bg-slate-800" />
@@ -132,12 +133,14 @@ export default function FeaturedTuitions() {
           </div>
         )}
 
-        {/* Tuitions Grid (Equal Height Cards) */}
         {!loading && tuitions.length > 0 && (
-          <div className="mt-10 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="mt-8 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {tuitions.map((item, idx) => {
               const itemId = item._id || item.id || String(idx);
               const isOnline = item.mode?.toLowerCase() === "online";
+              const scheduleText =
+                item.schedule ||
+                (item.daysPerWeek ? `${item.daysPerWeek} days/week` : "");
 
               return (
                 <article
@@ -176,10 +179,10 @@ export default function FeaturedTuitions() {
                         <GraduationCap className="h-4 w-4 shrink-0 text-blue-600 dark:text-blue-400" />
                         <span>Level: {item.classLevel || "General"}</span>
                       </p>
-                      {item.schedule && (
+                      {scheduleText && (
                         <p className="flex items-center gap-2">
                           <Calendar className="h-4 w-4 shrink-0 text-blue-600 dark:text-blue-400" />
-                          <span className="line-clamp-1">{item.schedule}</span>
+                          <span className="line-clamp-1">{scheduleText}</span>
                         </p>
                       )}
                       {!isOnline && item.location && (
@@ -215,10 +218,9 @@ export default function FeaturedTuitions() {
           </div>
         )}
 
-        {/* Empty / Fallback State when no tuition records exist yet */}
         {!loading && tuitions.length === 0 && (
-          <div className="mt-10 rounded-2xl border border-dashed border-slate-300 bg-white p-10 text-center dark:border-slate-700 dark:bg-slate-900">
-            <h3 className="text-lg font-semibold text-slate-900 dark:text-white">
+          <div className="mt-8 rounded-2xl border border-dashed border-slate-300 bg-white p-10 text-center dark:border-slate-700 dark:bg-slate-900">
+            <h3 className="text-lg font-bold text-slate-900 dark:text-white">
               Featured Tuitions Will Appear Here
             </h3>
             <p className="mx-auto mt-2 max-w-md text-sm text-slate-600 dark:text-slate-400">
@@ -226,16 +228,16 @@ export default function FeaturedTuitions() {
               automatically once published. You can still explore the tuitions
               directory or join as a tutor.
             </p>
-            <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
+            <div className="mt-5 flex flex-wrap items-center justify-center gap-3">
               <Link
                 href="/tuitions"
-                className="rounded-xl bg-blue-600 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-blue-700"
+                className="inline-flex items-center justify-center rounded-xl bg-blue-600 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-blue-700"
               >
                 Browse Tuitions
               </Link>
               <Link
                 href="/sign-up"
-                className="rounded-xl border border-slate-300 px-5 py-2.5 text-sm font-semibold text-slate-800 transition hover:bg-slate-100 dark:border-slate-700 dark:text-slate-200 dark:hover:bg-slate-800"
+                className="inline-flex items-center justify-center rounded-xl border border-slate-300 bg-white px-4 py-2.5 text-sm font-semibold text-slate-800 transition hover:bg-slate-50 dark:border-slate-700 dark:bg-slate-950 dark:text-slate-200 dark:hover:bg-slate-800"
               >
                 Become a Tutor
               </Link>

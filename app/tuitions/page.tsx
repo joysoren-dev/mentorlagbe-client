@@ -27,8 +27,11 @@ interface TuitionItem {
   location?: string;
   monthlyFee: number;
   schedule?: string;
+  daysPerWeek?: number;
   tutorName?: string;
   status?: string;
+  approvalStatus?: string;
+  isActive?: boolean;
 }
 
 function TuitionsCatalogContent() {
@@ -53,7 +56,7 @@ function TuitionsCatalogContent() {
     const fetchTuitions = async () => {
       try {
         setLoading(true);
-        const payload = await apiRequest<unknown>("/tuitions");
+        const payload = await apiRequest<unknown>("/api/tuitions");
         const dataObj =
           payload && typeof payload === "object"
             ? (payload as { tuitions?: unknown; data?: unknown })
@@ -69,9 +72,12 @@ function TuitionsCatalogContent() {
 
         const typedList = rawList as TuitionItem[];
         const approvedOnly = typedList.filter((item) => {
-          if (!item.status) return true;
-          const normalized = item.status.toLowerCase();
-          return normalized === "approved" || normalized === "active";
+          if (item.isActive === false) return false;
+          const st = item.approvalStatus || item.status;
+          if (!st) return true;
+          return (
+            st.toLowerCase() === "approved" || st.toLowerCase() === "active"
+          );
         });
 
         if (isMounted) {
@@ -283,6 +289,9 @@ function TuitionsCatalogContent() {
             {filteredTuitions.map((item, idx) => {
               const itemId = item._id || item.id || String(idx);
               const isOnline = item.mode?.toLowerCase() === "online";
+              const scheduleText =
+                item.schedule ||
+                (item.daysPerWeek ? `${item.daysPerWeek} days/week` : "");
 
               return (
                 <article
@@ -321,10 +330,10 @@ function TuitionsCatalogContent() {
                         <GraduationCap className="h-4 w-4 shrink-0 text-blue-600 dark:text-blue-400" />
                         <span>Level: {item.classLevel || "General"}</span>
                       </p>
-                      {item.schedule && (
+                      {scheduleText && (
                         <p className="flex items-center gap-2">
                           <Calendar className="h-4 w-4 shrink-0 text-blue-600 dark:text-blue-400" />
-                          <span className="line-clamp-1">{item.schedule}</span>
+                          <span className="line-clamp-1">{scheduleText}</span>
                         </p>
                       )}
                       {!isOnline && item.location && (
