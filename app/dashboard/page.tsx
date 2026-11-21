@@ -293,11 +293,9 @@ export default function DashboardPage() {
   return (
     <div className="min-h-screen bg-slate-50 py-10 dark:bg-[#070d19] sm:py-12">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        {/* Top Orientation Banner */}
         <div className="rounded-2xl border border-slate-200 bg-[#06142e] p-6 text-white shadow-sm dark:border-slate-800 sm:p-8">
           <div className="flex flex-col justify-between gap-6 lg:flex-row lg:items-center">
             <div className="flex flex-col gap-4 sm:flex-row sm:items-center">
-              {/* Avatar in Top Banner */}
               <div className="relative h-16 w-16 shrink-0 overflow-hidden rounded-2xl border-2 border-blue-400/50 bg-blue-600/20">
                 {user.image ? (
                   <img
@@ -345,6 +343,16 @@ export default function DashboardPage() {
             </div>
 
             <div className="flex flex-wrap items-center gap-3">
+              {role === "admin" && (
+                <Link
+                  href="/dashboard/admin"
+                  className="inline-flex items-center gap-2 rounded-xl bg-blue-600 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-blue-500"
+                >
+                  <Shield className="h-4 w-4" />
+                  <span>Admin Center</span>
+                  <ArrowRight className="h-4 w-4" />
+                </Link>
+              )}
               {role === "tutor" && (
                 <Link
                   href="/dashboard/tutor"
@@ -390,7 +398,6 @@ export default function DashboardPage() {
           </div>
         </div>
 
-        {/* Clear Orientation Strip */}
         <div className="mt-6 grid grid-cols-1 gap-4 md:grid-cols-2">
           <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm dark:border-slate-800 dark:bg-slate-900">
             <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-blue-600 dark:text-blue-400">
@@ -413,7 +420,6 @@ export default function DashboardPage() {
           </div>
         </div>
 
-        {/* Role-Specific Action Cards */}
         {role === "student" && (
           <div className="mt-6 grid grid-cols-1 gap-6 md:grid-cols-3">
             <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900">
@@ -581,9 +587,13 @@ export default function DashboardPage() {
                 Approve or reject tutor batch listings so students only see
                 verified posts.
               </p>
-              <p className="mt-4 text-2xl font-bold text-slate-900 dark:text-white">
-                Queue Ready
-              </p>
+              <Link
+                href="/dashboard/admin/tuitions"
+                className="mt-4 inline-flex items-center gap-1.5 text-sm font-semibold text-blue-600 hover:text-blue-500 dark:text-blue-400"
+              >
+                <span>Open Moderation Queue</span>
+                <ArrowRight className="h-4 w-4" />
+              </Link>
             </div>
 
             <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900">
@@ -596,9 +606,13 @@ export default function DashboardPage() {
               <p className="mt-1.5 text-sm text-slate-600 dark:text-slate-400">
                 Inspect student, tutor, and admin accounts across the platform.
               </p>
-              <p className="mt-4 text-2xl font-bold text-slate-900 dark:text-white">
-                3 Roles
-              </p>
+              <Link
+                href="/dashboard/admin/users"
+                className="mt-4 inline-flex items-center gap-1.5 text-sm font-semibold text-blue-600 hover:text-blue-500 dark:text-blue-400"
+              >
+                <span>Manage Users &amp; Roles</span>
+                <ArrowRight className="h-4 w-4" />
+              </Link>
             </div>
 
             <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900">
@@ -606,17 +620,17 @@ export default function DashboardPage() {
                 <Crown className="h-5 w-5" />
               </div>
               <h2 className="mt-4 text-lg font-semibold text-slate-900 dark:text-white">
-                Guides &amp; Pricing
+                Admin Overview &amp; Pricing
               </h2>
               <p className="mt-1.5 text-sm text-slate-600 dark:text-slate-400">
-                Review platform workflow guides and subscription plan tiers.
+                View moderation stats and review subscription plan tiers.
               </p>
               <div className="mt-4 flex flex-wrap items-center gap-4">
                 <Link
-                  href="/how-it-works"
+                  href="/dashboard/admin"
                   className="inline-flex items-center gap-1 text-sm font-semibold text-blue-600 hover:text-blue-500 dark:text-blue-400"
                 >
-                  <span>How It Works</span>
+                  <span>Admin Home</span>
                   <ArrowRight className="h-3.5 w-3.5" />
                 </Link>
                 <Link
@@ -631,7 +645,6 @@ export default function DashboardPage() {
           </div>
         )}
 
-        {/* Role-Agnostic Update Profile Section (Student / Tutor / Admin) */}
         <div className="mt-8 rounded-2xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900 sm:p-8">
           <div className="flex flex-wrap items-center justify-between gap-2 border-b border-slate-200 pb-4 dark:border-slate-800">
             <div>
@@ -651,7 +664,6 @@ export default function DashboardPage() {
           </div>
 
           <form onSubmit={handleProfileSave} className="mt-6 space-y-6">
-            {/* Profile Photo Picker + URL */}
             <div className="flex flex-col gap-4 rounded-xl border border-slate-200 bg-slate-50 p-4 dark:border-slate-800 dark:bg-slate-950/70 sm:flex-row sm:items-center">
               <div className="h-16 w-16 shrink-0 overflow-hidden rounded-2xl border border-slate-300 bg-white dark:border-slate-700 dark:bg-slate-900">
                 {imageInput ? (
@@ -705,7 +717,6 @@ export default function DashboardPage() {
               </div>
             </div>
 
-            {/* Name, Email, Phone */}
             <div className="grid grid-cols-1 gap-5 md:grid-cols-3">
               <div>
                 <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300">
@@ -756,7 +767,6 @@ export default function DashboardPage() {
               </div>
             </div>
 
-            {/* Bio */}
             <div>
               <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300">
                 Short Bio / Learning or Teaching Note
