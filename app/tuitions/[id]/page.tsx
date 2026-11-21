@@ -47,8 +47,26 @@ interface StoredSession {
   token: string | null;
 }
 
-const DAY_OPTIONS = ["Sun / Tue / Thu", "Sat / Mon / Wed", "Fri / Sat"];
-const TIME_SLOTS = ["4:00 PM", "6:00 PM", "8:00 PM", "9:30 PM"];
+const SEVEN_DAYS = ["Sat", "Sun", "Mon", "Tue", "Wed", "Thu", "Fri"] as const;
+
+function format24HourTo12Hour(time24: string): string {
+  const parts = time24.split(":");
+  if (parts.length < 2) return "6:00 PM";
+  const hourNum = Number(parts[0]);
+  const minuteNum = Number(parts[1]);
+  if (Number.isNaN(hourNum) || Number.isNaN(minuteNum)) return "6:00 PM";
+
+  const period = hourNum >= 12 ? "PM" : "AM";
+  const hour12 = hourNum % 12 === 0 ? 12 : hourNum % 12;
+  const paddedMinutes = String(minuteNum).padStart(2, "0");
+  return `${hour12}:${paddedMinutes} ${period}`;
+}
+
+function buildScheduleString(days: string[], time24: string): string {
+  const daysPart = days.length > 0 ? days.join(" / ") : "Flexible Days";
+  const timePart = format24HourTo12Hour(time24);
+  return `${daysPart}, ${timePart}`;
+}
 
 function readSession(): StoredSession {
   if (typeof window === "undefined") return { user: null, token: null };
@@ -80,10 +98,14 @@ export default function TuitionDetailsPage() {
     token: null,
   });
   const [phone, setPhone] = useState("");
-  const [selectedDays, setSelectedDays] = useState<string>("Sun / Tue / Thu");
-  const [selectedTime, setSelectedTime] = useState<string>("6:00 PM");
+  const [selectedDays, setSelectedDays] = useState<string[]>([
+    "Sun",
+    "Tue",
+    "Thu",
+  ]);
+  const [time24, setTime24] = useState<string>("18:00");
   const [preferredSchedule, setPreferredSchedule] = useState(
-    "Sun / Tue / Thu, 6:00 PM",
+    buildScheduleString(["Sun", "Tue", "Thu"], "18:00"),
   );
   const [message, setMessage] = useState("");
   const [submitting, setSubmitting] = useState(false);
@@ -173,14 +195,19 @@ export default function TuitionDetailsPage() {
     };
   }, [tuitionId]);
 
-  const handleSelectDay = (days: string) => {
-    setSelectedDays(days);
-    setPreferredSchedule(`${days}, ${selectedTime}`);
+  const handleToggleDay = (day: string) => {
+    const updatedDays = selectedDays.includes(day)
+      ? selectedDays.filter((item) => item !== day)
+      : SEVEN_DAYS.filter((d) => selectedDays.includes(d) || d === day);
+
+    setSelectedDays(updatedDays);
+    setPreferredSchedule(buildScheduleString(updatedDays, time24));
   };
 
-  const handleSelectTime = (slot: string) => {
-    setSelectedTime(slot);
-    setPreferredSchedule(`${selectedDays}, ${slot}`);
+  const handleTimeChange = (nextTime: string) => {
+    const value = nextTime || "18:00";
+    setTime24(value);
+    setPreferredSchedule(buildScheduleString(selectedDays, value));
   };
 
   const handleApplySubmit = async (e: FormEvent) => {
@@ -478,55 +505,52 @@ export default function TuitionDetailsPage() {
                       />
                     </div>
 
-                    <div className="space-y-2.5 rounded-xl border border-slate-200/90 bg-slate-50/80 p-3.5 dark:border-slate-800 dark:bg-slate-950/60">
+                    <div className="space-y-3 rounded-xl border border-slate-200/90 bg-slate-50/80 p-3.5 dark:border-slate-800 dark:bg-slate-950/60">
                       <div className="flex items-center justify-between">
                         <label className="flex items-center gap-1.5 text-xs font-semibold text-slate-800 dark:text-slate-200">
                           <Clock className="h-3.5 w-3.5 text-blue-600 dark:text-blue-400" />
-                          <span>Preferred Schedule</span>
+                          <span>Preferred Schedule (7-Day &amp; 24-Hour)</span>
                         </label>
                         <span className="text-[11px] font-medium text-blue-600 dark:text-blue-400">
-                          Quick Select
+                          {selectedDays.length}{" "}
+                          {selectedDays.length === 1 ? "day" : "days"}
                         </span>
                       </div>
 
-                      <div className="flex flex-wrap gap-1.5">
-                        {DAY_OPTIONS.map((days) => {
-                          const active = selectedDays === days;
+                      <div className="grid grid-cols-7 gap-1">
+                        {SEVEN_DAYS.map((day) => {
+                          const active = selectedDays.includes(day);
                           return (
                             <button
-                              key={days}
+                              key={day}
                               type="button"
-                              onClick={() => handleSelectDay(days)}
-                              className={`rounded-lg px-2.5 py-1 text-[11px] font-semibold transition ${
+                              onClick={() => handleToggleDay(day)}
+                              className={`rounded-lg py-1.5 text-[11px] font-semibold transition ${
                                 active
                                   ? "bg-blue-600 text-white"
                                   : "border border-slate-200 bg-white text-slate-700 hover:border-blue-400 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-300"
                               }`}
                             >
-                              {days}
+                              {day}
                             </button>
                           );
                         })}
                       </div>
 
-                      <div className="flex flex-wrap gap-1.5">
-                        {TIME_SLOTS.map((slot) => {
-                          const active = selectedTime === slot;
-                          return (
-                            <button
-                              key={slot}
-                              type="button"
-                              onClick={() => handleSelectTime(slot)}
-                              className={`rounded-lg px-2.5 py-1 text-[11px] font-semibold transition ${
-                                active
-                                  ? "bg-slate-900 text-white dark:bg-blue-500"
-                                  : "border border-slate-200 bg-white text-slate-700 hover:border-blue-400 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-300"
-                              }`}
-                            >
-                              {slot}
-                            </button>
-                          );
-                        })}
+                      <div className="flex flex-col gap-1.5 sm:flex-row sm:items-center sm:justify-between">
+                        <label
+                          htmlFor="preferred-time-24h"
+                          className="text-[11px] font-semibold text-slate-700 dark:text-slate-300"
+                        >
+                          Time Slot (24-Hour Input)
+                        </label>
+                        <input
+                          id="preferred-time-24h"
+                          type="time"
+                          value={time24}
+                          onChange={(e) => handleTimeChange(e.target.value)}
+                          className="rounded-lg border border-slate-300 bg-white px-2.5 py-1.5 text-xs font-medium text-slate-900 focus:border-blue-600 focus:outline-none dark:border-slate-700 dark:bg-slate-900 dark:text-white"
+                        />
                       </div>
 
                       <input
