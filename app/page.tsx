@@ -15,6 +15,7 @@ import {
   Users,
 } from "lucide-react";
 import FeaturedTuitions from "@/components/FeaturedTuitions";
+import HowItWorks from "@/components/HowItWorks";
 
 interface HeroSlide {
   id: number;
@@ -332,6 +333,8 @@ export default function HomePage() {
       </section>
       {/* Featured Tuitions Section */}
       <FeaturedTuitions />
+      {/* How It Works Section */}
+      <HowItWorks />
     </div>
   );
 }
