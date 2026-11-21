@@ -19,6 +19,7 @@ interface AuthUser {
   id?: string;
   name?: string;
   email?: string;
+  image?: string;
   role?: "student" | "tutor" | "admin" | string;
   plan?: string;
 }
@@ -41,6 +42,14 @@ function extractUserFromStorage(): AuthUser | null {
       id: candidate.id || candidate._id,
       name: candidate.name || candidate.email?.split("@")[0] || "User",
       email: candidate.email || "",
+      image:
+        typeof candidate.image === "string"
+          ? candidate.image
+          : typeof candidate.avatar === "string"
+            ? candidate.avatar
+            : typeof candidate.picture === "string"
+              ? candidate.picture
+              : "",
       role: candidate.role || "student",
       plan: candidate.plan || "free",
     };
@@ -56,8 +65,10 @@ export default function Navbar() {
   const [isDark, setIsDark] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [user, setUser] = useState<AuthUser | null>(null);
+  const [imgError, setImgError] = useState(false);
 
   const syncUser = useCallback(() => {
+    setImgError(false);
     setUser(extractUserFromStorage());
   }, []);
 
@@ -122,6 +133,21 @@ export default function Navbar() {
 
   const roleLabel = (user?.role || "student").toUpperCase();
 
+  const renderAvatar = () => {
+    if (user?.image && !imgError) {
+      return (
+        <img
+          src={user.image}
+          alt={user.name || "User avatar"}
+          referrerPolicy="no-referrer"
+          onError={() => setImgError(true)}
+          className="h-5 w-5 rounded-full object-cover"
+        />
+      );
+    }
+    return <UserCircle2 className="h-4 w-4 text-blue-400" />;
+  };
+
   return (
     <header className="sticky top-0 z-50 w-full border-b border-slate-200/80 bg-[#06142e]/95 text-white backdrop-blur dark:border-slate-800">
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
@@ -166,7 +192,7 @@ export default function Navbar() {
           {user ? (
             <>
               <div className="flex items-center gap-2 rounded-lg border border-slate-700/90 bg-slate-900/85 px-3 py-1.5">
-                <UserCircle2 className="h-4 w-4 text-blue-400" />
+                {renderAvatar()}
                 <span className="max-w-[130px] truncate text-xs font-semibold text-white">
                   {user.name}
                 </span>
@@ -257,7 +283,7 @@ export default function Navbar() {
               <div className="space-y-2.5 border-t border-slate-800 pt-3">
                 <div className="flex items-center justify-between rounded-lg bg-slate-900/85 px-3 py-2">
                   <div className="flex items-center gap-2">
-                    <UserCircle2 className="h-4 w-4 text-blue-400" />
+                    {renderAvatar()}
                     <span className="text-xs font-semibold text-white">
                       {user.name}
                     </span>
