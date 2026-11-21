@@ -1,13 +1,65 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import Link from "next/link";
-import { GraduationCap, Menu, Moon, Sun, X } from "lucide-react";
+import { usePathname, useRouter } from "next/navigation";
+import {
+  GraduationCap,
+  LayoutDashboard,
+  LogOut,
+  Menu,
+  Moon,
+  Sun,
+  UserCircle2,
+  X,
+} from "lucide-react";
 import { toast } from "sonner";
 
+interface AuthUser {
+  id?: string;
+  name?: string;
+  email?: string;
+  role?: "student" | "tutor" | "admin" | string;
+  plan?: string;
+}
+
+function extractUserFromStorage(): AuthUser | null {
+  if (typeof window === "undefined") return null;
+  try {
+    const raw = localStorage.getItem("mentorlagbe-user");
+    if (!raw) return null;
+    const parsed = JSON.parse(raw);
+    const candidate =
+      parsed && typeof parsed === "object" && "user" in parsed && parsed.user
+        ? parsed.user
+        : parsed;
+
+    if (!candidate || typeof candidate !== "object") return null;
+    if (!candidate.email && !candidate.name && !candidate.role) return null;
+
+    return {
+      id: candidate.id || candidate._id,
+      name: candidate.name || candidate.email?.split("@")[0] || "User",
+      email: candidate.email || "",
+      role: candidate.role || "student",
+      plan: candidate.plan || "free",
+    };
+  } catch {
+    return null;
+  }
+}
+
 export default function Navbar() {
+  const pathname = usePathname();
+  const router = useRouter();
+
   const [isDark, setIsDark] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [user, setUser] = useState<AuthUser | null>(null);
+
+  const syncUser = useCallback(() => {
+    setUser(extractUserFromStorage());
+  }, []);
 
   useEffect(() => {
     const savedTheme = localStorage.getItem("mentorlagbe-theme");
@@ -15,7 +67,28 @@ export default function Navbar() {
       document.documentElement.classList.add("dark");
       setIsDark(true);
     }
-  }, []);
+
+    syncUser();
+
+    const handleAuthChange = () => syncUser();
+    const handleStorage = (e: StorageEvent) => {
+      if (e.key === "mentorlagbe-user" || e.key === null) {
+        syncUser();
+      }
+    };
+
+    window.addEventListener("mentorlagbe-auth-change", handleAuthChange);
+    window.addEventListener("storage", handleStorage);
+
+    return () => {
+      window.removeEventListener("mentorlagbe-auth-change", handleAuthChange);
+      window.removeEventListener("storage", handleStorage);
+    };
+  }, [syncUser]);
+
+  useEffect(() => {
+    syncUser();
+  }, [pathname, syncUser]);
 
   const toggleTheme = () => {
     const nextDark = !isDark;
@@ -31,12 +104,23 @@ export default function Navbar() {
     }
   };
 
+  const handleLogout = () => {
+    localStorage.removeItem("mentorlagbe-user");
+    window.dispatchEvent(new Event("mentorlagbe-auth-change"));
+    setUser(null);
+    setMobileOpen(false);
+    toast.success("Logged out successfully.");
+    router.push("/sign-in");
+  };
+
   const navLinks = [
     { label: "Home", href: "/" },
     { label: "Browse Tuitions", href: "/tuitions" },
     { label: "Pricing", href: "/pricing" },
     { label: "How It Works", href: "/how-it-works" },
   ];
+
+  const roleLabel = (user?.role || "student").toUpperCase();
 
   return (
     <header className="sticky top-0 z-50 w-full border-b border-slate-200/80 bg-[#06142e]/95 text-white backdrop-blur dark:border-slate-800">
@@ -56,7 +140,9 @@ export default function Navbar() {
             <Link
               key={item.href}
               href={item.href}
-              className="text-sm font-medium text-slate-200 transition hover:text-blue-400"
+              className={`text-sm font-medium transition hover:text-blue-400 ${
+                pathname === item.href ? "text-blue-400" : "text-slate-200"
+              }`}
             >
               {item.label}
             </Link>
@@ -77,19 +163,52 @@ export default function Navbar() {
             )}
           </button>
 
-          <Link
-            href="/sign-in"
-            className="rounded-lg border border-slate-600 px-4 py-2 text-sm font-medium text-slate-100 transition hover:border-blue-400 hover:bg-slate-800/70"
-          >
-            Sign In
-          </Link>
+          {user ? (
+            <>
+              <div className="flex items-center gap-2 rounded-lg border border-slate-700/90 bg-slate-900/85 px-3 py-1.5">
+                <UserCircle2 className="h-4 w-4 text-blue-400" />
+                <span className="max-w-[130px] truncate text-xs font-semibold text-white">
+                  {user.name}
+                </span>
+                <span className="rounded bg-blue-500/20 px-1.5 py-0.5 text-[10px] font-bold tracking-wider text-blue-300">
+                  {roleLabel}
+                </span>
+              </div>
 
-          <Link
-            href="/sign-up"
-            className="rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white transition hover:bg-blue-500"
-          >
-            Sign Up
-          </Link>
+              <Link
+                href="/dashboard"
+                className="inline-flex items-center gap-1.5 rounded-lg bg-blue-600 px-3.5 py-2 text-sm font-medium text-white transition hover:bg-blue-500"
+              >
+                <LayoutDashboard className="h-4 w-4" />
+                <span>Dashboard</span>
+              </Link>
+
+              <button
+                type="button"
+                onClick={handleLogout}
+                className="inline-flex items-center gap-1.5 rounded-lg border border-slate-600 px-3.5 py-2 text-sm font-medium text-slate-100 transition hover:border-red-400/70 hover:bg-red-500/10 hover:text-red-200"
+              >
+                <LogOut className="h-4 w-4" />
+                <span>Logout</span>
+              </button>
+            </>
+          ) : (
+            <>
+              <Link
+                href="/sign-in"
+                className="rounded-lg border border-slate-600 px-4 py-2 text-sm font-medium text-slate-100 transition hover:border-blue-400 hover:bg-slate-800/70"
+              >
+                Sign In
+              </Link>
+
+              <Link
+                href="/sign-up"
+                className="rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white transition hover:bg-blue-500"
+              >
+                Sign Up
+              </Link>
+            </>
+          )}
         </div>
 
         <div className="flex items-center gap-2 md:hidden">
@@ -133,22 +252,56 @@ export default function Navbar() {
                 {item.label}
               </Link>
             ))}
-            <div className="flex items-center gap-3 pt-2">
-              <Link
-                href="/sign-in"
-                onClick={() => setMobileOpen(false)}
-                className="flex-1 rounded-lg border border-slate-600 px-3 py-2 text-center text-sm font-medium text-white"
-              >
-                Sign In
-              </Link>
-              <Link
-                href="/sign-up"
-                onClick={() => setMobileOpen(false)}
-                className="flex-1 rounded-lg bg-blue-600 px-3 py-2 text-center text-sm font-medium text-white"
-              >
-                Sign Up
-              </Link>
-            </div>
+
+            {user ? (
+              <div className="space-y-2.5 border-t border-slate-800 pt-3">
+                <div className="flex items-center justify-between rounded-lg bg-slate-900/85 px-3 py-2">
+                  <div className="flex items-center gap-2">
+                    <UserCircle2 className="h-4 w-4 text-blue-400" />
+                    <span className="text-xs font-semibold text-white">
+                      {user.name}
+                    </span>
+                  </div>
+                  <span className="rounded bg-blue-500/20 px-1.5 py-0.5 text-[10px] font-bold text-blue-300">
+                    {roleLabel}
+                  </span>
+                </div>
+
+                <div className="flex items-center gap-3">
+                  <Link
+                    href="/dashboard"
+                    onClick={() => setMobileOpen(false)}
+                    className="flex-1 rounded-lg bg-blue-600 px-3 py-2 text-center text-sm font-medium text-white"
+                  >
+                    Dashboard
+                  </Link>
+                  <button
+                    type="button"
+                    onClick={handleLogout}
+                    className="flex-1 rounded-lg border border-slate-600 px-3 py-2 text-center text-sm font-medium text-white"
+                  >
+                    Logout
+                  </button>
+                </div>
+              </div>
+            ) : (
+              <div className="flex items-center gap-3 pt-2">
+                <Link
+                  href="/sign-in"
+                  onClick={() => setMobileOpen(false)}
+                  className="flex-1 rounded-lg border border-slate-600 px-3 py-2 text-center text-sm font-medium text-white"
+                >
+                  Sign In
+                </Link>
+                <Link
+                  href="/sign-up"
+                  onClick={() => setMobileOpen(false)}
+                  className="flex-1 rounded-lg bg-blue-600 px-3 py-2 text-center text-sm font-medium text-white"
+                >
+                  Sign Up
+                </Link>
+              </div>
+            )}
           </div>
         </div>
       )}

@@ -32,8 +32,22 @@ export default function SignUpPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!name.trim() || !email.trim() || !password.trim()) {
+    const trimmedName = name.trim();
+    const trimmedEmail = email.trim();
+
+    if (!trimmedName || !trimmedEmail || !password.trim()) {
       toast.error("Please fill in your name, email, and password.");
+      return;
+    }
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(trimmedEmail)) {
+      toast.error("Please enter a valid email address.");
+      return;
+    }
+
+    if (password.length < 6) {
+      toast.error("Password must be at least 6 characters long.");
       return;
     }
 
@@ -42,10 +56,11 @@ export default function SignUpPage() {
       await apiRequest("/api/auth/register", {
         method: "POST",
         body: JSON.stringify({
-          name: name.trim(),
-          email: email.trim(),
+          name: trimmedName,
+          email: trimmedEmail,
           password,
           role,
+          plan: "free",
         }),
       });
 
@@ -56,7 +71,7 @@ export default function SignUpPage() {
         err instanceof Error && err.message
           ? err.message
           : "Could not create account right now.";
-      toast.info(message);
+      toast.error(message);
     } finally {
       setSubmitting(false);
     }
@@ -150,7 +165,7 @@ export default function SignUpPage() {
                   type="password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  placeholder="Create a password"
+                  placeholder="Create a password (min. 6 characters)"
                   className="w-full rounded-xl border border-slate-300 bg-slate-50 py-2.5 pr-4 pl-10 text-sm text-slate-900 placeholder-slate-400 focus:border-blue-600 focus:bg-white focus:outline-none dark:border-slate-700 dark:bg-slate-950 dark:text-white"
                 />
               </div>

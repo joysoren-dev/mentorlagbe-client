@@ -23,8 +23,15 @@ export default function SignInPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!email.trim() || !password.trim()) {
+    const trimmedEmail = email.trim();
+    if (!trimmedEmail || !password.trim()) {
       toast.error("Please enter both your email and password.");
+      return;
+    }
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(trimmedEmail)) {
+      toast.error("Please enter a valid email address.");
       return;
     }
 
@@ -33,13 +40,14 @@ export default function SignInPage() {
       const res = await apiRequest<unknown>("/api/auth/login", {
         method: "POST",
         body: JSON.stringify({
-          email: email.trim(),
+          email: trimmedEmail,
           password,
         }),
       });
 
       if (res && typeof res === "object") {
         localStorage.setItem("mentorlagbe-user", JSON.stringify(res));
+        window.dispatchEvent(new Event("mentorlagbe-auth-change"));
       }
 
       toast.success("Signed in successfully!");
@@ -49,7 +57,7 @@ export default function SignInPage() {
         err instanceof Error && err.message
           ? err.message
           : "Could not sign in right now. Please check your credentials.";
-      toast.info(message);
+      toast.error(message);
     } finally {
       setSubmitting(false);
     }
