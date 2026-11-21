@@ -10,6 +10,7 @@ import {
   CheckCircle2,
   Compass,
   Crown,
+  FileText,
   GraduationCap,
   HelpCircle,
   ImageIcon,
@@ -267,7 +268,7 @@ export default function DashboardPage() {
           doingNow:
             "Managing your tutor identity, batch workflow, and free/pro plan readiness.",
           nextStep:
-            "Set up your batches, review incoming applicants, or check Tutor Pro plans.",
+            "Open Tutor Workspace, post a new batch, or review incoming student applicants.",
         }
       : role === "admin"
         ? {
@@ -286,7 +287,7 @@ export default function DashboardPage() {
             doingNow:
               "Viewing your student account, active application status, and learning path.",
             nextStep:
-              "Browse active tuitions, check how it works, or inspect free/mentor pricing.",
+              "Open My Applications, browse active tuitions, or inspect free/mentor pricing.",
           };
 
   return (
@@ -344,6 +345,26 @@ export default function DashboardPage() {
             </div>
 
             <div className="flex flex-wrap items-center gap-3">
+              {role === "tutor" && (
+                <Link
+                  href="/dashboard/tutor"
+                  className="inline-flex items-center gap-2 rounded-xl bg-blue-600 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-blue-500"
+                >
+                  <LayoutDashboard className="h-4 w-4" />
+                  <span>Tutor Workspace</span>
+                  <ArrowRight className="h-4 w-4" />
+                </Link>
+              )}
+              {role === "student" && (
+                <Link
+                  href="/dashboard/student/my-applications"
+                  className="inline-flex items-center gap-2 rounded-xl bg-blue-600 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-blue-500"
+                >
+                  <FileText className="h-4 w-4" />
+                  <span>My Applications</span>
+                  <ArrowRight className="h-4 w-4" />
+                </Link>
+              )}
               <Link
                 href="/tuitions"
                 className="inline-flex items-center gap-2 rounded-xl border border-slate-700 bg-slate-900/90 px-4 py-2.5 text-sm font-semibold text-white transition hover:border-blue-500"
@@ -360,11 +381,10 @@ export default function DashboardPage() {
               </Link>
               <Link
                 href="/pricing"
-                className="inline-flex items-center gap-2 rounded-xl bg-blue-600 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-blue-500"
+                className="inline-flex items-center gap-2 rounded-xl border border-slate-700 bg-slate-900/90 px-4 py-2.5 text-sm font-semibold text-white transition hover:border-blue-500"
               >
-                <Sparkles className="h-4 w-4" />
+                <Sparkles className="h-4 w-4 text-blue-400" />
                 <span>Pricing</span>
-                <ArrowRight className="h-4 w-4" />
               </Link>
             </div>
           </div>
@@ -407,9 +427,13 @@ export default function DashboardPage() {
                 Track applications you submit to tutors and check whether they
                 are pending, accepted, or rejected.
               </p>
-              <p className="mt-4 text-2xl font-bold text-slate-900 dark:text-white">
-                0 Active
-              </p>
+              <Link
+                href="/dashboard/student/my-applications"
+                className="mt-4 inline-flex items-center gap-1.5 text-sm font-semibold text-blue-600 hover:text-blue-500 dark:text-blue-400"
+              >
+                <span>Open My Applications</span>
+                <ArrowRight className="h-4 w-4" />
+              </Link>
             </div>
 
             <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900">
@@ -437,18 +461,18 @@ export default function DashboardPage() {
                 <Tag className="h-5 w-5" />
               </div>
               <h2 className="mt-4 text-lg font-semibold text-slate-900 dark:text-white">
-                How It Works &amp; Pricing
+                Student Overview &amp; Pricing
               </h2>
               <p className="mt-1.5 text-sm text-slate-600 dark:text-slate-400">
-                See the step-by-step platform flow and check transparent plans
-                anytime (students apply free on Starter).
+                View your student dashboard stats or inspect transparent plans
+                anytime.
               </p>
               <div className="mt-4 flex flex-wrap items-center gap-4">
                 <Link
-                  href="/how-it-works"
+                  href="/dashboard/student"
                   className="inline-flex items-center gap-1 text-sm font-semibold text-blue-600 hover:text-blue-500 dark:text-blue-400"
                 >
-                  <span>How It Works</span>
+                  <span>Student Home</span>
                   <ArrowRight className="h-3.5 w-3.5" />
                 </Link>
                 <Link
@@ -476,9 +500,21 @@ export default function DashboardPage() {
                 Create and manage batches with subject, class level, schedule,
                 and monthly fee.
               </p>
-              <p className="mt-4 text-2xl font-bold text-slate-900 dark:text-white">
-                {planLabel === "PRO" ? "Pro Capacity" : "Starter Tier"}
-              </p>
+              <div className="mt-4 flex flex-wrap items-center gap-4">
+                <Link
+                  href="/dashboard/tutor/my-tuitions"
+                  className="inline-flex items-center gap-1.5 text-sm font-semibold text-blue-600 hover:text-blue-500 dark:text-blue-400"
+                >
+                  <span>Manage Batches</span>
+                  <ArrowRight className="h-4 w-4" />
+                </Link>
+                <Link
+                  href="/dashboard/tutor/post-tuition"
+                  className="inline-flex items-center gap-1 text-sm font-semibold text-slate-700 hover:text-blue-600 dark:text-slate-300"
+                >
+                  <span>+ Post New</span>
+                </Link>
+              </div>
             </div>
 
             <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900">
@@ -489,12 +525,16 @@ export default function DashboardPage() {
                 Incoming Applicants
               </h2>
               <p className="mt-1.5 text-sm text-slate-600 dark:text-slate-400">
-                Review student requests on your batches and accept or decline
+                Review student requests on your batches and approve or reject
                 applications.
               </p>
-              <p className="mt-4 text-2xl font-bold text-slate-900 dark:text-white">
-                0 Pending
-              </p>
+              <Link
+                href="/dashboard/tutor/applicants"
+                className="mt-4 inline-flex items-center gap-1.5 text-sm font-semibold text-blue-600 hover:text-blue-500 dark:text-blue-400"
+              >
+                <span>Review Applicants</span>
+                <ArrowRight className="h-4 w-4" />
+              </Link>
             </div>
 
             <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900">
@@ -502,18 +542,18 @@ export default function DashboardPage() {
                 <Crown className="h-5 w-5" />
               </div>
               <h2 className="mt-4 text-lg font-semibold text-slate-900 dark:text-white">
-                How It Works &amp; Pricing ({planLabel})
+                Tutor Overview &amp; Plan ({planLabel})
               </h2>
               <p className="mt-1.5 text-sm text-slate-600 dark:text-slate-400">
-                Check batch approval steps or compare Mentor Pro and Coaching
-                plans whenever you want to scale.
+                Open your full tutor summary or compare Mentor Pro and Coaching
+                plans.
               </p>
               <div className="mt-4 flex flex-wrap items-center gap-4">
                 <Link
-                  href="/how-it-works"
+                  href="/dashboard/tutor"
                   className="inline-flex items-center gap-1 text-sm font-semibold text-blue-600 hover:text-blue-500 dark:text-blue-400"
                 >
-                  <span>How It Works</span>
+                  <span>Tutor Home</span>
                   <ArrowRight className="h-3.5 w-3.5" />
                 </Link>
                 <Link
