@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Suspense } from "react";
 import { Toaster } from "sonner";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -21,7 +22,9 @@ export default function RootLayout({
         suppressHydrationWarning
         className="flex min-h-screen flex-col antialiased"
       >
-        <Navbar />
+        <Suspense fallback={<div className="h-16 w-full bg-[#06142e]" />}>
+          <Navbar />
+        </Suspense>
         <main className="flex-1">{children}</main>
         <Footer />
         <Toaster richColors position="top-right" />

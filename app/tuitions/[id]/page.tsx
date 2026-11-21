@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { FormEvent, useEffect, useState } from "react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import {
@@ -8,9 +8,13 @@ import {
   BookOpen,
   Calendar,
   CheckCircle2,
+  Clock,
   GraduationCap,
   Laptop,
+  Loader2,
   MapPin,
+  Send,
+  ShieldCheck,
   UserCheck,
 } from "lucide-react";
 import { toast } from "sonner";
@@ -34,6 +38,35 @@ interface TuitionDetail {
   isActive?: boolean;
 }
 
+interface StoredSession {
+  user: {
+    name?: string;
+    email?: string;
+    role?: string;
+  } | null;
+  token: string | null;
+}
+
+const DAY_OPTIONS = ["Sun / Tue / Thu", "Sat / Mon / Wed", "Fri / Sat"];
+const TIME_SLOTS = ["4:00 PM", "6:00 PM", "8:00 PM", "9:30 PM"];
+
+function readSession(): StoredSession {
+  if (typeof window === "undefined") return { user: null, token: null };
+  try {
+    const raw = localStorage.getItem("mentorlagbe-user");
+    if (!raw) return { user: null, token: null };
+    const parsed = JSON.parse(raw) as Record<string, unknown>;
+    const token = typeof parsed.token === "string" ? parsed.token : null;
+    const candidate =
+      parsed.user && typeof parsed.user === "object"
+        ? (parsed.user as { name?: string; email?: string; role?: string })
+        : (parsed as { name?: string; email?: string; role?: string });
+    return { user: candidate, token };
+  } catch {
+    return { user: null, token: null };
+  }
+}
+
 export default function TuitionDetailsPage() {
   const params = useParams<{ id: string }>();
   const tuitionId = params?.id;
@@ -41,6 +74,28 @@ export default function TuitionDetailsPage() {
   const [tuition, setTuition] = useState<TuitionDetail | null>(null);
   const [loading, setLoading] = useState(true);
   const [notFound, setNotFound] = useState(false);
+
+  const [session, setSession] = useState<StoredSession>({
+    user: null,
+    token: null,
+  });
+  const [phone, setPhone] = useState("");
+  const [selectedDays, setSelectedDays] = useState<string>("Sun / Tue / Thu");
+  const [selectedTime, setSelectedTime] = useState<string>("6:00 PM");
+  const [preferredSchedule, setPreferredSchedule] = useState(
+    "Sun / Tue / Thu, 6:00 PM",
+  );
+  const [message, setMessage] = useState("");
+  const [submitting, setSubmitting] = useState(false);
+  const [applied, setApplied] = useState(false);
+
+  useEffect(() => {
+    setSession(readSession());
+    const onAuthChange = () => setSession(readSession());
+    window.addEventListener("mentorlagbe-auth-change", onAuthChange);
+    return () =>
+      window.removeEventListener("mentorlagbe-auth-change", onAuthChange);
+  }, []);
 
   useEffect(() => {
     if (!tuitionId) return;
@@ -75,7 +130,6 @@ export default function TuitionDetailsPage() {
           return;
         }
 
-        // Fallback: jodi single id endpoint na thake, tahole list theke id match kore nebe
         const listPayload = await apiRequest<unknown>("/api/tuitions");
         const listObj =
           listPayload && typeof listPayload === "object"
@@ -119,16 +173,82 @@ export default function TuitionDetailsPage() {
     };
   }, [tuitionId]);
 
+  const handleSelectDay = (days: string) => {
+    setSelectedDays(days);
+    setPreferredSchedule(`${days}, ${selectedTime}`);
+  };
+
+  const handleSelectTime = (slot: string) => {
+    setSelectedTime(slot);
+    setPreferredSchedule(`${selectedDays}, ${slot}`);
+  };
+
+  const handleApplySubmit = async (e: FormEvent) => {
+    e.preventDefault();
+    const { user, token } = readSession();
+
+    if (!user?.email) {
+      toast.info("Please sign in as a student to apply.");
+      return;
+    }
+
+    if (user.role?.toLowerCase() !== "student") {
+      toast.error("Only student accounts can apply for tuitions.");
+      return;
+    }
+
+    const composedMessage = [
+      preferredSchedule.trim()
+        ? `Preferred Schedule: ${preferredSchedule.trim()}`
+        : "",
+      phone.trim() ? `Phone: ${phone.trim()}` : "",
+      message.trim(),
+    ]
+      .filter(Boolean)
+      .join(" | ");
+
+    try {
+      setSubmitting(true);
+      await apiRequest("/api/applications", {
+        method: "POST",
+        headers: token ? { Authorization: `Bearer ${token}` } : {},
+        body: JSON.stringify({
+          tuitionId: String(tuition?._id || tuition?.id || tuitionId || ""),
+          studentPhone: phone.trim(),
+          preferredSchedule: preferredSchedule.trim(),
+          message: composedMessage,
+        }),
+      });
+
+      setApplied(true);
+      setPhone("");
+      setMessage("");
+      toast.success("Application submitted successfully!");
+    } catch (err) {
+      const msg =
+        err instanceof Error && err.message
+          ? err.message
+          : "Failed to submit application.";
+      toast.error(msg);
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
   const isOnline = tuition?.mode?.toLowerCase() === "online";
   const scheduleText =
     tuition?.schedule ||
     (tuition?.daysPerWeek ? `${tuition.daysPerWeek} days/week` : "Flexible");
 
+  const role = session.user?.role?.toLowerCase();
+  const isLoggedIn = Boolean(session.user?.email);
+  const isStudent = role === "student";
+
   return (
     <div className="min-h-screen bg-slate-50 dark:bg-[#070d19]">
       {/* Top Dark Header */}
       <section className="bg-[#06142e] py-10 text-white sm:py-14">
-        <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
+        <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
           <Link
             href="/tuitions"
             className="inline-flex items-center gap-2 text-sm font-medium text-blue-300 transition hover:text-white"
@@ -163,7 +283,7 @@ export default function TuitionDetailsPage() {
       </section>
 
       {/* Main Content */}
-      <section className="mx-auto max-w-5xl px-4 py-8 sm:px-6 lg:px-8">
+      <section className="mx-auto max-w-6xl px-4 py-8 sm:px-6 lg:px-8">
         {loading && (
           <div className="rounded-2xl border border-slate-200 bg-white p-8 dark:border-slate-800 dark:bg-slate-900">
             <div className="space-y-4">
@@ -196,10 +316,10 @@ export default function TuitionDetailsPage() {
         )}
 
         {!loading && tuition && (
-          <div className="grid grid-cols-1 gap-6 lg:grid-cols-12">
-            {/* Left Overview & Description */}
-            <div className="space-y-6 lg:col-span-8">
-              <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900">
+          <div className="grid grid-cols-1 items-start gap-7 lg:grid-cols-12">
+            {/* Left Overview + Mentor Summary */}
+            <div className="space-y-6 lg:col-span-7">
+              <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900 sm:p-7">
                 <h2 className="text-lg font-bold text-slate-900 dark:text-white">
                   Batch Overview
                 </h2>
@@ -209,7 +329,7 @@ export default function TuitionDetailsPage() {
                 </p>
 
                 <div className="mt-6 grid grid-cols-1 gap-4 border-t border-slate-100 pt-6 sm:grid-cols-2 dark:border-slate-800">
-                  <div className="flex items-start gap-3">
+                  <div className="flex items-start gap-3 rounded-xl bg-slate-50 p-3.5 dark:bg-slate-950/70">
                     <GraduationCap className="mt-0.5 h-5 w-5 text-blue-600 dark:text-blue-400" />
                     <div>
                       <p className="text-xs font-medium text-slate-500 dark:text-slate-400">
@@ -221,7 +341,7 @@ export default function TuitionDetailsPage() {
                     </div>
                   </div>
 
-                  <div className="flex items-start gap-3">
+                  <div className="flex items-start gap-3 rounded-xl bg-slate-50 p-3.5 dark:bg-slate-950/70">
                     <Calendar className="mt-0.5 h-5 w-5 text-blue-600 dark:text-blue-400" />
                     <div>
                       <p className="text-xs font-medium text-slate-500 dark:text-slate-400">
@@ -233,7 +353,7 @@ export default function TuitionDetailsPage() {
                     </div>
                   </div>
 
-                  <div className="flex items-start gap-3">
+                  <div className="flex items-start gap-3 rounded-xl bg-slate-50 p-3.5 dark:bg-slate-950/70">
                     <MapPin className="mt-0.5 h-5 w-5 text-blue-600 dark:text-blue-400" />
                     <div>
                       <p className="text-xs font-medium text-slate-500 dark:text-slate-400">
@@ -247,7 +367,7 @@ export default function TuitionDetailsPage() {
                     </div>
                   </div>
 
-                  <div className="flex items-start gap-3">
+                  <div className="flex items-start gap-3 rounded-xl bg-slate-50 p-3.5 dark:bg-slate-950/70">
                     <UserCheck className="mt-0.5 h-5 w-5 text-blue-600 dark:text-blue-400" />
                     <div>
                       <p className="text-xs font-medium text-slate-500 dark:text-slate-400">
@@ -260,11 +380,31 @@ export default function TuitionDetailsPage() {
                   </div>
                 </div>
               </div>
+
+              <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900">
+                <div className="flex items-center gap-2.5">
+                  <ShieldCheck className="h-5 w-5 text-blue-600 dark:text-blue-400" />
+                  <h3 className="text-base font-bold text-slate-900 dark:text-white">
+                    What to Expect After Applying
+                  </h3>
+                </div>
+                <p className="mt-2.5 text-sm leading-relaxed text-slate-600 dark:text-slate-400">
+                  Your request goes directly to{" "}
+                  <span className="font-semibold text-slate-800 dark:text-slate-200">
+                    {tuition.tutorName || "the mentor"}
+                  </span>{" "}
+                  with your preferred day and time slot. You can monitor{" "}
+                  <span className="font-medium">Pending</span>,{" "}
+                  <span className="font-medium">Accepted</span>, or{" "}
+                  <span className="font-medium">Rejected</span> status from your
+                  Student Dashboard.
+                </p>
+              </div>
             </div>
 
-            {/* Right Fee & Enrollment Card */}
-            <div className="lg:col-span-4">
-              <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900">
+            {/* Right Fee & Apply Card */}
+            <div className="lg:col-span-5">
+              <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900 sm:p-7">
                 <p className="text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">
                   Monthly Fee
                 </p>
@@ -272,25 +412,159 @@ export default function TuitionDetailsPage() {
                   ৳{Number(tuition.monthlyFee || 0).toLocaleString()}
                 </p>
 
-                <div className="mt-4 flex items-center gap-2 text-xs font-medium text-emerald-700 dark:text-emerald-400">
+                <div className="mt-3 flex items-center gap-2 text-xs font-medium text-emerald-700 dark:text-emerald-400">
                   <CheckCircle2 className="h-4 w-4 shrink-0" />
-                  <span>Active &amp; Open for Inquiries</span>
+                  <span>Active &amp; Open for Applications</span>
                 </div>
 
-                <div className="mt-6 space-y-3">
-                  <Link
-                    href="/sign-in"
-                    className="flex w-full items-center justify-center rounded-xl bg-blue-600 px-5 py-3 text-sm font-semibold text-white transition hover:bg-blue-700"
+                {!isLoggedIn ? (
+                  <div className="mt-6 space-y-3 border-t border-slate-100 pt-5 dark:border-slate-800">
+                    <p className="text-xs text-slate-600 dark:text-slate-400">
+                      Sign in with a Student account to apply for this tuition.
+                    </p>
+                    <Link
+                      href="/sign-in"
+                      className="flex w-full items-center justify-center rounded-xl bg-blue-600 px-5 py-3 text-sm font-semibold text-white transition hover:bg-blue-700"
+                    >
+                      Sign In to Apply
+                    </Link>
+                    <Link
+                      href="/sign-up?role=student"
+                      className="flex w-full items-center justify-center rounded-xl border border-slate-300 bg-white px-5 py-2.5 text-sm font-semibold text-slate-800 transition hover:bg-slate-50 dark:border-slate-700 dark:bg-slate-950 dark:text-slate-200 dark:hover:bg-slate-800"
+                    >
+                      Create Student Account
+                    </Link>
+                  </div>
+                ) : !isStudent ? (
+                  <div className="mt-6 rounded-xl border-t border-slate-100 pt-5 dark:border-slate-800">
+                    <p className="rounded-xl bg-slate-100 p-4 text-xs leading-relaxed text-slate-700 dark:bg-slate-800 dark:text-slate-300">
+                      Only <strong>Student</strong> accounts can apply to
+                      tuitions. You are signed in as{" "}
+                      <strong className="uppercase">{role}</strong>.
+                    </p>
+                  </div>
+                ) : applied ? (
+                  <div className="mt-6 space-y-3 rounded-xl bg-emerald-50 p-4 text-emerald-900 dark:bg-emerald-950/50 dark:text-emerald-200">
+                    <div className="flex items-center gap-2 text-sm font-bold">
+                      <CheckCircle2 className="h-5 w-5 shrink-0" />
+                      <span>Application Submitted!</span>
+                    </div>
+                    <p className="text-xs">
+                      Your application is now pending review. Track it anytime
+                      in your Student Dashboard.
+                    </p>
+                    <Link
+                      href="/dashboard/student/my-applications"
+                      className="inline-flex rounded-xl bg-emerald-600 px-4 py-2 text-xs font-semibold text-white transition hover:bg-emerald-700"
+                    >
+                      Go to My Applications
+                    </Link>
+                  </div>
+                ) : (
+                  <form
+                    onSubmit={handleApplySubmit}
+                    className="mt-6 space-y-4 border-t border-slate-100 pt-5 dark:border-slate-800"
                   >
-                    Sign In to Apply
-                  </Link>
-                  <Link
-                    href="/tuitions"
-                    className="flex w-full items-center justify-center rounded-xl border border-slate-300 bg-white px-5 py-3 text-sm font-semibold text-slate-800 transition hover:bg-slate-50 dark:border-slate-700 dark:bg-slate-950 dark:text-slate-200 dark:hover:bg-slate-800"
-                  >
-                    Explore More Batches
-                  </Link>
-                </div>
+                    <div>
+                      <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300">
+                        Phone Number
+                      </label>
+                      <input
+                        type="text"
+                        value={phone}
+                        onChange={(e) => setPhone(e.target.value)}
+                        placeholder="e.g., 017XXXXXXXX"
+                        className="mt-1.5 w-full rounded-xl border border-slate-300 bg-slate-50 px-3.5 py-2.5 text-sm text-slate-900 placeholder-slate-400 focus:border-blue-600 focus:bg-white focus:outline-none dark:border-slate-700 dark:bg-slate-950 dark:text-white"
+                      />
+                    </div>
+
+                    <div className="space-y-2.5 rounded-xl border border-slate-200/90 bg-slate-50/80 p-3.5 dark:border-slate-800 dark:bg-slate-950/60">
+                      <div className="flex items-center justify-between">
+                        <label className="flex items-center gap-1.5 text-xs font-semibold text-slate-800 dark:text-slate-200">
+                          <Clock className="h-3.5 w-3.5 text-blue-600 dark:text-blue-400" />
+                          <span>Preferred Schedule</span>
+                        </label>
+                        <span className="text-[11px] font-medium text-blue-600 dark:text-blue-400">
+                          Quick Select
+                        </span>
+                      </div>
+
+                      <div className="flex flex-wrap gap-1.5">
+                        {DAY_OPTIONS.map((days) => {
+                          const active = selectedDays === days;
+                          return (
+                            <button
+                              key={days}
+                              type="button"
+                              onClick={() => handleSelectDay(days)}
+                              className={`rounded-lg px-2.5 py-1 text-[11px] font-semibold transition ${
+                                active
+                                  ? "bg-blue-600 text-white"
+                                  : "border border-slate-200 bg-white text-slate-700 hover:border-blue-400 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-300"
+                              }`}
+                            >
+                              {days}
+                            </button>
+                          );
+                        })}
+                      </div>
+
+                      <div className="flex flex-wrap gap-1.5">
+                        {TIME_SLOTS.map((slot) => {
+                          const active = selectedTime === slot;
+                          return (
+                            <button
+                              key={slot}
+                              type="button"
+                              onClick={() => handleSelectTime(slot)}
+                              className={`rounded-lg px-2.5 py-1 text-[11px] font-semibold transition ${
+                                active
+                                  ? "bg-slate-900 text-white dark:bg-blue-500"
+                                  : "border border-slate-200 bg-white text-slate-700 hover:border-blue-400 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-300"
+                              }`}
+                            >
+                              {slot}
+                            </button>
+                          );
+                        })}
+                      </div>
+
+                      <input
+                        type="text"
+                        value={preferredSchedule}
+                        onChange={(e) => setPreferredSchedule(e.target.value)}
+                        placeholder="e.g., Sun / Tue / Thu, 6:00 PM"
+                        className="w-full rounded-xl border border-slate-300 bg-white px-3.5 py-2 text-sm text-slate-900 placeholder-slate-400 focus:border-blue-600 focus:outline-none dark:border-slate-700 dark:bg-slate-900 dark:text-white"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300">
+                        Learning Note (Optional)
+                      </label>
+                      <textarea
+                        rows={3}
+                        value={message}
+                        onChange={(e) => setMessage(e.target.value)}
+                        placeholder="Share your goals or questions for the mentor..."
+                        className="mt-1.5 w-full rounded-xl border border-slate-300 bg-slate-50 p-3 text-sm text-slate-900 placeholder-slate-400 focus:border-blue-600 focus:bg-white focus:outline-none dark:border-slate-700 dark:bg-slate-950 dark:text-white"
+                      />
+                    </div>
+
+                    <button
+                      type="submit"
+                      disabled={submitting}
+                      className="flex w-full items-center justify-center gap-2 rounded-xl bg-blue-600 px-5 py-3 text-sm font-semibold text-white transition hover:bg-blue-700 disabled:opacity-60"
+                    >
+                      {submitting ? (
+                        <Loader2 className="h-4 w-4 animate-spin" />
+                      ) : (
+                        <Send className="h-4 w-4" />
+                      )}
+                      <span>{submitting ? "Submitting..." : "Apply Now"}</span>
+                    </button>
+                  </form>
+                )}
               </div>
             </div>
           </div>
