@@ -11,7 +11,7 @@ import {
   MapPin,
 } from "lucide-react";
 import { toast } from "sonner";
-import api from "@/lib/api";
+import { apiRequest } from "@/lib/api";
 
 interface TuitionItem {
   _id?: string;
@@ -37,16 +37,22 @@ export default function FeaturedTuitions() {
     const loadFeatured = async () => {
       try {
         setLoading(true);
-        const res = await api.get("/tuitions");
-        const rawList = Array.isArray(res.data)
-          ? res.data
-          : Array.isArray(res.data?.tuitions)
-            ? res.data.tuitions
-            : Array.isArray(res.data?.data)
-              ? res.data.data
+        const payload = await apiRequest<unknown>("/tuitions");
+        const dataObj =
+          payload && typeof payload === "object"
+            ? (payload as { tuitions?: unknown; data?: unknown })
+            : null;
+
+        const rawList = Array.isArray(payload)
+          ? payload
+          : Array.isArray(dataObj?.tuitions)
+            ? dataObj.tuitions
+            : Array.isArray(dataObj?.data)
+              ? dataObj.data
               : [];
 
-        const approvedOnly = rawList.filter((item: TuitionItem) => {
+        const typedList = rawList as TuitionItem[];
+        const approvedOnly = typedList.filter((item) => {
           if (!item.status) return true;
           return (
             item.status.toLowerCase() === "approved" ||
@@ -69,7 +75,7 @@ export default function FeaturedTuitions() {
           setLoading(false);
         }
       }
-    };
+    }
 
     loadFeatured();
     return () => {
