@@ -1,62 +1,95 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
-import { Check, HelpCircle, Sparkles } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { Check, HelpCircle, Loader2, Sparkles } from "lucide-react";
+import { toast } from "sonner";
+import { apiRequest } from "@/lib/api";
+
+interface StoredUser {
+  id?: string;
+  name?: string;
+  email?: string;
+  role?: "student" | "tutor" | "admin" | string;
+  plan?: string;
+  token?: string;
+}
+
+function getAuthSession(): { user: StoredUser | null; token: string | null } {
+  if (typeof window === "undefined") return { user: null, token: null };
+  try {
+    const raw = localStorage.getItem("mentorlagbe-user");
+    if (!raw) return { user: null, token: null };
+    const parsed = JSON.parse(raw) as Record<string, unknown>;
+    const token = typeof parsed.token === "string" ? parsed.token : null;
+    const candidate =
+      parsed.user && typeof parsed.user === "object"
+        ? (parsed.user as StoredUser)
+        : (parsed as StoredUser);
+    return { user: candidate, token };
+  } catch {
+    return { user: null, token: null };
+  }
+}
 
 const PLANS = [
   {
+    id: "free",
     name: "Starter",
     badge: "Free Forever",
-    monthlyPrice: 0,
-    yearlyPrice: 0,
+    priceLabel: "Free",
+    suffix: "",
     description:
-      "Ideal for students exploring verified tutors and mentors starting their first batch.",
+      "Ideal for students and new tutors getting started with browse, applications, and basic listings.",
     features: [
       "Browse all verified tuition listings",
       "Filter by subject, class level, and mode",
-      "Direct batch inquiry & application",
-      "Basic profile & dashboard access",
+      "Apply to tuitions & track application status",
+      "Up to 2 tuition posts for free-tier tutors",
     ],
     ctaLabel: "Get Started Free",
     ctaHref: "/sign-up",
     highlighted: false,
+    paidForRole: null as "student" | "tutor" | null,
   },
   {
-    name: "Mentor Pro",
-    badge: "Most Popular",
-    monthlyPrice: 499,
-    yearlyPrice: 399,
+    id: "pro-student",
+    name: "Pro Student",
+    badge: "For Students",
+    priceLabel: "$10",
+    suffix: "/ one-time",
     description:
-      "Built for active tutors who want higher visibility, priority approvals, and batch analytics.",
+      "Designed for students wanting priority booking and enhanced profile visibility.",
     features: [
-      "Publish up to 15 active tuition batches",
-      "Featured placement on Home & Directory",
-      "Verified Mentor badge on all listings",
-      "Applicant tracking & instant notifications",
-      "Priority review & support",
+      "Priority tuition booking & inquiries",
+      "Pro Student badge on account",
+      "Real-time application status tracking",
+      "Instant Pro plan activation after Stripe payment",
     ],
-    ctaLabel: "Start Mentor Pro",
-    ctaHref: "/sign-up",
-    highlighted: true,
-  },
-  {
-    name: "Coaching & Team",
-    badge: "For Academies",
-    monthlyPrice: 1499,
-    yearlyPrice: 1199,
-    description:
-      "Designed for coaching centers and multi-subject mentorship teams managing larger cohorts.",
-    features: [
-      "Unlimited active tuition & batch listings",
-      "Multi-subject & multi-location management",
-      "Dedicated academy profile & branding",
-      "Monthly enrollment & fee insights",
-      "24/7 priority onboarding assistance",
-    ],
-    ctaLabel: "Create Academy Account",
-    ctaHref: "/sign-up",
+    ctaLabel: "Upgrade Student Pro ($10)",
+    ctaHref: "/sign-up?role=student",
     highlighted: false,
+    paidForRole: "student" as const,
+  },
+  {
+    id: "pro-tutor",
+    name: "Pro Tutor",
+    badge: "Most Popular",
+    priceLabel: "$15",
+    suffix: "/ one-time",
+    description:
+      "Built for dedicated tutors who want unlimited tuition batches and a verified Pro badge.",
+    features: [
+      "Unlimited active tuition batch postings",
+      "Verified Pro Tutor badge & priority visibility",
+      "Manage student applicants (Accept / Reject)",
+      "Instant Pro plan activation after Stripe payment",
+    ],
+    ctaLabel: "Upgrade Tutor Pro ($15)",
+    ctaHref: "/sign-up?role=tutor",
+    highlighted: true,
+    paidForRole: "tutor" as const,
   },
 ];
 
@@ -65,26 +98,84 @@ const FAQS = [
     question:
       "Do students need to pay a subscription fee to apply for tuitions?",
     answer:
-      "No. Students can browse all approved listings and apply to batches completely free. You only pay the tutor's stated monthly tuition fee once enrolled.",
+      "No. Students can browse all approved listings and apply to batches for free. Upgrading to Pro Student ($10) unlocks priority booking and Pro status.",
   },
   {
-    question: "Can tutors start publishing batches on the free plan?",
+    question: "What does the Pro Tutor ($15) upgrade include?",
     answer:
-      "Yes. New tutors can create an account on the Starter plan and submit tuition listings for admin approval without upfront charges.",
+      "Free tutors can post up to 2 tuitions, while Pro Tutors get unlimited tuition posts, a Pro plan badge, and full applicant management.",
   },
   {
-    question: "Can I switch between monthly and yearly billing anytime?",
+    question: "How does Stripe upgrade my account to Pro?",
     answer:
-      "Yes, you can upgrade, downgrade, or switch billing cycles directly from your dashboard settings at any time.",
+      "Once you complete Stripe Checkout, your payment is recorded and your account plan automatically updates to Pro.",
   },
 ];
 
 export default function PricingPage() {
-  const [yearly, setYearly] = useState(false);
+  const router = useRouter();
+  const [loadingPlanId, setLoadingPlanId] = useState<string | null>(null);
+  const [currentUser, setCurrentUser] = useState<StoredUser | null>(null);
+
+  useEffect(() => {
+    const sync = () => {
+      const { user } = getAuthSession();
+      setCurrentUser(user);
+    };
+    sync();
+    window.addEventListener("mentorlagbe-auth-change", sync);
+    return () => window.removeEventListener("mentorlagbe-auth-change", sync);
+  }, []);
+
+  const handleStripeCheckout = async (planId: string) => {
+    const { user, token } = getAuthSession();
+
+    if (!user?.email) {
+      toast.info("Please sign in first to upgrade to Pro.");
+      router.push("/sign-in");
+      return;
+    }
+
+    if (user.role === "admin") {
+      toast.info("Admin accounts do not need a Pro subscription.");
+      return;
+    }
+
+    if (user.plan === "pro") {
+      toast.success("Your account is already on the Pro plan!");
+      return;
+    }
+
+    try {
+      setLoadingPlanId(planId);
+      const data = await apiRequest<{
+        success?: boolean;
+        url?: string;
+        message?: string;
+      }>("/api/payments/create-checkout-session", {
+        method: "POST",
+        headers: token ? { Authorization: `Bearer ${token}` } : {},
+        body: JSON.stringify({ role: user.role }),
+      });
+
+      if (data?.url) {
+        window.location.href = data.url;
+      } else {
+        toast.error(data?.message || "Could not start Stripe checkout.");
+      }
+    } catch (err) {
+      const msg =
+        err instanceof Error && err.message
+          ? err.message
+          : "Failed to initiate payment.";
+      toast.error(msg);
+    } finally {
+      setLoadingPlanId(null);
+    }
+  };
 
   return (
     <div className="min-h-screen bg-slate-50 dark:bg-[#070d19]">
-      {/* Header Banner */}
       <section className="bg-[#06142e] py-14 text-white sm:py-20">
         <div className="mx-auto max-w-5xl px-4 text-center sm:px-6 lg:px-8">
           <p className="text-xs font-semibold uppercase tracking-wider text-blue-400">
@@ -94,50 +185,27 @@ export default function PricingPage() {
             Simple Pricing for Students &amp; Mentors
           </h1>
           <p className="mx-auto mt-3 max-w-2xl text-sm text-slate-300 sm:text-base">
-            Students browse and apply for free. Tutors and academies can scale
-            their reach with flexible monthly or yearly plans.
+            Start free or upgrade to Pro via Stripe for priority student
+            features and unlimited tutor batch postings.
           </p>
-
-          {/* Billing Toggle */}
-          <div className="mt-8 inline-flex items-center gap-3 rounded-full border border-white/15 bg-white/5 p-1.5">
-            <button
-              type="button"
-              onClick={() => setYearly(false)}
-              className={`rounded-full px-4 py-1.5 text-xs font-semibold transition sm:text-sm ${
-                !yearly
-                  ? "bg-blue-600 text-white"
-                  : "text-slate-300 hover:text-white"
-              }`}
-            >
-              Monthly Billing
-            </button>
-            <button
-              type="button"
-              onClick={() => setYearly(true)}
-              className={`inline-flex items-center gap-1.5 rounded-full px-4 py-1.5 text-xs font-semibold transition sm:text-sm ${
-                yearly
-                  ? "bg-blue-600 text-white"
-                  : "text-slate-300 hover:text-white"
-              }`}
-            >
-              <span>Yearly Billing</span>
-              <span className="rounded-full bg-emerald-500/20 px-2 py-0.5 text-[11px] text-emerald-300">
-                Save 20%
-              </span>
-            </button>
-          </div>
         </div>
       </section>
 
-      {/* Pricing Cards */}
       <section className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
           {PLANS.map((plan) => {
-            const price = yearly ? plan.yearlyPrice : plan.monthlyPrice;
+            const isAlreadyPro =
+              Boolean(plan.paidForRole) && currentUser?.plan === "pro";
+            const isRoleMismatch =
+              Boolean(plan.paidForRole) &&
+              Boolean(currentUser?.role) &&
+              currentUser?.role !== "admin" &&
+              currentUser?.role !== plan.paidForRole;
+            const isLoading = loadingPlanId === plan.id;
 
             return (
               <div
-                key={plan.name}
+                key={plan.id}
                 className={`flex h-full flex-col justify-between rounded-2xl border p-7 shadow-sm transition ${
                   plan.highlighted
                     ? "border-blue-600 bg-white ring-2 ring-blue-600/20 dark:border-blue-500 dark:bg-slate-900"
@@ -167,11 +235,11 @@ export default function PricingPage() {
 
                   <div className="mt-6 flex items-baseline gap-1">
                     <span className="text-4xl font-bold text-slate-900 dark:text-white">
-                      {price === 0 ? "Free" : `৳${price.toLocaleString()}`}
+                      {plan.priceLabel}
                     </span>
-                    {price > 0 && (
+                    {plan.suffix && (
                       <span className="text-sm text-slate-500 dark:text-slate-400">
-                        / month
+                        {plan.suffix}
                       </span>
                     )}
                   </div>
@@ -186,22 +254,45 @@ export default function PricingPage() {
                   </ul>
                 </div>
 
-                <Link
-                  href={plan.ctaHref}
-                  className={`mt-8 flex w-full items-center justify-center rounded-xl px-5 py-3 text-sm font-semibold transition ${
-                    plan.highlighted
-                      ? "bg-blue-600 text-white hover:bg-blue-700"
-                      : "border border-slate-300 bg-slate-50 text-slate-900 hover:border-blue-500 hover:text-blue-600 dark:border-slate-700 dark:bg-slate-950 dark:text-white dark:hover:border-blue-500"
-                  }`}
-                >
-                  {plan.ctaLabel}
-                </Link>
+                {!plan.paidForRole ? (
+                  <Link
+                    href={plan.ctaHref}
+                    className="mt-8 flex w-full items-center justify-center rounded-xl border border-slate-300 bg-slate-50 px-5 py-3 text-sm font-semibold text-slate-900 transition hover:border-blue-500 hover:text-blue-600 dark:border-slate-700 dark:bg-slate-950 dark:text-white dark:hover:border-blue-500"
+                  >
+                    {plan.ctaLabel}
+                  </Link>
+                ) : isAlreadyPro ? (
+                  <button
+                    type="button"
+                    disabled
+                    className="mt-8 flex w-full cursor-not-allowed items-center justify-center rounded-xl bg-emerald-600/20 px-5 py-3 text-sm font-semibold text-emerald-700 dark:text-emerald-300"
+                  >
+                    Active Pro Plan
+                  </button>
+                ) : (
+                  <button
+                    type="button"
+                    disabled={isLoading || isRoleMismatch}
+                    onClick={() => handleStripeCheckout(plan.id)}
+                    className={`mt-8 flex w-full items-center justify-center gap-2 rounded-xl px-5 py-3 text-sm font-semibold transition disabled:opacity-60 ${
+                      plan.highlighted
+                        ? "bg-blue-600 text-white hover:bg-blue-700"
+                        : "border border-slate-300 bg-slate-50 text-slate-900 hover:border-blue-500 hover:text-blue-600 dark:border-slate-700 dark:bg-slate-950 dark:text-white dark:hover:border-blue-500"
+                    }`}
+                  >
+                    {isLoading && <Loader2 className="h-4 w-4 animate-spin" />}
+                    <span>
+                      {isRoleMismatch
+                        ? `Requires ${plan.paidForRole.toUpperCase()} account`
+                        : plan.ctaLabel}
+                    </span>
+                  </button>
+                )}
               </div>
             );
           })}
         </div>
 
-        {/* FAQ Section */}
         <div className="mx-auto mt-16 max-w-4xl">
           <div className="flex items-center justify-center gap-2 text-center">
             <HelpCircle className="h-5 w-5 text-blue-600 dark:text-blue-400" />
