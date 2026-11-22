@@ -15,6 +15,7 @@ import {
 import FeaturedTuitions from "@/components/FeaturedTuitions";
 import HowItWorks from "@/components/HowItWorks";
 import WhyChooseUs from "@/components/WhyChooseUs";
+import HomeExtrasAndPricing from "@/components/HomeExtrasAndPricing";
 
 interface HeroSlide {
   id: number;
@@ -349,6 +350,8 @@ export default function HomePage() {
 
       {/* Featured Tuitions Section */}
       <FeaturedTuitions />
+      {/* Pricing, Top Subjects, Stats & Testimonials Section */}
+      <HomeExtrasAndPricing />
       {/* How It Works Section */}
       <HowItWorks />
       {/* Why Choose Us Section */}
