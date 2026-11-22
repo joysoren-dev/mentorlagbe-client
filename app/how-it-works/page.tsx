@@ -224,12 +224,12 @@ export default function HowItWorksPage() {
             toggleCard(item.id);
           }
         }}
-        className={`group flex cursor-pointer flex-col justify-between rounded-2xl border p-6 text-left transition-all ${
+        className={`group flex cursor-pointer flex-col justify-between rounded-2xl border p-6 text-left backdrop-blur-xs transition-all ${
           isExpanded
-            ? "border-blue-500 bg-white shadow-md ring-2 ring-blue-500/15 dark:border-blue-500 dark:bg-slate-900"
+            ? "border-amber-600 bg-[#fffdf9] shadow-md ring-2 ring-amber-600/15 dark:border-blue-500 dark:bg-slate-900 dark:ring-blue-500/15"
             : variant === "student"
-              ? "border-slate-200 bg-white shadow-sm hover:-translate-y-0.5 hover:border-blue-300 dark:border-slate-800 dark:bg-slate-900 dark:hover:border-blue-700"
-              : "border-slate-200 bg-slate-50 hover:-translate-y-0.5 hover:border-blue-300 dark:border-slate-800 dark:bg-slate-900 dark:hover:border-blue-700"
+              ? "border-stone-200/90 bg-[#fffdf9]/92 shadow-xs hover:-translate-y-0.5 hover:border-amber-600/60 dark:border-slate-800 dark:bg-slate-900/90 dark:hover:border-blue-500/60"
+              : "border-stone-200/90 bg-[#faf7f2]/92 shadow-xs hover:-translate-y-0.5 hover:border-amber-600/60 dark:border-slate-800 dark:bg-slate-900/90 dark:hover:border-blue-500/60"
         }`}
       >
         <div>
@@ -237,8 +237,8 @@ export default function HowItWorksPage() {
             <span
               className={`inline-flex h-11 w-11 items-center justify-center rounded-xl ${
                 variant === "student"
-                  ? "bg-blue-50 text-blue-600 dark:bg-blue-950/70 dark:text-blue-400"
-                  : "bg-blue-100 text-blue-700 dark:bg-blue-950 dark:text-blue-300"
+                  ? "bg-amber-100/90 text-amber-800 dark:bg-blue-950/70 dark:text-blue-400"
+                  : "bg-amber-700/15 text-amber-900 dark:bg-blue-950 dark:text-blue-300"
               }`}
             >
               <Icon className="h-5 w-5" />
@@ -248,44 +248,44 @@ export default function HowItWorksPage() {
               <span
                 className={`text-2xl font-extrabold ${
                   variant === "student"
-                    ? "text-slate-200 dark:text-slate-800"
-                    : "text-slate-300 dark:text-slate-700"
+                    ? "text-stone-300 dark:text-slate-800"
+                    : "text-stone-300 dark:text-slate-700"
                 }`}
               >
                 {item.step}
               </span>
               <ChevronDown
-                className={`h-4 w-4 text-slate-400 transition-transform duration-200 ${
+                className={`h-4 w-4 text-stone-400 transition-transform duration-200 dark:text-slate-400 ${
                   isExpanded
-                    ? "rotate-180 text-blue-600 dark:text-blue-400"
+                    ? "rotate-180 text-amber-700 dark:text-blue-400"
                     : ""
                 }`}
               />
             </div>
           </div>
 
-          <h3 className="mt-5 text-lg font-bold text-slate-900 dark:text-white">
+          <h3 className="mt-5 text-lg font-bold text-stone-900 dark:text-white">
             {item.title}
           </h3>
-          <p className="mt-2 text-sm leading-relaxed text-slate-600 dark:text-slate-400">
+          <p className="mt-2 text-sm leading-relaxed text-stone-600 dark:text-slate-400">
             {item.description}
           </p>
 
           {isExpanded && (
-            <div className="mt-4 rounded-xl border border-blue-100 bg-blue-50/70 p-3.5 text-xs leading-relaxed text-slate-700 dark:border-blue-900/60 dark:bg-blue-950/40 dark:text-slate-300">
+            <div className="mt-4 rounded-xl border border-amber-200/80 bg-amber-50/80 p-3.5 text-xs leading-relaxed text-stone-700 dark:border-blue-900/60 dark:bg-blue-950/40 dark:text-slate-300">
               <div className="flex items-start gap-2">
-                <Sparkles className="mt-0.5 h-3.5 w-3.5 shrink-0 text-blue-600 dark:text-blue-400" />
+                <Sparkles className="mt-0.5 h-3.5 w-3.5 shrink-0 text-amber-700 dark:text-blue-400" />
                 <span>{item.tip}</span>
               </div>
             </div>
           )}
         </div>
 
-        <div className="mt-5 border-t border-slate-100 pt-4 dark:border-slate-800">
+        <div className="mt-5 border-t border-stone-200/80 pt-4 dark:border-slate-800">
           <Link
             href={action.href}
             onClick={(e) => e.stopPropagation()}
-            className="inline-flex items-center gap-1.5 text-xs font-semibold text-blue-600 transition hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300"
+            className="inline-flex items-center gap-1.5 text-xs font-semibold text-amber-800 transition hover:text-amber-900 dark:text-blue-400 dark:hover:text-blue-300"
           >
             <span>{action.label}</span>
             <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" />
@@ -296,17 +296,17 @@ export default function HowItWorksPage() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 dark:bg-[#070d19]">
+    <div className="min-h-screen bg-transparent">
       {/* Header Banner */}
-      <section className="bg-[#06142e] py-14 text-white sm:py-20">
+      <section className="bg-[#16120e] py-14 text-white dark:bg-[#06142e] sm:py-20">
         <div className="mx-auto max-w-5xl px-4 text-center sm:px-6 lg:px-8">
-          <p className="text-xs font-semibold uppercase tracking-wider text-blue-400">
+          <p className="text-xs font-semibold uppercase tracking-wider text-amber-300 dark:text-blue-400">
             Simple &amp; Transparent Workflow
           </p>
           <h1 className="mt-2 text-3xl font-bold tracking-tight sm:text-5xl">
             How MentorLagbe Works
           </h1>
-          <p className="mx-auto mt-3 max-w-2xl text-sm text-slate-300 sm:text-base">
+          <p className="mx-auto mt-3 max-w-2xl text-sm text-stone-300 dark:text-slate-300 sm:text-base">
             Click any step below to see how students, tutors, and admin
             moderation work together—and jump straight into action.
           </p>
@@ -317,16 +317,16 @@ export default function HowItWorksPage() {
       <section className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
         <div className="flex flex-col justify-between gap-2 sm:flex-row sm:items-end">
           <div>
-            <p className="text-xs font-semibold uppercase tracking-wider text-blue-600 dark:text-blue-400">
+            <p className="text-xs font-semibold uppercase tracking-wider text-amber-800 dark:text-blue-400">
               For Students &amp; Learners
             </p>
-            <h2 className="mt-1 text-2xl font-bold text-slate-900 dark:text-white sm:text-3xl">
+            <h2 className="mt-1 text-2xl font-bold text-stone-900 dark:text-white sm:text-3xl">
               Find &amp; Join a Tuition Batch in 3 Steps
             </h2>
           </div>
           <Link
             href="/tuitions"
-            className="inline-flex items-center gap-1.5 text-sm font-semibold text-blue-600 transition hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300"
+            className="inline-flex items-center gap-1.5 text-sm font-semibold text-amber-800 transition hover:text-amber-900 dark:text-blue-400 dark:hover:text-blue-300"
           >
             <span>Browse Active Tuitions</span>
             <ArrowRight className="h-4 w-4" />
@@ -339,14 +339,14 @@ export default function HowItWorksPage() {
       </section>
 
       {/* For Tutors / Mentors */}
-      <section className="border-t border-slate-200 bg-white py-12 dark:border-slate-800 dark:bg-slate-900/40 sm:py-16">
+      <section className="border-t border-stone-200/80 bg-transparent py-12 dark:border-slate-800/80 sm:py-16">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col justify-between gap-2 sm:flex-row sm:items-end">
             <div>
-              <p className="text-xs font-semibold uppercase tracking-wider text-blue-600 dark:text-blue-400">
+              <p className="text-xs font-semibold uppercase tracking-wider text-amber-800 dark:text-blue-400">
                 For Tutors &amp; Mentors
               </p>
-              <h2 className="mt-1 text-2xl font-bold text-slate-900 dark:text-white sm:text-3xl">
+              <h2 className="mt-1 text-2xl font-bold text-stone-900 dark:text-white sm:text-3xl">
                 Launch Your Batch &amp; Reach Students
               </h2>
             </div>
@@ -354,7 +354,7 @@ export default function HowItWorksPage() {
               href={
                 role === "tutor" ? "/dashboard/tutor" : "/sign-up?role=tutor"
               }
-              className="inline-flex items-center gap-1.5 text-sm font-semibold text-blue-600 transition hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300"
+              className="inline-flex items-center gap-1.5 text-sm font-semibold text-amber-800 transition hover:text-amber-900 dark:text-blue-400 dark:hover:text-blue-300"
             >
               <span>
                 {role === "tutor" ? "Open Tutor Dashboard" : "Join as a Tutor"}
@@ -368,18 +368,18 @@ export default function HowItWorksPage() {
           </div>
 
           {/* Bottom CTA */}
-          <div className="mt-12 rounded-2xl bg-[#06142e] p-8 text-center text-white sm:p-10">
+          <div className="mt-12 rounded-2xl border border-stone-800 bg-[#1c1610] p-8 text-center text-white shadow-lg dark:border-slate-800 dark:bg-[#06142e] sm:p-10">
             <h2 className="text-2xl font-bold sm:text-3xl">
               Ready to Get Started?
             </h2>
-            <p className="mx-auto mt-2 max-w-xl text-sm text-slate-300 sm:text-base">
+            <p className="mx-auto mt-2 max-w-xl text-sm text-stone-300 dark:text-slate-300 sm:text-base">
               Explore live tuition batches right now or jump into your role
               dashboard to manage batches and applications.
             </p>
             <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
               <Link
                 href="/tuitions"
-                className="inline-flex items-center gap-2 rounded-xl bg-blue-600 px-6 py-3 text-sm font-semibold text-white transition hover:bg-blue-700"
+                className="inline-flex items-center gap-2 rounded-xl bg-amber-600 px-6 py-3 text-sm font-semibold text-white transition hover:bg-amber-500 dark:bg-blue-600 dark:hover:bg-blue-700"
               >
                 <span>Browse Tuitions</span>
                 <ArrowRight className="h-4 w-4" />

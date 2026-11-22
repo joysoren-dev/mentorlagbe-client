@@ -92,33 +92,31 @@ export default function HowItWorks() {
   return (
     <section
       id="how-it-works"
-      className="scroll-mt-16 border-t border-slate-200 bg-white py-16 dark:border-slate-800 dark:bg-[#06142e] sm:py-20"
+      className="scroll-mt-16 border-t border-stone-200/80 bg-transparent py-16 dark:border-slate-800/80 sm:py-20"
     >
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        {/* Section Header + Role Switcher */}
         <div className="flex flex-col justify-between gap-6 lg:flex-row lg:items-end">
           <div className="space-y-2">
-            <p className="text-xs font-semibold uppercase tracking-wider text-blue-600 dark:text-blue-400">
+            <p className="text-xs font-semibold uppercase tracking-wider text-amber-800 dark:text-blue-400">
               Simple Process
             </p>
-            <h2 className="text-2xl font-bold tracking-tight text-slate-900 dark:text-white sm:text-3xl">
+            <h2 className="text-2xl font-bold tracking-tight text-stone-900 dark:text-white sm:text-3xl">
               How MentorLagbe Works
             </h2>
-            <p className="max-w-2xl text-sm text-slate-600 dark:text-slate-300 sm:text-base">
+            <p className="max-w-2xl text-sm text-stone-600 dark:text-slate-300 sm:text-base">
               A clear, role-focused workflow designed for both students
               searching for mentors and tutors managing learning batches.
             </p>
           </div>
 
-          {/* Student / Tutor Tab Switcher */}
-          <div className="inline-flex self-start rounded-xl border border-slate-200 bg-slate-100 p-1 dark:border-slate-700 dark:bg-slate-900/90 lg:self-auto">
+          <div className="inline-flex self-start rounded-xl border border-stone-300/90 bg-[#fffdf9]/90 p-1 backdrop-blur-xs dark:border-slate-700 dark:bg-slate-900/90 lg:self-auto">
             <button
               type="button"
               onClick={() => setActiveTab("student")}
               className={`inline-flex items-center gap-2 rounded-lg px-4 py-2 text-xs font-semibold transition sm:text-sm ${
                 activeTab === "student"
-                  ? "bg-blue-600 text-white shadow-sm"
-                  : "text-slate-700 hover:text-slate-900 dark:text-slate-300 dark:hover:text-white"
+                  ? "bg-amber-700 text-white shadow-xs dark:bg-blue-600"
+                  : "text-stone-700 hover:text-stone-900 dark:text-slate-300 dark:hover:text-white"
               }`}
             >
               <GraduationCap className="h-4 w-4" />
@@ -129,8 +127,8 @@ export default function HowItWorks() {
               onClick={() => setActiveTab("tutor")}
               className={`inline-flex items-center gap-2 rounded-lg px-4 py-2 text-xs font-semibold transition sm:text-sm ${
                 activeTab === "tutor"
-                  ? "bg-blue-600 text-white shadow-sm"
-                  : "text-slate-700 hover:text-slate-900 dark:text-slate-300 dark:hover:text-white"
+                  ? "bg-amber-700 text-white shadow-xs dark:bg-blue-600"
+                  : "text-stone-700 hover:text-stone-900 dark:text-slate-300 dark:hover:text-white"
               }`}
             >
               <UserCheck className="h-4 w-4" />
@@ -139,33 +137,32 @@ export default function HowItWorks() {
           </div>
         </div>
 
-        {/* 3-Step Cards Grid (Equal Height) */}
         <div className="mt-10 grid grid-cols-1 gap-6 md:grid-cols-3">
           {steps.map((item) => (
             <article
               key={`${activeTab}-${item.stepNumber}`}
-              className="flex h-full flex-col justify-between rounded-2xl border border-slate-200 bg-slate-50 p-6 transition hover:border-blue-500/60 hover:shadow-md dark:border-slate-800 dark:bg-slate-900/80"
+              className="flex h-full flex-col justify-between rounded-2xl border border-stone-200/90 bg-[#fffdf9]/92 p-6 backdrop-blur-xs transition hover:border-amber-600/60 hover:shadow-md dark:border-slate-800 dark:bg-slate-900/85 dark:hover:border-blue-500/60"
             >
               <div>
                 <div className="flex items-center justify-between">
-                  <span className="inline-flex h-11 w-11 items-center justify-center rounded-xl bg-blue-600 text-white">
+                  <span className="inline-flex h-11 w-11 items-center justify-center rounded-xl bg-amber-700 text-white dark:bg-blue-600">
                     <StepIcon name={item.icon} />
                   </span>
-                  <span className="text-2xl font-extrabold tracking-tight text-slate-300 dark:text-slate-700">
+                  <span className="text-2xl font-extrabold tracking-tight text-stone-300 dark:text-slate-700">
                     {item.stepNumber}
                   </span>
                 </div>
 
-                <h3 className="mt-5 text-lg font-bold text-slate-900 dark:text-white">
+                <h3 className="mt-5 text-lg font-bold text-stone-900 dark:text-white">
                   {item.title}
                 </h3>
 
-                <p className="mt-2.5 text-sm leading-relaxed text-slate-600 dark:text-slate-300">
+                <p className="mt-2.5 text-sm leading-relaxed text-stone-600 dark:text-slate-300">
                   {item.description}
                 </p>
               </div>
 
-              <div className="mt-6 border-t border-slate-200/80 pt-4 text-xs font-semibold text-blue-600 dark:border-slate-800 dark:text-blue-400">
+              <div className="mt-6 border-t border-stone-200/80 pt-4 text-xs font-semibold text-amber-800 dark:border-slate-800 dark:text-blue-400">
                 {activeTab === "student" ? "Student Step" : "Tutor Step"} ·{" "}
                 {item.stepNumber}
               </div>
@@ -173,15 +170,14 @@ export default function HowItWorks() {
           ))}
         </div>
 
-        {/* Bottom Action Bar */}
-        <div className="mt-10 flex flex-col items-start justify-between gap-4 rounded-2xl border border-slate-200 bg-slate-50 p-6 dark:border-slate-800 dark:bg-slate-900/80 sm:flex-row sm:items-center">
+        <div className="mt-10 flex flex-col items-start justify-between gap-4 rounded-2xl border border-stone-200/90 bg-[#fffdf9]/92 p-6 backdrop-blur-xs dark:border-slate-800 dark:bg-slate-900/85 sm:flex-row sm:items-center">
           <div>
-            <h3 className="text-base font-bold text-slate-900 dark:text-white">
+            <h3 className="text-base font-bold text-stone-900 dark:text-white">
               {activeTab === "student"
                 ? "Ready to find a batch that matches your goals?"
                 : "Ready to publish your tuition batches and reach students?"}
             </h3>
-            <p className="mt-1 text-xs text-slate-600 dark:text-slate-400 sm:text-sm">
+            <p className="mt-1 text-xs text-stone-600 dark:text-slate-400 sm:text-sm">
               {activeTab === "student"
                 ? "Explore active listings or create a student account to apply and track status."
                 : "Sign up as a tutor or check Pro plans for expanded batch capacity."}
@@ -191,7 +187,7 @@ export default function HowItWorks() {
           <div className="flex flex-wrap items-center gap-3">
             <Link
               href={activeTab === "student" ? "/tuitions" : "/pricing"}
-              className="inline-flex items-center gap-2 rounded-xl bg-blue-600 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-blue-700"
+              className="inline-flex items-center gap-2 rounded-xl bg-amber-700 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-amber-800 dark:bg-blue-600 dark:hover:bg-blue-500"
             >
               <span>
                 {activeTab === "student" ? "Browse Tuitions" : "View Pro Plans"}
@@ -200,7 +196,7 @@ export default function HowItWorks() {
             </Link>
             <Link
               href="/sign-up"
-              className="inline-flex items-center justify-center rounded-xl border border-slate-300 bg-white px-4 py-2.5 text-sm font-semibold text-slate-800 transition hover:bg-slate-100 dark:border-slate-700 dark:bg-slate-950 dark:text-slate-200 dark:hover:bg-slate-800"
+              className="inline-flex items-center justify-center rounded-xl border border-stone-300 bg-[#fffdf9] px-4 py-2.5 text-sm font-semibold text-stone-800 transition hover:bg-stone-100 dark:border-slate-700 dark:bg-slate-950 dark:text-slate-200 dark:hover:bg-slate-800"
             >
               Get Started
             </Link>

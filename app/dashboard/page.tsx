@@ -247,9 +247,9 @@ export default function DashboardPage() {
 
   if (loading || !user) {
     return (
-      <div className="min-h-screen bg-slate-50 py-14 dark:bg-[#070d19]">
+      <div className="min-h-screen bg-transparent py-14">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="h-48 animate-pulse rounded-2xl border border-slate-200 bg-white dark:border-slate-800 dark:bg-slate-900" />
+          <div className="h-48 animate-pulse rounded-2xl border border-stone-200/90 bg-[#fffdf9]/90 dark:border-slate-800 dark:bg-slate-900/90" />
         </div>
       </div>
     );
@@ -291,12 +291,12 @@ export default function DashboardPage() {
           };
 
   return (
-    <div className="min-h-screen bg-slate-50 py-10 dark:bg-[#070d19] sm:py-12">
+    <div className="min-h-screen bg-transparent py-10 sm:py-12">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="rounded-2xl border border-slate-200 bg-[#06142e] p-6 text-white shadow-sm dark:border-slate-800 sm:p-8">
+        <div className="rounded-2xl border border-stone-800 bg-[#16120e] p-6 text-white shadow-sm dark:border-slate-800 dark:bg-[#06142e] sm:p-8">
           <div className="flex flex-col justify-between gap-6 lg:flex-row lg:items-center">
             <div className="flex flex-col gap-4 sm:flex-row sm:items-center">
-              <div className="relative h-16 w-16 shrink-0 overflow-hidden rounded-2xl border-2 border-blue-400/50 bg-blue-600/20">
+              <div className="relative h-16 w-16 shrink-0 overflow-hidden rounded-2xl border-2 border-amber-400/50 bg-amber-600/20 dark:border-blue-400/50 dark:bg-blue-600/20">
                 {user.image ? (
                   <img
                     src={user.image}
@@ -304,17 +304,17 @@ export default function DashboardPage() {
                     className="h-full w-full object-cover"
                   />
                 ) : (
-                  <div className="flex h-full w-full items-center justify-center text-2xl font-bold text-blue-300">
+                  <div className="flex h-full w-full items-center justify-center text-2xl font-bold text-amber-300 dark:text-blue-300">
                     {initials}
                   </div>
                 )}
               </div>
 
               <div className="space-y-2">
-                <div className="inline-flex items-center gap-2 rounded-full border border-blue-400/30 bg-blue-500/10 px-3 py-1 text-xs font-medium text-blue-300">
+                <div className="inline-flex items-center gap-2 rounded-full border border-amber-400/30 bg-amber-500/10 px-3 py-1 text-xs font-medium text-amber-300 dark:border-blue-400/30 dark:bg-blue-500/10 dark:text-blue-300">
                   <LayoutDashboard className="h-3.5 w-3.5" />
                   <span>{roleGuide.workspaceTitle}</span>
-                  <span className="rounded bg-blue-500/25 px-1.5 py-0.5 text-[10px] font-bold uppercase text-white">
+                  <span className="rounded bg-amber-500/25 px-1.5 py-0.5 text-[10px] font-bold uppercase text-white dark:bg-blue-500/25">
                     {role}
                   </span>
                 </div>
@@ -323,19 +323,19 @@ export default function DashboardPage() {
                   Welcome back, {user.name}
                 </h1>
 
-                <p className="max-w-2xl text-sm text-slate-300">
+                <p className="max-w-2xl text-sm text-stone-300 dark:text-slate-300">
                   {roleGuide.whyHere}
                 </p>
 
-                <div className="flex flex-wrap items-center gap-4 pt-1 text-xs text-slate-300 sm:text-sm">
+                <div className="flex flex-wrap items-center gap-4 pt-1 text-xs text-stone-300 dark:text-slate-300 sm:text-sm">
                   {user.email && (
                     <span className="inline-flex items-center gap-1.5">
-                      <Mail className="h-4 w-4 text-blue-400" />
+                      <Mail className="h-4 w-4 text-amber-300 dark:text-blue-400" />
                       <span>{user.email}</span>
                     </span>
                   )}
                   <span className="inline-flex items-center gap-1.5">
-                    <Crown className="h-4 w-4 text-blue-400" />
+                    <Crown className="h-4 w-4 text-amber-300 dark:text-blue-400" />
                     <span>Account Tier: {planLabel}</span>
                   </span>
                 </div>
@@ -346,7 +346,7 @@ export default function DashboardPage() {
               {role === "admin" && (
                 <Link
                   href="/dashboard/admin"
-                  className="inline-flex items-center gap-2 rounded-xl bg-blue-600 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-blue-500"
+                  className="inline-flex items-center gap-2 rounded-xl bg-amber-600 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-amber-500 dark:bg-blue-600 dark:hover:bg-blue-500"
                 >
                   <Shield className="h-4 w-4" />
                   <span>Admin Center</span>
@@ -356,7 +356,7 @@ export default function DashboardPage() {
               {role === "tutor" && (
                 <Link
                   href="/dashboard/tutor"
-                  className="inline-flex items-center gap-2 rounded-xl bg-blue-600 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-blue-500"
+                  className="inline-flex items-center gap-2 rounded-xl bg-amber-600 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-amber-500 dark:bg-blue-600 dark:hover:bg-blue-500"
                 >
                   <LayoutDashboard className="h-4 w-4" />
                   <span>Tutor Workspace</span>
@@ -366,7 +366,7 @@ export default function DashboardPage() {
               {role === "student" && (
                 <Link
                   href="/dashboard/student/my-applications"
-                  className="inline-flex items-center gap-2 rounded-xl bg-blue-600 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-blue-500"
+                  className="inline-flex items-center gap-2 rounded-xl bg-amber-600 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-amber-500 dark:bg-blue-600 dark:hover:bg-blue-500"
                 >
                   <FileText className="h-4 w-4" />
                   <span>My Applications</span>
@@ -375,23 +375,23 @@ export default function DashboardPage() {
               )}
               <Link
                 href="/tuitions"
-                className="inline-flex items-center gap-2 rounded-xl border border-slate-700 bg-slate-900/90 px-4 py-2.5 text-sm font-semibold text-white transition hover:border-blue-500"
+                className="inline-flex items-center gap-2 rounded-xl border border-stone-700 bg-[#261e16] px-4 py-2.5 text-sm font-semibold text-white transition hover:border-amber-400 dark:border-slate-700 dark:bg-slate-900/90 dark:hover:border-blue-500"
               >
-                <BookOpen className="h-4 w-4 text-blue-400" />
+                <BookOpen className="h-4 w-4 text-amber-300 dark:text-blue-400" />
                 <span>Browse Tuitions</span>
               </Link>
               <Link
                 href="/how-it-works"
-                className="inline-flex items-center gap-2 rounded-xl border border-slate-700 bg-slate-900/90 px-4 py-2.5 text-sm font-semibold text-white transition hover:border-blue-500"
+                className="inline-flex items-center gap-2 rounded-xl border border-stone-700 bg-[#261e16] px-4 py-2.5 text-sm font-semibold text-white transition hover:border-amber-400 dark:border-slate-700 dark:bg-slate-900/90 dark:hover:border-blue-500"
               >
-                <HelpCircle className="h-4 w-4 text-blue-400" />
+                <HelpCircle className="h-4 w-4 text-amber-300 dark:text-blue-400" />
                 <span>How It Works</span>
               </Link>
               <Link
                 href="/pricing"
-                className="inline-flex items-center gap-2 rounded-xl border border-slate-700 bg-slate-900/90 px-4 py-2.5 text-sm font-semibold text-white transition hover:border-blue-500"
+                className="inline-flex items-center gap-2 rounded-xl border border-stone-700 bg-[#261e16] px-4 py-2.5 text-sm font-semibold text-white transition hover:border-amber-400 dark:border-slate-700 dark:bg-slate-900/90 dark:hover:border-blue-500"
               >
-                <Sparkles className="h-4 w-4 text-blue-400" />
+                <Sparkles className="h-4 w-4 text-amber-300 dark:text-blue-400" />
                 <span>Pricing</span>
               </Link>
             </div>
@@ -399,22 +399,22 @@ export default function DashboardPage() {
         </div>
 
         <div className="mt-6 grid grid-cols-1 gap-4 md:grid-cols-2">
-          <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm dark:border-slate-800 dark:bg-slate-900">
-            <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-blue-600 dark:text-blue-400">
+          <div className="rounded-2xl border border-stone-200/90 bg-[#fffdf9]/92 p-5 shadow-xs backdrop-blur-xs dark:border-slate-800 dark:bg-slate-900/90">
+            <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-amber-800 dark:text-blue-400">
               <Compass className="h-4 w-4" />
               <span>What You Are Doing Here</span>
             </div>
-            <p className="mt-2 text-sm text-slate-700 dark:text-slate-300">
+            <p className="mt-2 text-sm text-stone-700 dark:text-slate-300">
               {roleGuide.doingNow}
             </p>
           </div>
 
-          <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm dark:border-slate-800 dark:bg-slate-900">
-            <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-blue-600 dark:text-blue-400">
+          <div className="rounded-2xl border border-stone-200/90 bg-[#fffdf9]/92 p-5 shadow-xs backdrop-blur-xs dark:border-slate-800 dark:bg-slate-900/90">
+            <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-amber-800 dark:text-blue-400">
               <ArrowRight className="h-4 w-4" />
               <span>What To Do Next</span>
             </div>
-            <p className="mt-2 text-sm text-slate-700 dark:text-slate-300">
+            <p className="mt-2 text-sm text-stone-700 dark:text-slate-300">
               {roleGuide.nextStep}
             </p>
           </div>
@@ -422,68 +422,68 @@ export default function DashboardPage() {
 
         {role === "student" && (
           <div className="mt-6 grid grid-cols-1 gap-6 md:grid-cols-3">
-            <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900">
-              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-blue-600/10 text-blue-600 dark:text-blue-400">
+            <div className="rounded-2xl border border-stone-200/90 bg-[#fffdf9]/92 p-6 shadow-xs backdrop-blur-xs dark:border-slate-800 dark:bg-slate-900/90">
+              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-amber-700/12 text-amber-800 dark:bg-blue-600/15 dark:text-blue-400">
                 <GraduationCap className="h-5 w-5" />
               </div>
-              <h2 className="mt-4 text-lg font-semibold text-slate-900 dark:text-white">
+              <h2 className="mt-4 text-lg font-semibold text-stone-900 dark:text-white">
                 Applied Batches
               </h2>
-              <p className="mt-1.5 text-sm text-slate-600 dark:text-slate-400">
+              <p className="mt-1.5 text-sm text-stone-600 dark:text-slate-400">
                 Track applications you submit to tutors and check whether they
                 are pending, accepted, or rejected.
               </p>
               <Link
                 href="/dashboard/student/my-applications"
-                className="mt-4 inline-flex items-center gap-1.5 text-sm font-semibold text-blue-600 hover:text-blue-500 dark:text-blue-400"
+                className="mt-4 inline-flex items-center gap-1.5 text-sm font-semibold text-amber-800 hover:text-amber-900 dark:text-blue-400 dark:hover:text-blue-300"
               >
                 <span>Open My Applications</span>
                 <ArrowRight className="h-4 w-4" />
               </Link>
             </div>
 
-            <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900">
-              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-blue-600/10 text-blue-600 dark:text-blue-400">
+            <div className="rounded-2xl border border-stone-200/90 bg-[#fffdf9]/92 p-6 shadow-xs backdrop-blur-xs dark:border-slate-800 dark:bg-slate-900/90">
+              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-amber-700/12 text-amber-800 dark:bg-blue-600/15 dark:text-blue-400">
                 <CheckCircle2 className="h-5 w-5" />
               </div>
-              <h2 className="mt-4 text-lg font-semibold text-slate-900 dark:text-white">
+              <h2 className="mt-4 text-lg font-semibold text-stone-900 dark:text-white">
                 How Students Apply
               </h2>
-              <p className="mt-1.5 text-sm text-slate-600 dark:text-slate-400">
+              <p className="mt-1.5 text-sm text-stone-600 dark:text-slate-400">
                 Browse approved tuition listings for free, check weekly days and
                 monthly fee, and apply directly.
               </p>
               <Link
                 href="/tuitions"
-                className="mt-4 inline-flex items-center gap-1.5 text-sm font-semibold text-blue-600 hover:text-blue-500 dark:text-blue-400"
+                className="mt-4 inline-flex items-center gap-1.5 text-sm font-semibold text-amber-800 hover:text-amber-900 dark:text-blue-400 dark:hover:text-blue-300"
               >
                 <span>Go to Browse Tuitions</span>
                 <ArrowRight className="h-4 w-4" />
               </Link>
             </div>
 
-            <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900">
-              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-blue-600/10 text-blue-600 dark:text-blue-400">
+            <div className="rounded-2xl border border-stone-200/90 bg-[#fffdf9]/92 p-6 shadow-xs backdrop-blur-xs dark:border-slate-800 dark:bg-slate-900/90">
+              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-amber-700/12 text-amber-800 dark:bg-blue-600/15 dark:text-blue-400">
                 <Tag className="h-5 w-5" />
               </div>
-              <h2 className="mt-4 text-lg font-semibold text-slate-900 dark:text-white">
+              <h2 className="mt-4 text-lg font-semibold text-stone-900 dark:text-white">
                 Student Overview &amp; Pricing
               </h2>
-              <p className="mt-1.5 text-sm text-slate-600 dark:text-slate-400">
+              <p className="mt-1.5 text-sm text-stone-600 dark:text-slate-400">
                 View your student dashboard stats or inspect transparent plans
                 anytime.
               </p>
               <div className="mt-4 flex flex-wrap items-center gap-4">
                 <Link
                   href="/dashboard/student"
-                  className="inline-flex items-center gap-1 text-sm font-semibold text-blue-600 hover:text-blue-500 dark:text-blue-400"
+                  className="inline-flex items-center gap-1 text-sm font-semibold text-amber-800 hover:text-amber-900 dark:text-blue-400 dark:hover:text-blue-300"
                 >
                   <span>Student Home</span>
                   <ArrowRight className="h-3.5 w-3.5" />
                 </Link>
                 <Link
                   href="/pricing"
-                  className="inline-flex items-center gap-1 text-sm font-semibold text-blue-600 hover:text-blue-500 dark:text-blue-400"
+                  className="inline-flex items-center gap-1 text-sm font-semibold text-amber-800 hover:text-amber-900 dark:text-blue-400 dark:hover:text-blue-300"
                 >
                   <span>View Pricing</span>
                   <ArrowRight className="h-3.5 w-3.5" />
@@ -495,76 +495,76 @@ export default function DashboardPage() {
 
         {role === "tutor" && (
           <div className="mt-6 grid grid-cols-1 gap-6 md:grid-cols-3">
-            <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900">
-              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-blue-600/10 text-blue-600 dark:text-blue-400">
+            <div className="rounded-2xl border border-stone-200/90 bg-[#fffdf9]/92 p-6 shadow-xs backdrop-blur-xs dark:border-slate-800 dark:bg-slate-900/90">
+              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-amber-700/12 text-amber-800 dark:bg-blue-600/15 dark:text-blue-400">
                 <PlusCircle className="h-5 w-5" />
               </div>
-              <h2 className="mt-4 text-lg font-semibold text-slate-900 dark:text-white">
+              <h2 className="mt-4 text-lg font-semibold text-stone-900 dark:text-white">
                 My Tuition Batches
               </h2>
-              <p className="mt-1.5 text-sm text-slate-600 dark:text-slate-400">
+              <p className="mt-1.5 text-sm text-stone-600 dark:text-slate-400">
                 Create and manage batches with subject, class level, schedule,
                 and monthly fee.
               </p>
               <div className="mt-4 flex flex-wrap items-center gap-4">
                 <Link
                   href="/dashboard/tutor/my-tuitions"
-                  className="inline-flex items-center gap-1.5 text-sm font-semibold text-blue-600 hover:text-blue-500 dark:text-blue-400"
+                  className="inline-flex items-center gap-1.5 text-sm font-semibold text-amber-800 hover:text-amber-900 dark:text-blue-400 dark:hover:text-blue-300"
                 >
                   <span>Manage Batches</span>
                   <ArrowRight className="h-4 w-4" />
                 </Link>
                 <Link
                   href="/dashboard/tutor/post-tuition"
-                  className="inline-flex items-center gap-1 text-sm font-semibold text-slate-700 hover:text-blue-600 dark:text-slate-300"
+                  className="inline-flex items-center gap-1 text-sm font-semibold text-stone-700 hover:text-amber-800 dark:text-slate-300 dark:hover:text-blue-400"
                 >
                   <span>+ Post New</span>
                 </Link>
               </div>
             </div>
 
-            <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900">
-              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-blue-600/10 text-blue-600 dark:text-blue-400">
+            <div className="rounded-2xl border border-stone-200/90 bg-[#fffdf9]/92 p-6 shadow-xs backdrop-blur-xs dark:border-slate-800 dark:bg-slate-900/90">
+              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-amber-700/12 text-amber-800 dark:bg-blue-600/15 dark:text-blue-400">
                 <Users className="h-5 w-5" />
               </div>
-              <h2 className="mt-4 text-lg font-semibold text-slate-900 dark:text-white">
+              <h2 className="mt-4 text-lg font-semibold text-stone-900 dark:text-white">
                 Incoming Applicants
               </h2>
-              <p className="mt-1.5 text-sm text-slate-600 dark:text-slate-400">
+              <p className="mt-1.5 text-sm text-stone-600 dark:text-slate-400">
                 Review student requests on your batches and approve or reject
                 applications.
               </p>
               <Link
                 href="/dashboard/tutor/applicants"
-                className="mt-4 inline-flex items-center gap-1.5 text-sm font-semibold text-blue-600 hover:text-blue-500 dark:text-blue-400"
+                className="mt-4 inline-flex items-center gap-1.5 text-sm font-semibold text-amber-800 hover:text-amber-900 dark:text-blue-400 dark:hover:text-blue-300"
               >
                 <span>Review Applicants</span>
                 <ArrowRight className="h-4 w-4" />
               </Link>
             </div>
 
-            <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900">
-              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-blue-600/10 text-blue-600 dark:text-blue-400">
+            <div className="rounded-2xl border border-stone-200/90 bg-[#fffdf9]/92 p-6 shadow-xs backdrop-blur-xs dark:border-slate-800 dark:bg-slate-900/90">
+              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-amber-700/12 text-amber-800 dark:bg-blue-600/15 dark:text-blue-400">
                 <Crown className="h-5 w-5" />
               </div>
-              <h2 className="mt-4 text-lg font-semibold text-slate-900 dark:text-white">
+              <h2 className="mt-4 text-lg font-semibold text-stone-900 dark:text-white">
                 Tutor Overview &amp; Plan ({planLabel})
               </h2>
-              <p className="mt-1.5 text-sm text-slate-600 dark:text-slate-400">
+              <p className="mt-1.5 text-sm text-stone-600 dark:text-slate-400">
                 Open your full tutor summary or compare Mentor Pro and Coaching
                 plans.
               </p>
               <div className="mt-4 flex flex-wrap items-center gap-4">
                 <Link
                   href="/dashboard/tutor"
-                  className="inline-flex items-center gap-1 text-sm font-semibold text-blue-600 hover:text-blue-500 dark:text-blue-400"
+                  className="inline-flex items-center gap-1 text-sm font-semibold text-amber-800 hover:text-amber-900 dark:text-blue-400 dark:hover:text-blue-300"
                 >
                   <span>Tutor Home</span>
                   <ArrowRight className="h-3.5 w-3.5" />
                 </Link>
                 <Link
                   href="/pricing"
-                  className="inline-flex items-center gap-1 text-sm font-semibold text-blue-600 hover:text-blue-500 dark:text-blue-400"
+                  className="inline-flex items-center gap-1 text-sm font-semibold text-amber-800 hover:text-amber-900 dark:text-blue-400 dark:hover:text-blue-300"
                 >
                   <span>Pricing Plans</span>
                   <ArrowRight className="h-3.5 w-3.5" />
@@ -576,66 +576,66 @@ export default function DashboardPage() {
 
         {role === "admin" && (
           <div className="mt-6 grid grid-cols-1 gap-6 md:grid-cols-3">
-            <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900">
-              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-blue-600/10 text-blue-600 dark:text-blue-400">
+            <div className="rounded-2xl border border-stone-200/90 bg-[#fffdf9]/92 p-6 shadow-xs backdrop-blur-xs dark:border-slate-800 dark:bg-slate-900/90">
+              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-amber-700/12 text-amber-800 dark:bg-blue-600/15 dark:text-blue-400">
                 <Shield className="h-5 w-5" />
               </div>
-              <h2 className="mt-4 text-lg font-semibold text-slate-900 dark:text-white">
+              <h2 className="mt-4 text-lg font-semibold text-stone-900 dark:text-white">
                 Tuition Moderation
               </h2>
-              <p className="mt-1.5 text-sm text-slate-600 dark:text-slate-400">
+              <p className="mt-1.5 text-sm text-stone-600 dark:text-slate-400">
                 Approve or reject tutor batch listings so students only see
                 verified posts.
               </p>
               <Link
                 href="/dashboard/admin/tuitions"
-                className="mt-4 inline-flex items-center gap-1.5 text-sm font-semibold text-blue-600 hover:text-blue-500 dark:text-blue-400"
+                className="mt-4 inline-flex items-center gap-1.5 text-sm font-semibold text-amber-800 hover:text-amber-900 dark:text-blue-400 dark:hover:text-blue-300"
               >
                 <span>Open Moderation Queue</span>
                 <ArrowRight className="h-4 w-4" />
               </Link>
             </div>
 
-            <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900">
-              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-blue-600/10 text-blue-600 dark:text-blue-400">
+            <div className="rounded-2xl border border-stone-200/90 bg-[#fffdf9]/92 p-6 shadow-xs backdrop-blur-xs dark:border-slate-800 dark:bg-slate-900/90">
+              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-amber-700/12 text-amber-800 dark:bg-blue-600/15 dark:text-blue-400">
                 <UserCheck className="h-5 w-5" />
               </div>
-              <h2 className="mt-4 text-lg font-semibold text-slate-900 dark:text-white">
+              <h2 className="mt-4 text-lg font-semibold text-stone-900 dark:text-white">
                 Users &amp; Roles
               </h2>
-              <p className="mt-1.5 text-sm text-slate-600 dark:text-slate-400">
+              <p className="mt-1.5 text-sm text-stone-600 dark:text-slate-400">
                 Inspect student, tutor, and admin accounts across the platform.
               </p>
               <Link
                 href="/dashboard/admin/users"
-                className="mt-4 inline-flex items-center gap-1.5 text-sm font-semibold text-blue-600 hover:text-blue-500 dark:text-blue-400"
+                className="mt-4 inline-flex items-center gap-1.5 text-sm font-semibold text-amber-800 hover:text-amber-900 dark:text-blue-400 dark:hover:text-blue-300"
               >
                 <span>Manage Users &amp; Roles</span>
                 <ArrowRight className="h-4 w-4" />
               </Link>
             </div>
 
-            <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900">
-              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-blue-600/10 text-blue-600 dark:text-blue-400">
+            <div className="rounded-2xl border border-stone-200/90 bg-[#fffdf9]/92 p-6 shadow-xs backdrop-blur-xs dark:border-slate-800 dark:bg-slate-900/90">
+              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-amber-700/12 text-amber-800 dark:bg-blue-600/15 dark:text-blue-400">
                 <Crown className="h-5 w-5" />
               </div>
-              <h2 className="mt-4 text-lg font-semibold text-slate-900 dark:text-white">
+              <h2 className="mt-4 text-lg font-semibold text-stone-900 dark:text-white">
                 Admin Overview &amp; Pricing
               </h2>
-              <p className="mt-1.5 text-sm text-slate-600 dark:text-slate-400">
+              <p className="mt-1.5 text-sm text-stone-600 dark:text-slate-400">
                 View moderation stats and review subscription plan tiers.
               </p>
               <div className="mt-4 flex flex-wrap items-center gap-4">
                 <Link
                   href="/dashboard/admin"
-                  className="inline-flex items-center gap-1 text-sm font-semibold text-blue-600 hover:text-blue-500 dark:text-blue-400"
+                  className="inline-flex items-center gap-1 text-sm font-semibold text-amber-800 hover:text-amber-900 dark:text-blue-400 dark:hover:text-blue-300"
                 >
                   <span>Admin Home</span>
                   <ArrowRight className="h-3.5 w-3.5" />
                 </Link>
                 <Link
                   href="/pricing"
-                  className="inline-flex items-center gap-1 text-sm font-semibold text-blue-600 hover:text-blue-500 dark:text-blue-400"
+                  className="inline-flex items-center gap-1 text-sm font-semibold text-amber-800 hover:text-amber-900 dark:text-blue-400 dark:hover:text-blue-300"
                 >
                   <span>Pricing Plans</span>
                   <ArrowRight className="h-3.5 w-3.5" />
@@ -645,27 +645,27 @@ export default function DashboardPage() {
           </div>
         )}
 
-        <div className="mt-8 rounded-2xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900 sm:p-8">
-          <div className="flex flex-wrap items-center justify-between gap-2 border-b border-slate-200 pb-4 dark:border-slate-800">
+        <div className="mt-8 rounded-2xl border border-stone-200/90 bg-[#fffdf9]/92 p-6 shadow-xs backdrop-blur-xs dark:border-slate-800 dark:bg-slate-900/90 sm:p-8">
+          <div className="flex flex-wrap items-center justify-between gap-2 border-b border-stone-200/80 pb-4 dark:border-slate-800">
             <div>
-              <h2 className="text-lg font-bold text-slate-900 dark:text-white">
+              <h2 className="text-lg font-bold text-stone-900 dark:text-white">
                 Update Profile ({role.toUpperCase()})
               </h2>
-              <p className="mt-1 text-sm text-slate-600 dark:text-slate-400">
+              <p className="mt-1 text-sm text-stone-600 dark:text-slate-400">
                 Update your profile photo, display name, email address, contact
                 number, and short bio for your {role} account.
               </p>
             </div>
             {hasUnsavedChanges && (
-              <span className="rounded-full bg-amber-500/15 px-3 py-1 text-xs font-semibold text-amber-700 dark:text-amber-300">
+              <span className="rounded-full bg-amber-500/15 px-3 py-1 text-xs font-semibold text-amber-800 dark:text-amber-300">
                 Unsaved changes
               </span>
             )}
           </div>
 
           <form onSubmit={handleProfileSave} className="mt-6 space-y-6">
-            <div className="flex flex-col gap-4 rounded-xl border border-slate-200 bg-slate-50 p-4 dark:border-slate-800 dark:bg-slate-950/70 sm:flex-row sm:items-center">
-              <div className="h-16 w-16 shrink-0 overflow-hidden rounded-2xl border border-slate-300 bg-white dark:border-slate-700 dark:bg-slate-900">
+            <div className="flex flex-col gap-4 rounded-xl border border-stone-200/90 bg-[#faf7f2] p-4 dark:border-slate-800 dark:bg-slate-950/70 sm:flex-row sm:items-center">
+              <div className="h-16 w-16 shrink-0 overflow-hidden rounded-2xl border border-stone-300 bg-[#fffdf9] dark:border-slate-700 dark:bg-slate-900">
                 {imageInput ? (
                   <img
                     src={imageInput}
@@ -673,7 +673,7 @@ export default function DashboardPage() {
                     className="h-full w-full object-cover"
                   />
                 ) : (
-                  <div className="flex h-full w-full items-center justify-center text-xl font-bold text-blue-600 dark:text-blue-400">
+                  <div className="flex h-full w-full items-center justify-center text-xl font-bold text-amber-800 dark:text-blue-400">
                     {(nameInput || "U").slice(0, 1).toUpperCase()}
                   </div>
                 )}
@@ -681,7 +681,7 @@ export default function DashboardPage() {
 
               <div className="flex-1 space-y-2.5">
                 <div className="flex flex-wrap items-center gap-2.5">
-                  <label className="inline-flex cursor-pointer items-center gap-1.5 rounded-lg bg-blue-600 px-3.5 py-2 text-xs font-semibold text-white transition hover:bg-blue-500">
+                  <label className="inline-flex cursor-pointer items-center gap-1.5 rounded-lg bg-amber-700 px-3.5 py-2 text-xs font-semibold text-white transition hover:bg-amber-800 dark:bg-blue-600 dark:hover:bg-blue-500">
                     <Camera className="h-3.5 w-3.5" />
                     <span>Upload Photo</span>
                     <input
@@ -696,7 +696,7 @@ export default function DashboardPage() {
                     <button
                       type="button"
                       onClick={() => setImageInput("")}
-                      className="inline-flex items-center gap-1.5 rounded-lg border border-slate-300 bg-white px-3 py-2 text-xs font-semibold text-slate-700 transition hover:border-red-400 hover:text-red-600 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-300"
+                      className="inline-flex items-center gap-1.5 rounded-lg border border-stone-300 bg-[#fffdf9] px-3 py-2 text-xs font-semibold text-stone-700 transition hover:border-red-400 hover:text-red-600 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-300"
                     >
                       <Trash2 className="h-3.5 w-3.5" />
                       <span>Remove</span>
@@ -705,13 +705,13 @@ export default function DashboardPage() {
                 </div>
 
                 <div className="relative">
-                  <ImageIcon className="pointer-events-none absolute top-1/2 left-3 h-3.5 w-3.5 -translate-y-1/2 text-slate-400" />
+                  <ImageIcon className="pointer-events-none absolute top-1/2 left-3 h-3.5 w-3.5 -translate-y-1/2 text-stone-400 dark:text-slate-400" />
                   <input
                     type="text"
                     value={imageInput}
                     onChange={(e) => setImageInput(e.target.value)}
                     placeholder="Or paste an image URL (https://...)"
-                    className="w-full rounded-lg border border-slate-300 bg-white py-2 pr-3 pl-9 text-xs text-slate-900 placeholder-slate-400 focus:border-blue-600 focus:outline-none dark:border-slate-700 dark:bg-slate-900 dark:text-white"
+                    className="w-full rounded-lg border border-stone-300 bg-[#fffdf9] py-2 pr-3 pl-9 text-xs text-stone-900 placeholder-stone-400 focus:border-amber-700 focus:outline-none dark:border-slate-700 dark:bg-slate-900 dark:text-white dark:focus:border-blue-500"
                   />
                 </div>
               </div>
@@ -719,56 +719,56 @@ export default function DashboardPage() {
 
             <div className="grid grid-cols-1 gap-5 md:grid-cols-3">
               <div>
-                <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300">
+                <label className="block text-xs font-semibold text-stone-700 dark:text-slate-300">
                   Full Name
                 </label>
                 <div className="relative mt-1.5">
-                  <User className="pointer-events-none absolute top-1/2 left-3.5 h-4 w-4 -translate-y-1/2 text-slate-400" />
+                  <User className="pointer-events-none absolute top-1/2 left-3.5 h-4 w-4 -translate-y-1/2 text-stone-400 dark:text-slate-400" />
                   <input
                     type="text"
                     value={nameInput}
                     onChange={(e) => setNameInput(e.target.value)}
                     placeholder="Your full name"
-                    className="w-full rounded-xl border border-slate-300 bg-slate-50 py-2.5 pr-4 pl-10 text-sm text-slate-900 placeholder-slate-400 focus:border-blue-600 focus:bg-white focus:outline-none dark:border-slate-700 dark:bg-slate-950 dark:text-white"
+                    className="w-full rounded-xl border border-stone-300 bg-[#faf7f2] py-2.5 pr-4 pl-10 text-sm text-stone-900 placeholder-stone-400 focus:border-amber-700 focus:bg-white focus:outline-none dark:border-slate-700 dark:bg-slate-950 dark:text-white dark:focus:border-blue-500"
                   />
                 </div>
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300">
+                <label className="block text-xs font-semibold text-stone-700 dark:text-slate-300">
                   Email Address
                 </label>
                 <div className="relative mt-1.5">
-                  <Mail className="pointer-events-none absolute top-1/2 left-3.5 h-4 w-4 -translate-y-1/2 text-slate-400" />
+                  <Mail className="pointer-events-none absolute top-1/2 left-3.5 h-4 w-4 -translate-y-1/2 text-stone-400 dark:text-slate-400" />
                   <input
                     type="email"
                     value={emailInput}
                     onChange={(e) => setEmailInput(e.target.value)}
                     placeholder="you@example.com"
-                    className="w-full rounded-xl border border-slate-300 bg-slate-50 py-2.5 pr-4 pl-10 text-sm text-slate-900 placeholder-slate-400 focus:border-blue-600 focus:bg-white focus:outline-none dark:border-slate-700 dark:bg-slate-950 dark:text-white"
+                    className="w-full rounded-xl border border-stone-300 bg-[#faf7f2] py-2.5 pr-4 pl-10 text-sm text-stone-900 placeholder-stone-400 focus:border-amber-700 focus:bg-white focus:outline-none dark:border-slate-700 dark:bg-slate-950 dark:text-white dark:focus:border-blue-500"
                   />
                 </div>
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300">
+                <label className="block text-xs font-semibold text-stone-700 dark:text-slate-300">
                   Phone Number (Optional)
                 </label>
                 <div className="relative mt-1.5">
-                  <Phone className="pointer-events-none absolute top-1/2 left-3.5 h-4 w-4 -translate-y-1/2 text-slate-400" />
+                  <Phone className="pointer-events-none absolute top-1/2 left-3.5 h-4 w-4 -translate-y-1/2 text-stone-400 dark:text-slate-400" />
                   <input
                     type="text"
                     value={phoneInput}
                     onChange={(e) => setPhoneInput(e.target.value)}
                     placeholder="e.g., +880 17XX-XXXXXX"
-                    className="w-full rounded-xl border border-slate-300 bg-slate-50 py-2.5 pr-4 pl-10 text-sm text-slate-900 placeholder-slate-400 focus:border-blue-600 focus:bg-white focus:outline-none dark:border-slate-700 dark:bg-slate-950 dark:text-white"
+                    className="w-full rounded-xl border border-stone-300 bg-[#faf7f2] py-2.5 pr-4 pl-10 text-sm text-stone-900 placeholder-stone-400 focus:border-amber-700 focus:bg-white focus:outline-none dark:border-slate-700 dark:bg-slate-950 dark:text-white dark:focus:border-blue-500"
                   />
                 </div>
               </div>
             </div>
 
             <div>
-              <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300">
+              <label className="block text-xs font-semibold text-stone-700 dark:text-slate-300">
                 Short Bio / Learning or Teaching Note
               </label>
               <textarea
@@ -782,7 +782,7 @@ export default function DashboardPage() {
                       ? "Moderator notes or responsibility summary..."
                       : "Share your class/exam goals or preferred subjects..."
                 }
-                className="mt-1.5 w-full rounded-xl border border-slate-300 bg-slate-50 px-4 py-2.5 text-sm text-slate-900 placeholder-slate-400 focus:border-blue-600 focus:bg-white focus:outline-none dark:border-slate-700 dark:bg-slate-950 dark:text-white"
+                className="mt-1.5 w-full rounded-xl border border-stone-300 bg-[#faf7f2] px-4 py-2.5 text-sm text-stone-900 placeholder-stone-400 focus:border-amber-700 focus:bg-white focus:outline-none dark:border-slate-700 dark:bg-slate-950 dark:text-white dark:focus:border-blue-500"
               />
             </div>
 
@@ -790,7 +790,7 @@ export default function DashboardPage() {
               <button
                 type="submit"
                 disabled={savingProfile}
-                className="inline-flex items-center gap-2 rounded-xl bg-blue-600 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-blue-500 disabled:opacity-60"
+                className="inline-flex items-center gap-2 rounded-xl bg-amber-700 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-amber-800 disabled:opacity-60 dark:bg-blue-600 dark:hover:bg-blue-500"
               >
                 <Save className="h-4 w-4" />
                 <span>{savingProfile ? "Saving..." : "Save Profile"}</span>

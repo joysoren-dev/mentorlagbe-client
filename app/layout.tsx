@@ -11,6 +11,16 @@ export const metadata: Metadata = {
     "Find verified tutors and mentorship batches by subject, class level, mode, and monthly budget.",
 };
 
+const themeInitScript = `
+  (function () {
+    try {
+      var saved = localStorage.getItem("mentorlagbe-theme");
+      var isDark = saved === "dark";
+      document.documentElement.classList.toggle("dark", isDark);
+    } catch (e) {}
+  })();
+`;
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -18,11 +28,18 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: themeInitScript }} />
+      </head>
       <body
         suppressHydrationWarning
-        className="flex min-h-screen flex-col antialiased"
+        className="theme-grid-bg flex min-h-screen flex-col antialiased"
       >
-        <Suspense fallback={<div className="h-16 w-full bg-[#06142e]" />}>
+        <Suspense
+          fallback={
+            <div className="h-16 w-full bg-[#16120e] dark:bg-[#06142e]" />
+          }
+        >
           <Navbar />
         </Suspense>
         <main className="flex-1">{children}</main>

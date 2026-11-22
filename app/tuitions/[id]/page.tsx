@@ -272,13 +272,13 @@ export default function TuitionDetailsPage() {
   const isStudent = role === "student";
 
   return (
-    <div className="min-h-screen bg-slate-50 dark:bg-[#070d19]">
-      {/* Top Dark Header */}
-      <section className="bg-[#06142e] py-10 text-white sm:py-14">
+    <div className="min-h-screen bg-transparent">
+      {/* Top Header */}
+      <section className="bg-[#16120e] py-10 text-white dark:bg-[#06142e] sm:py-14">
         <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
           <Link
             href="/tuitions"
-            className="inline-flex items-center gap-2 text-sm font-medium text-blue-300 transition hover:text-white"
+            className="inline-flex items-center gap-2 text-sm font-medium text-amber-300 transition hover:text-white dark:text-blue-300"
           >
             <ArrowLeft className="h-4 w-4" />
             <span>Back to All Tuitions</span>
@@ -287,11 +287,11 @@ export default function TuitionDetailsPage() {
           {!loading && tuition && (
             <div className="mt-4 space-y-3">
               <div className="flex flex-wrap items-center gap-2.5">
-                <span className="inline-flex items-center gap-1.5 rounded-full bg-blue-500/20 px-3 py-1 text-xs font-semibold text-blue-200">
+                <span className="inline-flex items-center gap-1.5 rounded-full bg-amber-500/20 px-3 py-1 text-xs font-semibold text-amber-200 dark:bg-blue-500/20 dark:text-blue-200">
                   <BookOpen className="h-3.5 w-3.5" />
                   <span>{tuition.subject}</span>
                 </span>
-                <span className="inline-flex items-center gap-1.5 rounded-full bg-white/10 px-3 py-1 text-xs font-medium text-slate-200">
+                <span className="inline-flex items-center gap-1.5 rounded-full bg-white/10 px-3 py-1 text-xs font-medium text-stone-200 dark:text-slate-200">
                   {isOnline ? (
                     <Laptop className="h-3.5 w-3.5" />
                   ) : (
@@ -312,28 +312,28 @@ export default function TuitionDetailsPage() {
       {/* Main Content */}
       <section className="mx-auto max-w-6xl px-4 py-8 sm:px-6 lg:px-8">
         {loading && (
-          <div className="rounded-2xl border border-slate-200 bg-white p-8 dark:border-slate-800 dark:bg-slate-900">
+          <div className="rounded-2xl border border-stone-200/90 bg-[#fffdf9]/90 p-8 dark:border-slate-800 dark:bg-slate-900/90">
             <div className="space-y-4">
-              <div className="h-7 w-2/3 animate-pulse rounded bg-slate-200 dark:bg-slate-800" />
-              <div className="h-4 w-full animate-pulse rounded bg-slate-200 dark:bg-slate-800" />
-              <div className="h-4 w-5/6 animate-pulse rounded bg-slate-200 dark:bg-slate-800" />
+              <div className="h-7 w-2/3 animate-pulse rounded bg-stone-200 dark:bg-slate-800" />
+              <div className="h-4 w-full animate-pulse rounded bg-stone-200 dark:bg-slate-800" />
+              <div className="h-4 w-5/6 animate-pulse rounded bg-stone-200 dark:bg-slate-800" />
             </div>
           </div>
         )}
 
         {!loading && (notFound || !tuition) && (
-          <div className="rounded-2xl border border-dashed border-slate-300 bg-white p-12 text-center dark:border-slate-700 dark:bg-slate-900">
-            <h2 className="text-xl font-bold text-slate-900 dark:text-white">
+          <div className="rounded-2xl border border-dashed border-stone-300 bg-[#fffdf9]/90 p-12 text-center dark:border-slate-700 dark:bg-slate-900/90">
+            <h2 className="text-xl font-bold text-stone-900 dark:text-white">
               Tuition Batch Not Found
             </h2>
-            <p className="mx-auto mt-2 max-w-md text-sm text-slate-600 dark:text-slate-400">
+            <p className="mx-auto mt-2 max-w-md text-sm text-stone-600 dark:text-slate-400">
               This batch may have been removed or the link is invalid. Explore
               other active tuitions from the directory.
             </p>
             <div className="mt-6">
               <Link
                 href="/tuitions"
-                className="inline-flex items-center gap-2 rounded-xl bg-blue-600 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-blue-700"
+                className="inline-flex items-center gap-2 rounded-xl bg-amber-700 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-amber-800 dark:bg-blue-600 dark:hover:bg-blue-500"
               >
                 <ArrowLeft className="h-4 w-4" />
                 <span>Browse Tuitions</span>
@@ -346,47 +346,47 @@ export default function TuitionDetailsPage() {
           <div className="grid grid-cols-1 items-start gap-7 lg:grid-cols-12">
             {/* Left Overview + Mentor Summary */}
             <div className="space-y-6 lg:col-span-7">
-              <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900 sm:p-7">
-                <h2 className="text-lg font-bold text-slate-900 dark:text-white">
+              <div className="rounded-2xl border border-stone-200/90 bg-[#fffdf9]/92 p-6 shadow-xs backdrop-blur-xs dark:border-slate-800 dark:bg-slate-900/90 sm:p-7">
+                <h2 className="text-lg font-bold text-stone-900 dark:text-white">
                   Batch Overview
                 </h2>
-                <p className="mt-3 text-sm leading-relaxed text-slate-600 dark:text-slate-300 sm:text-base">
+                <p className="mt-3 text-sm leading-relaxed text-stone-600 dark:text-slate-300 sm:text-base">
                   {tuition.description?.trim() ||
                     "Structured mentorship sessions focused on concept clarity, regular practice, and consistent academic progress."}
                 </p>
 
-                <div className="mt-6 grid grid-cols-1 gap-4 border-t border-slate-100 pt-6 sm:grid-cols-2 dark:border-slate-800">
-                  <div className="flex items-start gap-3 rounded-xl bg-slate-50 p-3.5 dark:bg-slate-950/70">
-                    <GraduationCap className="mt-0.5 h-5 w-5 text-blue-600 dark:text-blue-400" />
+                <div className="mt-6 grid grid-cols-1 gap-4 border-t border-stone-200/80 pt-6 sm:grid-cols-2 dark:border-slate-800">
+                  <div className="flex items-start gap-3 rounded-xl bg-[#faf7f2] p-3.5 dark:bg-slate-950/70">
+                    <GraduationCap className="mt-0.5 h-5 w-5 text-amber-700 dark:text-blue-400" />
                     <div>
-                      <p className="text-xs font-medium text-slate-500 dark:text-slate-400">
+                      <p className="text-xs font-medium text-stone-500 dark:text-slate-400">
                         Class Level
                       </p>
-                      <p className="text-sm font-semibold text-slate-900 dark:text-white">
+                      <p className="text-sm font-semibold text-stone-900 dark:text-white">
                         {tuition.classLevel || "General"}
                       </p>
                     </div>
                   </div>
 
-                  <div className="flex items-start gap-3 rounded-xl bg-slate-50 p-3.5 dark:bg-slate-950/70">
-                    <Calendar className="mt-0.5 h-5 w-5 text-blue-600 dark:text-blue-400" />
+                  <div className="flex items-start gap-3 rounded-xl bg-[#faf7f2] p-3.5 dark:bg-slate-950/70">
+                    <Calendar className="mt-0.5 h-5 w-5 text-amber-700 dark:text-blue-400" />
                     <div>
-                      <p className="text-xs font-medium text-slate-500 dark:text-slate-400">
+                      <p className="text-xs font-medium text-stone-500 dark:text-slate-400">
                         Weekly Schedule
                       </p>
-                      <p className="text-sm font-semibold text-slate-900 dark:text-white">
+                      <p className="text-sm font-semibold text-stone-900 dark:text-white">
                         {scheduleText}
                       </p>
                     </div>
                   </div>
 
-                  <div className="flex items-start gap-3 rounded-xl bg-slate-50 p-3.5 dark:bg-slate-950/70">
-                    <MapPin className="mt-0.5 h-5 w-5 text-blue-600 dark:text-blue-400" />
+                  <div className="flex items-start gap-3 rounded-xl bg-[#faf7f2] p-3.5 dark:bg-slate-950/70">
+                    <MapPin className="mt-0.5 h-5 w-5 text-amber-700 dark:text-blue-400" />
                     <div>
-                      <p className="text-xs font-medium text-slate-500 dark:text-slate-400">
+                      <p className="text-xs font-medium text-stone-500 dark:text-slate-400">
                         Location / Mode
                       </p>
-                      <p className="text-sm font-semibold text-slate-900 dark:text-white">
+                      <p className="text-sm font-semibold text-stone-900 dark:text-white">
                         {isOnline
                           ? "Online Session"
                           : tuition.location || "Local Batch"}
@@ -394,13 +394,13 @@ export default function TuitionDetailsPage() {
                     </div>
                   </div>
 
-                  <div className="flex items-start gap-3 rounded-xl bg-slate-50 p-3.5 dark:bg-slate-950/70">
-                    <UserCheck className="mt-0.5 h-5 w-5 text-blue-600 dark:text-blue-400" />
+                  <div className="flex items-start gap-3 rounded-xl bg-[#faf7f2] p-3.5 dark:bg-slate-950/70">
+                    <UserCheck className="mt-0.5 h-5 w-5 text-amber-700 dark:text-blue-400" />
                     <div>
-                      <p className="text-xs font-medium text-slate-500 dark:text-slate-400">
+                      <p className="text-xs font-medium text-stone-500 dark:text-slate-400">
                         Mentor
                       </p>
-                      <p className="text-sm font-semibold text-slate-900 dark:text-white">
+                      <p className="text-sm font-semibold text-stone-900 dark:text-white">
                         {tuition.tutorName || "Verified Mentor"}
                       </p>
                     </div>
@@ -408,16 +408,16 @@ export default function TuitionDetailsPage() {
                 </div>
               </div>
 
-              <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900">
+              <div className="rounded-2xl border border-stone-200/90 bg-[#fffdf9]/92 p-6 shadow-xs backdrop-blur-xs dark:border-slate-800 dark:bg-slate-900/90">
                 <div className="flex items-center gap-2.5">
-                  <ShieldCheck className="h-5 w-5 text-blue-600 dark:text-blue-400" />
-                  <h3 className="text-base font-bold text-slate-900 dark:text-white">
+                  <ShieldCheck className="h-5 w-5 text-amber-700 dark:text-blue-400" />
+                  <h3 className="text-base font-bold text-stone-900 dark:text-white">
                     What to Expect After Applying
                   </h3>
                 </div>
-                <p className="mt-2.5 text-sm leading-relaxed text-slate-600 dark:text-slate-400">
+                <p className="mt-2.5 text-sm leading-relaxed text-stone-600 dark:text-slate-400">
                   Your request goes directly to{" "}
-                  <span className="font-semibold text-slate-800 dark:text-slate-200">
+                  <span className="font-semibold text-stone-800 dark:text-slate-200">
                     {tuition.tutorName || "the mentor"}
                   </span>{" "}
                   with your preferred day and time slot. You can monitor{" "}
@@ -431,11 +431,11 @@ export default function TuitionDetailsPage() {
 
             {/* Right Fee & Apply Card */}
             <div className="lg:col-span-5">
-              <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900 sm:p-7">
-                <p className="text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">
+              <div className="rounded-2xl border border-stone-200/90 bg-[#fffdf9]/92 p-6 shadow-xs backdrop-blur-xs dark:border-slate-800 dark:bg-slate-900/90 sm:p-7">
+                <p className="text-xs font-semibold uppercase tracking-wider text-stone-500 dark:text-slate-400">
                   Monthly Fee
                 </p>
-                <p className="mt-1 text-3xl font-bold text-slate-900 dark:text-white">
+                <p className="mt-1 text-3xl font-bold text-stone-900 dark:text-white">
                   ৳{Number(tuition.monthlyFee || 0).toLocaleString()}
                 </p>
 
@@ -445,26 +445,26 @@ export default function TuitionDetailsPage() {
                 </div>
 
                 {!isLoggedIn ? (
-                  <div className="mt-6 space-y-3 border-t border-slate-100 pt-5 dark:border-slate-800">
-                    <p className="text-xs text-slate-600 dark:text-slate-400">
+                  <div className="mt-6 space-y-3 border-t border-stone-200/80 pt-5 dark:border-slate-800">
+                    <p className="text-xs text-stone-600 dark:text-slate-400">
                       Sign in with a Student account to apply for this tuition.
                     </p>
                     <Link
                       href="/sign-in"
-                      className="flex w-full items-center justify-center rounded-xl bg-blue-600 px-5 py-3 text-sm font-semibold text-white transition hover:bg-blue-700"
+                      className="flex w-full items-center justify-center rounded-xl bg-amber-700 px-5 py-3 text-sm font-semibold text-white transition hover:bg-amber-800 dark:bg-blue-600 dark:hover:bg-blue-500"
                     >
                       Sign In to Apply
                     </Link>
                     <Link
                       href="/sign-up?role=student"
-                      className="flex w-full items-center justify-center rounded-xl border border-slate-300 bg-white px-5 py-2.5 text-sm font-semibold text-slate-800 transition hover:bg-slate-50 dark:border-slate-700 dark:bg-slate-950 dark:text-slate-200 dark:hover:bg-slate-800"
+                      className="flex w-full items-center justify-center rounded-xl border border-stone-300 bg-[#fffdf9] px-5 py-2.5 text-sm font-semibold text-stone-800 transition hover:bg-stone-100 dark:border-slate-700 dark:bg-slate-950 dark:text-slate-200 dark:hover:bg-slate-800"
                     >
                       Create Student Account
                     </Link>
                   </div>
                 ) : !isStudent ? (
-                  <div className="mt-6 rounded-xl border-t border-slate-100 pt-5 dark:border-slate-800">
-                    <p className="rounded-xl bg-slate-100 p-4 text-xs leading-relaxed text-slate-700 dark:bg-slate-800 dark:text-slate-300">
+                  <div className="mt-6 rounded-xl border-t border-stone-200/80 pt-5 dark:border-slate-800">
+                    <p className="rounded-xl bg-stone-100 p-4 text-xs leading-relaxed text-stone-700 dark:bg-slate-800 dark:text-slate-300">
                       Only <strong>Student</strong> accounts can apply to
                       tuitions. You are signed in as{" "}
                       <strong className="uppercase">{role}</strong>.
@@ -490,10 +490,10 @@ export default function TuitionDetailsPage() {
                 ) : (
                   <form
                     onSubmit={handleApplySubmit}
-                    className="mt-6 space-y-4 border-t border-slate-100 pt-5 dark:border-slate-800"
+                    className="mt-6 space-y-4 border-t border-stone-200/80 pt-5 dark:border-slate-800"
                   >
                     <div>
-                      <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300">
+                      <label className="block text-xs font-semibold text-stone-700 dark:text-slate-300">
                         Phone Number
                       </label>
                       <input
@@ -501,17 +501,17 @@ export default function TuitionDetailsPage() {
                         value={phone}
                         onChange={(e) => setPhone(e.target.value)}
                         placeholder="e.g., 017XXXXXXXX"
-                        className="mt-1.5 w-full rounded-xl border border-slate-300 bg-slate-50 px-3.5 py-2.5 text-sm text-slate-900 placeholder-slate-400 focus:border-blue-600 focus:bg-white focus:outline-none dark:border-slate-700 dark:bg-slate-950 dark:text-white"
+                        className="mt-1.5 w-full rounded-xl border border-stone-300 bg-[#faf7f2] px-3.5 py-2.5 text-sm text-stone-900 placeholder-stone-400 focus:border-amber-700 focus:bg-white focus:outline-none dark:border-slate-700 dark:bg-slate-950 dark:text-white dark:focus:border-blue-500"
                       />
                     </div>
 
-                    <div className="space-y-3 rounded-xl border border-slate-200/90 bg-slate-50/80 p-3.5 dark:border-slate-800 dark:bg-slate-950/60">
+                    <div className="space-y-3 rounded-xl border border-stone-200/90 bg-[#faf7f2]/85 p-3.5 dark:border-slate-800 dark:bg-slate-950/60">
                       <div className="flex items-center justify-between">
-                        <label className="flex items-center gap-1.5 text-xs font-semibold text-slate-800 dark:text-slate-200">
-                          <Clock className="h-3.5 w-3.5 text-blue-600 dark:text-blue-400" />
+                        <label className="flex items-center gap-1.5 text-xs font-semibold text-stone-800 dark:text-slate-200">
+                          <Clock className="h-3.5 w-3.5 text-amber-700 dark:text-blue-400" />
                           <span>Preferred Schedule (7-Day &amp; 24-Hour)</span>
                         </label>
-                        <span className="text-[11px] font-medium text-blue-600 dark:text-blue-400">
+                        <span className="text-[11px] font-medium text-amber-800 dark:text-blue-400">
                           {selectedDays.length}{" "}
                           {selectedDays.length === 1 ? "day" : "days"}
                         </span>
@@ -527,8 +527,8 @@ export default function TuitionDetailsPage() {
                               onClick={() => handleToggleDay(day)}
                               className={`rounded-lg py-1.5 text-[11px] font-semibold transition ${
                                 active
-                                  ? "bg-blue-600 text-white"
-                                  : "border border-slate-200 bg-white text-slate-700 hover:border-blue-400 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-300"
+                                  ? "bg-amber-700 text-white dark:bg-blue-600"
+                                  : "border border-stone-200 bg-[#fffdf9] text-stone-700 hover:border-amber-600 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-300 dark:hover:border-blue-400"
                               }`}
                             >
                               {day}
@@ -540,7 +540,7 @@ export default function TuitionDetailsPage() {
                       <div className="flex flex-col gap-1.5 sm:flex-row sm:items-center sm:justify-between">
                         <label
                           htmlFor="preferred-time-24h"
-                          className="text-[11px] font-semibold text-slate-700 dark:text-slate-300"
+                          className="text-[11px] font-semibold text-stone-700 dark:text-slate-300"
                         >
                           Time Slot (24-Hour Input)
                         </label>
@@ -549,7 +549,7 @@ export default function TuitionDetailsPage() {
                           type="time"
                           value={time24}
                           onChange={(e) => handleTimeChange(e.target.value)}
-                          className="rounded-lg border border-slate-300 bg-white px-2.5 py-1.5 text-xs font-medium text-slate-900 focus:border-blue-600 focus:outline-none dark:border-slate-700 dark:bg-slate-900 dark:text-white"
+                          className="rounded-lg border border-stone-300 bg-[#fffdf9] px-2.5 py-1.5 text-xs font-medium text-stone-900 focus:border-amber-700 focus:outline-none dark:border-slate-700 dark:bg-slate-900 dark:text-white dark:focus:border-blue-500"
                         />
                       </div>
 
@@ -558,12 +558,12 @@ export default function TuitionDetailsPage() {
                         value={preferredSchedule}
                         onChange={(e) => setPreferredSchedule(e.target.value)}
                         placeholder="e.g., Sun / Tue / Thu, 6:00 PM"
-                        className="w-full rounded-xl border border-slate-300 bg-white px-3.5 py-2 text-sm text-slate-900 placeholder-slate-400 focus:border-blue-600 focus:outline-none dark:border-slate-700 dark:bg-slate-900 dark:text-white"
+                        className="w-full rounded-xl border border-stone-300 bg-[#fffdf9] px-3.5 py-2 text-sm text-stone-900 placeholder-stone-400 focus:border-amber-700 focus:outline-none dark:border-slate-700 dark:bg-slate-900 dark:text-white dark:focus:border-blue-500"
                       />
                     </div>
 
                     <div>
-                      <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300">
+                      <label className="block text-xs font-semibold text-stone-700 dark:text-slate-300">
                         Learning Note (Optional)
                       </label>
                       <textarea
@@ -571,14 +571,14 @@ export default function TuitionDetailsPage() {
                         value={message}
                         onChange={(e) => setMessage(e.target.value)}
                         placeholder="Share your goals or questions for the mentor..."
-                        className="mt-1.5 w-full rounded-xl border border-slate-300 bg-slate-50 p-3 text-sm text-slate-900 placeholder-slate-400 focus:border-blue-600 focus:bg-white focus:outline-none dark:border-slate-700 dark:bg-slate-950 dark:text-white"
+                        className="mt-1.5 w-full rounded-xl border border-stone-300 bg-[#faf7f2] p-3 text-sm text-stone-900 placeholder-stone-400 focus:border-amber-700 focus:bg-white focus:outline-none dark:border-slate-700 dark:bg-slate-950 dark:text-white dark:focus:border-blue-500"
                       />
                     </div>
 
                     <button
                       type="submit"
                       disabled={submitting}
-                      className="flex w-full items-center justify-center gap-2 rounded-xl bg-blue-600 px-5 py-3 text-sm font-semibold text-white transition hover:bg-blue-700 disabled:opacity-60"
+                      className="flex w-full items-center justify-center gap-2 rounded-xl bg-amber-700 px-5 py-3 text-sm font-semibold text-white transition hover:bg-amber-800 disabled:opacity-60 dark:bg-blue-600 dark:hover:bg-blue-500"
                     >
                       {submitting ? (
                         <Loader2 className="h-4 w-4 animate-spin" />

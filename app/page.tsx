@@ -134,14 +134,13 @@ export default function HomePage() {
   }, [isPaused]);
 
   return (
-    <div className="w-full">
+    <div className="theme-grid-bg w-full text-stone-900 dark:text-slate-100">
       {/* Full-Width Horizontal 3-Slide Hero Carousel */}
       <section
         onMouseEnter={() => setIsPaused(true)}
         onMouseLeave={() => setIsPaused(false)}
-        className="relative overflow-hidden bg-[#06142e] text-white"
+        className="relative overflow-hidden bg-[#16120e] text-stone-100 dark:bg-[#06142e] dark:text-white"
       >
-        {/* Sliding Track: each slide is a full-width separate slide with its own photo */}
         <div
           className="flex w-full transition-transform duration-400 ease-out"
           style={{ transform: `translateX(-${activeSlide * 100}%)` }}
@@ -155,14 +154,14 @@ export default function HomePage() {
                 src={encodeURI(slide.image)}
                 alt={slide.panelTitle}
                 aria-hidden="true"
-                className="pointer-events-none absolute inset-0 h-full w-full object-cover object-center opacity-70"
+                className="pointer-events-none absolute inset-0 h-full w-full object-cover object-center opacity-65"
               />
               <div
                 aria-hidden="true"
-                className="pointer-events-none absolute inset-0 bg-gradient-to-r from-[#06142e]/85 via-[#06142e]/55 to-[#06142e]/75"
+                className="pointer-events-none absolute inset-0 bg-gradient-to-r from-[#16120e]/90 via-[#16120e]/65 to-[#16120e]/80 dark:from-[#06142e]/85 dark:via-[#06142e]/55 dark:to-[#06142e]/75"
               />
-              <div className="pointer-events-none absolute -top-24 right-0 h-80 w-80 rounded-full bg-blue-600/20 blur-3xl" />
-              <div className="pointer-events-none absolute -bottom-24 left-0 h-80 w-80 rounded-full bg-indigo-500/15 blur-3xl" />
+              <div className="pointer-events-none absolute -top-24 right-0 h-80 w-80 rounded-full bg-amber-500/15 blur-3xl dark:bg-blue-600/20" />
+              <div className="pointer-events-none absolute -bottom-24 left-0 h-80 w-80 rounded-full bg-orange-400/10 blur-3xl dark:bg-indigo-500/15" />
 
               <div className="relative mx-auto max-w-7xl px-4 py-16 sm:px-6 sm:py-20 lg:px-8 lg:py-24">
                 <div className="grid grid-cols-1 items-center gap-12 lg:grid-cols-12">
@@ -170,24 +169,24 @@ export default function HomePage() {
                   <div className="space-y-6 lg:col-span-7">
                     <div className="space-y-5">
                       <div className="flex flex-wrap items-center gap-2.5">
-                        <span className="inline-flex items-center gap-2 rounded-full border border-blue-400/40 bg-[#06142e]/80 px-3.5 py-1.5 text-xs font-medium text-blue-300 backdrop-blur-sm">
+                        <span className="inline-flex items-center gap-2 rounded-full border border-amber-400/40 bg-[#1c1610]/85 px-3.5 py-1.5 text-xs font-medium text-amber-200 backdrop-blur-sm dark:border-blue-400/40 dark:bg-[#06142e]/80 dark:text-blue-300">
                           <Sparkles className="h-3.5 w-3.5" />
                           <span>{slide.badge}</span>
                         </span>
-                        <span className="rounded-full border border-slate-700/80 bg-slate-900/85 px-2.5 py-1 text-[11px] font-semibold tracking-wider text-slate-200 backdrop-blur-sm">
+                        <span className="rounded-full border border-stone-700/80 bg-stone-900/85 px-2.5 py-1 text-[11px] font-semibold tracking-wider text-stone-200 backdrop-blur-sm dark:border-slate-700/80 dark:bg-slate-900/85 dark:text-slate-200">
                           {slide.tag}
                         </span>
                       </div>
 
                       <h1 className="text-3xl font-bold tracking-tight text-white drop-shadow-[0_2px_12px_rgba(0,0,0,0.65)] sm:text-4xl lg:text-5xl lg:leading-[1.15]">
                         {slide.titlePrefix}
-                        <span className="text-blue-400">
+                        <span className="text-amber-300 dark:text-blue-400">
                           {slide.titleHighlight}
                         </span>
                         {slide.titleSuffix}
                       </h1>
 
-                      <p className="max-w-2xl rounded-xl bg-[#06142e]/55 px-3.5 py-2.5 text-base leading-relaxed text-slate-200 backdrop-blur-[2px] sm:text-lg">
+                      <p className="max-w-2xl rounded-xl bg-[#16120e]/65 px-3.5 py-2.5 text-base leading-relaxed text-stone-200 backdrop-blur-[2px] dark:bg-[#06142e]/55 dark:text-slate-200 sm:text-lg">
                         {slide.description}
                       </p>
                     </div>
@@ -196,37 +195,37 @@ export default function HomePage() {
                     <form
                       action="/tuitions"
                       method="GET"
-                      className="flex flex-col gap-3 rounded-2xl border border-slate-700/80 bg-slate-900/90 p-2.5 shadow-lg backdrop-blur-md sm:flex-row sm:items-center"
+                      className="flex flex-col gap-3 rounded-2xl border border-stone-700/80 bg-stone-900/90 p-2.5 shadow-lg backdrop-blur-md dark:border-slate-700/80 dark:bg-slate-900/90 sm:flex-row sm:items-center"
                     >
                       <div className="flex flex-1 items-center gap-2.5 px-3 py-1.5">
-                        <BookOpen className="h-4 w-4 shrink-0 text-blue-400" />
+                        <BookOpen className="h-4 w-4 shrink-0 text-amber-300 dark:text-blue-400" />
                         <input
                           type="text"
                           name="search"
                           placeholder="Search subject, course, or batch title (e.g., Math, Physics, IELTS)..."
-                          className="w-full bg-transparent text-sm text-white placeholder-slate-400 focus:outline-none"
+                          className="w-full bg-transparent text-sm text-white placeholder-stone-400 focus:outline-none dark:placeholder-slate-400"
                         />
                       </div>
                       <button
                         type="submit"
-                        className="inline-flex items-center justify-center gap-2 rounded-xl bg-blue-600 px-5 py-3 text-sm font-semibold text-white transition hover:bg-blue-500"
+                        className="inline-flex items-center justify-center gap-2 rounded-xl bg-amber-600 px-5 py-3 text-sm font-semibold text-white transition hover:bg-amber-700 dark:bg-blue-600 dark:hover:bg-blue-500"
                       >
                         <span>Browse Tuitions</span>
                         <ArrowRight className="h-4 w-4" />
                       </button>
                     </form>
 
-                    <div className="flex flex-wrap items-center gap-x-6 gap-y-2 pt-1 text-xs text-slate-200 sm:text-sm">
-                      <span className="inline-flex items-center gap-2 rounded-lg bg-[#06142e]/65 px-2.5 py-1 backdrop-blur-[2px]">
-                        <CheckCircle2 className="h-4 w-4 text-blue-400" />
+                    <div className="flex flex-wrap items-center gap-x-6 gap-y-2 pt-1 text-xs text-stone-200 dark:text-slate-200 sm:text-sm">
+                      <span className="inline-flex items-center gap-2 rounded-lg bg-[#16120e]/70 px-2.5 py-1 backdrop-blur-[2px] dark:bg-[#06142e]/65">
+                        <CheckCircle2 className="h-4 w-4 text-amber-300 dark:text-blue-400" />
                         <span>Verified Tutors</span>
                       </span>
-                      <span className="inline-flex items-center gap-2 rounded-lg bg-[#06142e]/65 px-2.5 py-1 backdrop-blur-[2px]">
-                        <CheckCircle2 className="h-4 w-4 text-blue-400" />
+                      <span className="inline-flex items-center gap-2 rounded-lg bg-[#16120e]/70 px-2.5 py-1 backdrop-blur-[2px] dark:bg-[#06142e]/65">
+                        <CheckCircle2 className="h-4 w-4 text-amber-300 dark:text-blue-400" />
                         <span>Online &amp; Offline Modes</span>
                       </span>
-                      <span className="inline-flex items-center gap-2 rounded-lg bg-[#06142e]/65 px-2.5 py-1 backdrop-blur-[2px]">
-                        <CheckCircle2 className="h-4 w-4 text-blue-400" />
+                      <span className="inline-flex items-center gap-2 rounded-lg bg-[#16120e]/70 px-2.5 py-1 backdrop-blur-[2px] dark:bg-[#06142e]/65">
+                        <CheckCircle2 className="h-4 w-4 text-amber-300 dark:text-blue-400" />
                         <span>Real-Time Status</span>
                       </span>
                     </div>
@@ -234,17 +233,17 @@ export default function HomePage() {
 
                   {/* Right Column: Visual Highlight Panel */}
                   <div className="lg:col-span-5">
-                    <div className="rounded-2xl border border-slate-700/80 bg-slate-900/85 p-6 shadow-2xl backdrop-blur-md">
-                      <div className="flex items-center justify-between border-b border-slate-800 pb-4">
+                    <div className="rounded-2xl border border-stone-700/80 bg-stone-900/90 p-6 shadow-2xl backdrop-blur-md dark:border-slate-700/80 dark:bg-slate-900/85">
+                      <div className="flex items-center justify-between border-b border-stone-800 pb-4 dark:border-slate-800">
                         <div>
-                          <p className="text-xs font-medium uppercase tracking-wider text-blue-400">
+                          <p className="text-xs font-medium uppercase tracking-wider text-amber-300 dark:text-blue-400">
                             {slide.panelLabel}
                           </p>
                           <h2 className="mt-1 text-lg font-semibold text-white">
                             {slide.panelTitle}
                           </h2>
                         </div>
-                        <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-blue-600/20 text-blue-400">
+                        <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-amber-500/20 text-amber-300 dark:bg-blue-600/20 dark:text-blue-400">
                           {slide.id === 0 && (
                             <ShieldCheck className="h-5 w-5" />
                           )}
@@ -256,53 +255,53 @@ export default function HomePage() {
                       </div>
 
                       <div className="mt-5 space-y-3.5">
-                        <div className="flex items-start gap-3 rounded-xl border border-slate-800 bg-[#06142e]/85 p-3.5">
-                          <Users className="mt-0.5 h-5 w-5 shrink-0 text-blue-400" />
+                        <div className="flex items-start gap-3 rounded-xl border border-stone-800 bg-[#16120e]/85 p-3.5 dark:border-slate-800 dark:bg-[#06142e]/85">
+                          <Users className="mt-0.5 h-5 w-5 shrink-0 text-amber-300 dark:text-blue-400" />
                           <div>
                             <p className="text-sm font-semibold text-white">
                               {slide.highlightOneTitle}
                             </p>
-                            <p className="mt-0.5 text-xs leading-relaxed text-slate-400">
+                            <p className="mt-0.5 text-xs leading-relaxed text-stone-300 dark:text-slate-400">
                               {slide.highlightOneDesc}
                             </p>
                           </div>
                         </div>
 
-                        <div className="flex items-start gap-3 rounded-xl border border-slate-800 bg-[#06142e]/85 p-3.5">
-                          <BookOpen className="mt-0.5 h-5 w-5 shrink-0 text-blue-400" />
+                        <div className="flex items-start gap-3 rounded-xl border border-stone-800 bg-[#16120e]/85 p-3.5 dark:border-slate-800 dark:bg-[#06142e]/85">
+                          <BookOpen className="mt-0.5 h-5 w-5 shrink-0 text-amber-300 dark:text-blue-400" />
                           <div>
                             <p className="text-sm font-semibold text-white">
                               {slide.highlightTwoTitle}
                             </p>
-                            <p className="mt-0.5 text-xs leading-relaxed text-slate-400">
+                            <p className="mt-0.5 text-xs leading-relaxed text-stone-300 dark:text-slate-400">
                               {slide.highlightTwoDesc}
                             </p>
                           </div>
                         </div>
                       </div>
 
-                      <div className="mt-5 grid grid-cols-3 gap-3 border-t border-slate-800 pt-4 text-center">
-                        <div className="rounded-lg bg-slate-800/60 p-2.5">
+                      <div className="mt-5 grid grid-cols-3 gap-3 border-t border-stone-800 pt-4 text-center dark:border-slate-800">
+                        <div className="rounded-lg bg-stone-800/70 p-2.5 dark:bg-slate-800/60">
                           <p className="text-base font-bold text-white">
                             {slide.statOneValue}
                           </p>
-                          <p className="text-[11px] text-slate-400">
+                          <p className="text-[11px] text-stone-300 dark:text-slate-400">
                             {slide.statOneLabel}
                           </p>
                         </div>
-                        <div className="rounded-lg bg-slate-800/60 p-2.5">
-                          <p className="text-base font-bold text-blue-400">
+                        <div className="rounded-lg bg-stone-800/70 p-2.5 dark:bg-slate-800/60">
+                          <p className="text-base font-bold text-amber-300 dark:text-blue-400">
                             {slide.statTwoValue}
                           </p>
-                          <p className="text-[11px] text-slate-400">
+                          <p className="text-[11px] text-stone-300 dark:text-slate-400">
                             {slide.statTwoLabel}
                           </p>
                         </div>
-                        <div className="rounded-lg bg-slate-800/60 p-2.5">
+                        <div className="rounded-lg bg-stone-800/70 p-2.5 dark:bg-slate-800/60">
                           <p className="text-base font-bold text-white">
                             {slide.statThreeValue}
                           </p>
-                          <p className="text-[11px] text-slate-400">
+                          <p className="text-[11px] text-stone-300 dark:text-slate-400">
                             {slide.statThreeLabel}
                           </p>
                         </div>
@@ -311,7 +310,7 @@ export default function HomePage() {
                       <div className="mt-4 flex justify-end">
                         <Link
                           href="/tuitions"
-                          className="inline-flex items-center gap-1.5 text-xs font-semibold text-blue-400 transition hover:text-blue-300"
+                          className="inline-flex items-center gap-1.5 text-xs font-semibold text-amber-300 transition hover:text-amber-200 dark:text-blue-400 dark:hover:text-blue-300"
                         >
                           <span>Explore all listings</span>
                           <ArrowRight className="h-3.5 w-3.5" />
@@ -326,7 +325,7 @@ export default function HomePage() {
         </div>
 
         {/* Centered Capsule Indicators */}
-        <div className="relative mx-auto flex max-w-7xl items-center justify-center border-t border-slate-800/80 bg-[#06142e]/80 px-4 py-4 backdrop-blur-sm sm:px-6 lg:px-8">
+        <div className="relative mx-auto flex max-w-7xl items-center justify-center border-t border-stone-800/80 bg-[#16120e]/85 px-4 py-4 backdrop-blur-sm dark:border-slate-800/80 dark:bg-[#06142e]/80 sm:px-6 lg:px-8">
           <div className="flex items-center gap-2">
             {HERO_SLIDES.map((slide) => {
               const isActive = activeSlide === slide.id;
@@ -338,8 +337,8 @@ export default function HomePage() {
                   aria-label={`Go to slide ${slide.id + 1}`}
                   className={`h-2.5 rounded-full transition-all duration-300 ${
                     isActive
-                      ? "w-8 bg-blue-500"
-                      : "w-2.5 bg-slate-600 hover:bg-slate-500"
+                      ? "w-8 bg-amber-400 dark:bg-blue-500"
+                      : "w-2.5 bg-stone-600 hover:bg-stone-500 dark:bg-slate-600 dark:hover:bg-slate-500"
                   }`}
                 />
               );

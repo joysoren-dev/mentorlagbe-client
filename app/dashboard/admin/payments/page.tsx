@@ -121,18 +121,18 @@ export default function AdminPaymentsPage() {
   }, [payments]);
 
   return (
-    <div className="min-h-screen bg-slate-50 py-10 dark:bg-[#070d19]">
+    <div className="min-h-screen bg-transparent py-10">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="flex flex-col justify-between gap-4 rounded-2xl bg-[#06142e] p-6 text-white sm:flex-row sm:items-center sm:p-8">
+        <div className="flex flex-col justify-between gap-4 rounded-2xl border border-stone-800 bg-[#16120e] p-6 text-white shadow-sm dark:border-slate-800 dark:bg-[#06142e] sm:flex-row sm:items-center sm:p-8">
           <div>
-            <div className="inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider text-blue-400">
+            <div className="inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider text-amber-300 dark:text-blue-400">
               <Shield className="h-3.5 w-3.5" />
-              <span>Admin Revenue & Transactions</span>
+              <span>Admin Revenue &amp; Transactions</span>
             </div>
             <h1 className="mt-1 text-2xl font-bold sm:text-3xl">
-              Payment History & Subscriptions
+              Payment History &amp; Subscriptions
             </h1>
-            <p className="mt-1 text-sm text-slate-300">
+            <p className="mt-1 text-sm text-stone-300 dark:text-slate-300">
               Monitor all Stripe Pro plan upgrades, transaction IDs, and
               platform revenue.
             </p>
@@ -140,63 +140,63 @@ export default function AdminPaymentsPage() {
 
           <Link
             href="/dashboard/admin"
-            className="inline-flex items-center gap-2 rounded-xl border border-slate-700 bg-slate-900 px-4 py-2.5 text-sm font-semibold text-white hover:border-blue-500"
+            className="inline-flex items-center gap-2 rounded-xl border border-stone-700 bg-[#261e16] px-4 py-2.5 text-sm font-semibold text-white transition hover:border-amber-400 dark:border-slate-700 dark:bg-slate-900 dark:hover:border-blue-500"
           >
-            <ArrowLeft className="h-4 w-4 text-blue-400" />
+            <ArrowLeft className="h-4 w-4 text-amber-300 dark:text-blue-400" />
             <span>Back to Admin Center</span>
           </Link>
         </div>
 
         {/* Summary Cards */}
         <div className="mt-6 grid grid-cols-1 gap-5 sm:grid-cols-3">
-          <div className="rounded-2xl border border-slate-200 bg-white p-6 dark:border-slate-800 dark:bg-slate-900">
-            <div className="flex items-center justify-between text-slate-500">
+          <div className="rounded-2xl border border-stone-200/90 bg-[#fffdf9]/92 p-6 shadow-xs backdrop-blur-xs dark:border-slate-800 dark:bg-slate-900/90">
+            <div className="flex items-center justify-between text-stone-500 dark:text-slate-400">
               <span className="text-xs font-semibold uppercase">
                 Total Revenue
               </span>
-              <DollarSign className="h-4 w-4 text-emerald-500" />
+              <DollarSign className="h-4 w-4 text-emerald-600 dark:text-emerald-400" />
             </div>
-            <p className="mt-3 text-3xl font-bold text-slate-900 dark:text-white">
+            <p className="mt-3 text-3xl font-bold text-stone-900 dark:text-white">
               {loading ? "..." : `$${totalRevenue.toFixed(2)}`}
             </p>
           </div>
 
-          <div className="rounded-2xl border border-slate-200 bg-white p-6 dark:border-slate-800 dark:bg-slate-900">
-            <div className="flex items-center justify-between text-slate-500">
+          <div className="rounded-2xl border border-stone-200/90 bg-[#fffdf9]/92 p-6 shadow-xs backdrop-blur-xs dark:border-slate-800 dark:bg-slate-900/90">
+            <div className="flex items-center justify-between text-stone-500 dark:text-slate-400">
               <span className="text-xs font-semibold uppercase">
                 Total Transactions
               </span>
-              <Receipt className="h-4 w-4 text-blue-600" />
+              <Receipt className="h-4 w-4 text-amber-700 dark:text-blue-400" />
             </div>
-            <p className="mt-3 text-3xl font-bold text-slate-900 dark:text-white">
+            <p className="mt-3 text-3xl font-bold text-stone-900 dark:text-white">
               {loading ? "..." : payments.length}
             </p>
           </div>
 
-          <div className="rounded-2xl border border-slate-200 bg-white p-6 dark:border-slate-800 dark:bg-slate-900">
-            <div className="flex items-center justify-between text-slate-500">
+          <div className="rounded-2xl border border-stone-200/90 bg-[#fffdf9]/92 p-6 shadow-xs backdrop-blur-xs dark:border-slate-800 dark:bg-slate-900/90">
+            <div className="flex items-center justify-between text-stone-500 dark:text-slate-400">
               <span className="text-xs font-semibold uppercase">
                 Pro Subscribers
               </span>
-              <Users className="h-4 w-4 text-indigo-500" />
+              <Users className="h-4 w-4 text-amber-700 dark:text-indigo-400" />
             </div>
-            <p className="mt-3 text-3xl font-bold text-slate-900 dark:text-white">
+            <p className="mt-3 text-3xl font-bold text-stone-900 dark:text-white">
               {loading ? "..." : proSubscribersCount}
             </p>
           </div>
         </div>
 
         {/* Filters & Table */}
-        <div className="mt-6 rounded-2xl border border-slate-200 bg-white p-6 dark:border-slate-800 dark:bg-slate-900">
+        <div className="mt-6 rounded-2xl border border-stone-200/90 bg-[#fffdf9]/92 p-6 shadow-xs backdrop-blur-xs dark:border-slate-800 dark:bg-slate-900/90">
           <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
             <div className="relative w-full sm:max-w-sm">
-              <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
+              <Search className="pointer-events-none absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-stone-400 dark:text-slate-400" />
               <input
                 type="text"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="Search by name, email, plan, or Txn ID..."
-                className="w-full rounded-xl border border-slate-200 bg-slate-50 py-2 pl-9 pr-3 text-sm text-slate-900 outline-none focus:border-blue-500 dark:border-slate-700 dark:bg-slate-800 dark:text-white"
+                className="w-full rounded-xl border border-stone-300 bg-[#faf7f2] py-2 pr-3 pl-9 text-sm text-stone-900 placeholder-stone-400 outline-none transition focus:border-amber-700 focus:bg-white dark:border-slate-700 dark:bg-slate-800 dark:text-white dark:focus:border-blue-500"
               />
             </div>
 
@@ -208,8 +208,8 @@ export default function AdminPaymentsPage() {
                   onClick={() => setRoleFilter(role)}
                   className={`rounded-lg px-3 py-1.5 text-xs font-semibold capitalize transition ${
                     roleFilter === role
-                      ? "bg-blue-600 text-white"
-                      : "bg-slate-100 text-slate-700 hover:bg-slate-200 dark:bg-slate-800 dark:text-slate-300"
+                      ? "bg-amber-700 text-white dark:bg-blue-600"
+                      : "bg-stone-200/80 text-stone-700 hover:bg-stone-300/80 dark:bg-slate-800 dark:text-slate-300 dark:hover:bg-slate-700"
                   }`}
                 >
                   {role}
@@ -227,7 +227,7 @@ export default function AdminPaymentsPage() {
           <div className="mt-5 overflow-x-auto">
             <table className="w-full min-w-[760px] border-collapse text-left text-sm">
               <thead>
-                <tr className="border-b border-slate-200 text-xs font-semibold uppercase text-slate-500 dark:border-slate-800">
+                <tr className="border-b border-stone-200 text-xs font-semibold uppercase text-stone-500 dark:border-slate-800 dark:text-slate-400">
                   <th className="py-3 pr-4">User</th>
                   <th className="py-3 pr-4">Role</th>
                   <th className="py-3 pr-4">Plan</th>
@@ -237,16 +237,22 @@ export default function AdminPaymentsPage() {
                   <th className="py-3">Paid At</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
+              <tbody className="divide-y divide-stone-200/70 dark:divide-slate-800">
                 {loading ? (
                   <tr>
-                    <td colSpan={7} className="py-8 text-center text-slate-500">
+                    <td
+                      colSpan={7}
+                      className="py-8 text-center text-stone-500 dark:text-slate-400"
+                    >
                       Loading payment transactions...
                     </td>
                   </tr>
                 ) : filteredPayments.length === 0 ? (
                   <tr>
-                    <td colSpan={7} className="py-8 text-center text-slate-500">
+                    <td
+                      colSpan={7}
+                      className="py-8 text-center text-stone-500 dark:text-slate-400"
+                    >
                       No payment transactions found.
                     </td>
                   </tr>
@@ -254,40 +260,40 @@ export default function AdminPaymentsPage() {
                   filteredPayments.map((payment) => (
                     <tr
                       key={payment.id}
-                      className="hover:bg-slate-50/80 dark:hover:bg-slate-800/40"
+                      className="transition-colors hover:bg-[#faf7f2]/80 dark:hover:bg-slate-800/40"
                     >
                       <td className="py-3.5 pr-4">
-                        <p className="font-semibold text-slate-900 dark:text-white">
+                        <p className="font-semibold text-stone-900 dark:text-white">
                           {payment.userName}
                         </p>
-                        <p className="text-xs text-slate-500">
+                        <p className="text-xs text-stone-500 dark:text-slate-400">
                           {payment.userEmail}
                         </p>
                       </td>
                       <td className="py-3.5 pr-4 capitalize">
-                        <span className="rounded-md bg-slate-100 px-2 py-0.5 text-xs font-medium text-slate-700 dark:bg-slate-800 dark:text-slate-300">
+                        <span className="rounded-md bg-stone-200/80 px-2 py-0.5 text-xs font-medium text-stone-700 dark:bg-slate-800 dark:text-slate-300">
                           {payment.userRole}
                         </span>
                       </td>
-                      <td className="py-3.5 pr-4 font-medium text-slate-800 dark:text-slate-200">
+                      <td className="py-3.5 pr-4 font-medium text-stone-800 dark:text-slate-200">
                         {payment.planName}
                       </td>
-                      <td className="py-3.5 pr-4 font-semibold text-emerald-600 dark:text-emerald-400">
+                      <td className="py-3.5 pr-4 font-semibold text-emerald-700 dark:text-emerald-400">
                         ${Number(payment.amount).toFixed(2)}{" "}
                         <span className="text-xs uppercase">
                           {payment.currency}
                         </span>
                       </td>
-                      <td className="py-3.5 pr-4 font-mono text-xs text-slate-600 dark:text-slate-400">
+                      <td className="py-3.5 pr-4 font-mono text-xs text-stone-600 dark:text-slate-400">
                         {payment.transactionId}
                       </td>
                       <td className="py-3.5 pr-4">
-                        <span className="inline-flex items-center gap-1 rounded-full bg-emerald-50 px-2.5 py-0.5 text-xs font-semibold capitalize text-emerald-700 dark:bg-emerald-950/60 dark:text-emerald-300">
+                        <span className="inline-flex items-center gap-1 rounded-full bg-emerald-100/90 px-2.5 py-0.5 text-xs font-semibold capitalize text-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-300">
                           <CreditCard className="h-3 w-3" />
                           {payment.paymentStatus}
                         </span>
                       </td>
-                      <td className="py-3.5 text-xs text-slate-500">
+                      <td className="py-3.5 text-xs text-stone-500 dark:text-slate-400">
                         {payment.paidAt
                           ? new Date(payment.paidAt).toLocaleDateString()
                           : "—"}

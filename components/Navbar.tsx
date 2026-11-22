@@ -74,10 +74,9 @@ export default function Navbar() {
 
   useEffect(() => {
     const savedTheme = localStorage.getItem("mentorlagbe-theme");
-    if (savedTheme === "dark") {
-      document.documentElement.classList.add("dark");
-      setIsDark(true);
-    }
+    const shouldBeDark = savedTheme === "dark";
+    document.documentElement.classList.toggle("dark", shouldBeDark);
+    setIsDark(shouldBeDark);
 
     syncUser();
 
@@ -104,15 +103,11 @@ export default function Navbar() {
   const toggleTheme = () => {
     const nextDark = !isDark;
     setIsDark(nextDark);
-    if (nextDark) {
-      document.documentElement.classList.add("dark");
-      localStorage.setItem("mentorlagbe-theme", "dark");
-      toast.success("Switched to Dark Mode");
-    } else {
-      document.documentElement.classList.remove("dark");
-      localStorage.setItem("mentorlagbe-theme", "light");
-      toast.success("Switched to Light Mode");
-    }
+    document.documentElement.classList.toggle("dark", nextDark);
+    localStorage.setItem("mentorlagbe-theme", nextDark ? "dark" : "light");
+    toast.success(
+      nextDark ? "Switched to Dark Theme" : "Switched to Warm Light Theme",
+    );
   };
 
   const handleLogout = () => {
@@ -145,17 +140,19 @@ export default function Navbar() {
         />
       );
     }
-    return <UserCircle2 className="h-4 w-4 text-blue-400" />;
+    return (
+      <UserCircle2 className="h-4 w-4 text-amber-700 dark:text-blue-400" />
+    );
   };
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b border-slate-200/80 bg-[#06142e]/95 text-white backdrop-blur dark:border-slate-800">
+    <header className="sticky top-0 z-50 w-full border-b border-stone-200/90 bg-[#faf7f2]/95 text-stone-900 shadow-xs backdrop-blur transition-colors duration-200 dark:border-slate-800 dark:bg-[#070d19]/95 dark:text-white dark:shadow-none">
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
         <Link
           href="/"
-          className="flex items-center gap-2.5 text-lg font-bold tracking-tight text-white"
+          className="flex items-center gap-2.5 text-lg font-bold tracking-tight text-stone-900 dark:text-white"
         >
-          <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-blue-600 text-white">
+          <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-amber-700 text-white dark:bg-blue-600">
             <GraduationCap className="h-5 w-5" />
           </span>
           <span>MentorLagbe</span>
@@ -166,8 +163,10 @@ export default function Navbar() {
             <Link
               key={item.href}
               href={item.href}
-              className={`text-sm font-medium transition hover:text-blue-400 ${
-                pathname === item.href ? "text-blue-400" : "text-slate-200"
+              className={`text-sm font-medium transition ${
+                pathname === item.href
+                  ? "font-semibold text-amber-800 underline decoration-amber-700/70 underline-offset-8 dark:text-blue-400 dark:decoration-blue-400/70"
+                  : "text-stone-700 hover:text-amber-800 dark:text-slate-300 dark:hover:text-blue-400"
               }`}
             >
               {item.label}
@@ -179,31 +178,38 @@ export default function Navbar() {
           <button
             type="button"
             onClick={toggleTheme}
-            aria-label="Toggle color theme"
-            className="inline-flex h-9 w-9 items-center justify-center rounded-lg border border-slate-700 bg-slate-900/80 text-slate-200 transition hover:border-blue-500 hover:text-white"
+            aria-label={isDark ? "Switch to light mode" : "Switch to dark mode"}
+            title={isDark ? "Switch to Warm Light" : "Switch to Dark Mode"}
+            className="inline-flex h-9 items-center gap-1.5 rounded-lg border border-stone-300 bg-[#fffdf9] px-3 text-xs font-semibold text-stone-800 transition hover:border-amber-700 hover:bg-amber-50 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200 dark:hover:border-blue-500 dark:hover:bg-slate-800"
           >
             {isDark ? (
-              <Sun className="h-4 w-4" />
+              <>
+                <Sun className="h-4 w-4 text-amber-400" />
+                <span>Light</span>
+              </>
             ) : (
-              <Moon className="h-4 w-4" />
+              <>
+                <Moon className="h-4 w-4 text-stone-700" />
+                <span>Dark</span>
+              </>
             )}
           </button>
 
           {user ? (
             <>
-              <div className="flex items-center gap-2 rounded-lg border border-slate-700/90 bg-slate-900/85 px-3 py-1.5">
+              <div className="flex items-center gap-2 rounded-lg border border-stone-300 bg-[#fffdf9] px-3 py-1.5 dark:border-slate-700/90 dark:bg-slate-900/85">
                 {renderAvatar()}
-                <span className="max-w-[130px] truncate text-xs font-semibold text-white">
+                <span className="max-w-[130px] truncate text-xs font-semibold text-stone-900 dark:text-white">
                   {user.name}
                 </span>
-                <span className="rounded bg-blue-500/20 px-1.5 py-0.5 text-[10px] font-bold tracking-wider text-blue-300">
+                <span className="rounded bg-amber-700/15 px-1.5 py-0.5 text-[10px] font-bold tracking-wider text-amber-900 dark:bg-blue-500/20 dark:text-blue-300">
                   {roleLabel}
                 </span>
               </div>
 
               <Link
                 href="/dashboard"
-                className="inline-flex items-center gap-1.5 rounded-lg bg-blue-600 px-3.5 py-2 text-sm font-medium text-white transition hover:bg-blue-500"
+                className="inline-flex items-center gap-1.5 rounded-lg bg-amber-700 px-3.5 py-2 text-sm font-medium text-white transition hover:bg-amber-800 dark:bg-blue-600 dark:hover:bg-blue-500"
               >
                 <LayoutDashboard className="h-4 w-4" />
                 <span>Dashboard</span>
@@ -212,7 +218,7 @@ export default function Navbar() {
               <button
                 type="button"
                 onClick={handleLogout}
-                className="inline-flex items-center gap-1.5 rounded-lg border border-slate-600 px-3.5 py-2 text-sm font-medium text-slate-100 transition hover:border-red-400/70 hover:bg-red-500/10 hover:text-red-200"
+                className="inline-flex items-center gap-1.5 rounded-lg border border-stone-300 bg-transparent px-3.5 py-2 text-sm font-medium text-stone-800 transition hover:border-red-500/60 hover:bg-red-50 hover:text-red-700 dark:border-slate-600 dark:text-slate-100 dark:hover:border-red-400/70 dark:hover:bg-red-500/10 dark:hover:text-red-200"
               >
                 <LogOut className="h-4 w-4" />
                 <span>Logout</span>
@@ -222,14 +228,14 @@ export default function Navbar() {
             <>
               <Link
                 href="/sign-in"
-                className="rounded-lg border border-slate-600 px-4 py-2 text-sm font-medium text-slate-100 transition hover:border-blue-400 hover:bg-slate-800/70"
+                className="rounded-lg border border-stone-300 bg-[#fffdf9] px-4 py-2 text-sm font-medium text-stone-800 transition hover:border-amber-700 hover:bg-amber-50 dark:border-slate-600 dark:bg-transparent dark:text-slate-100 dark:hover:border-blue-400 dark:hover:bg-slate-800/70"
               >
                 Sign In
               </Link>
 
               <Link
                 href="/sign-up"
-                className="rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white transition hover:bg-blue-500"
+                className="rounded-lg bg-amber-700 px-4 py-2 text-sm font-medium text-white transition hover:bg-amber-800 dark:bg-blue-600 dark:hover:bg-blue-500"
               >
                 Sign Up
               </Link>
@@ -241,20 +247,20 @@ export default function Navbar() {
           <button
             type="button"
             onClick={toggleTheme}
-            aria-label="Toggle color theme"
-            className="inline-flex h-9 w-9 items-center justify-center rounded-lg border border-slate-700 bg-slate-900/80 text-slate-200"
+            aria-label={isDark ? "Switch to light mode" : "Switch to dark mode"}
+            className="inline-flex h-9 w-9 items-center justify-center rounded-lg border border-stone-300 bg-[#fffdf9] text-stone-800 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200"
           >
             {isDark ? (
-              <Sun className="h-4 w-4" />
+              <Sun className="h-4 w-4 text-amber-400" />
             ) : (
-              <Moon className="h-4 w-4" />
+              <Moon className="h-4 w-4 text-stone-700" />
             )}
           </button>
           <button
             type="button"
             onClick={() => setMobileOpen((prev) => !prev)}
             aria-label="Toggle menu"
-            className="inline-flex h-9 w-9 items-center justify-center rounded-lg border border-slate-700 bg-slate-900/80 text-white"
+            className="inline-flex h-9 w-9 items-center justify-center rounded-lg border border-stone-300 bg-[#fffdf9] text-stone-900 dark:border-slate-700 dark:bg-slate-900 dark:text-white"
           >
             {mobileOpen ? (
               <X className="h-5 w-5" />
@@ -266,29 +272,29 @@ export default function Navbar() {
       </div>
 
       {mobileOpen && (
-        <div className="border-t border-slate-800 bg-[#06142e] px-4 py-4 md:hidden">
+        <div className="border-t border-stone-200 bg-[#faf7f2] px-4 py-4 dark:border-slate-800 dark:bg-[#070d19] md:hidden">
           <div className="flex flex-col space-y-3">
             {navLinks.map((item) => (
               <Link
                 key={item.href}
                 href={item.href}
                 onClick={() => setMobileOpen(false)}
-                className="rounded-md px-2 py-1.5 text-sm font-medium text-slate-200 hover:bg-slate-800/70 hover:text-blue-400"
+                className="rounded-md px-2 py-1.5 text-sm font-medium text-stone-800 hover:bg-stone-200/60 hover:text-amber-800 dark:text-slate-200 dark:hover:bg-slate-800/70 dark:hover:text-blue-400"
               >
                 {item.label}
               </Link>
             ))}
 
             {user ? (
-              <div className="space-y-2.5 border-t border-slate-800 pt-3">
-                <div className="flex items-center justify-between rounded-lg bg-slate-900/85 px-3 py-2">
+              <div className="space-y-2.5 border-t border-stone-200 pt-3 dark:border-slate-800">
+                <div className="flex items-center justify-between rounded-lg border border-stone-200 bg-[#fffdf9] px-3 py-2 dark:border-slate-800 dark:bg-slate-900/85">
                   <div className="flex items-center gap-2">
                     {renderAvatar()}
-                    <span className="text-xs font-semibold text-white">
+                    <span className="text-xs font-semibold text-stone-900 dark:text-white">
                       {user.name}
                     </span>
                   </div>
-                  <span className="rounded bg-blue-500/20 px-1.5 py-0.5 text-[10px] font-bold text-blue-300">
+                  <span className="rounded bg-amber-700/15 px-1.5 py-0.5 text-[10px] font-bold text-amber-900 dark:bg-blue-500/20 dark:text-blue-300">
                     {roleLabel}
                   </span>
                 </div>
@@ -297,14 +303,14 @@ export default function Navbar() {
                   <Link
                     href="/dashboard"
                     onClick={() => setMobileOpen(false)}
-                    className="flex-1 rounded-lg bg-blue-600 px-3 py-2 text-center text-sm font-medium text-white"
+                    className="flex-1 rounded-lg bg-amber-700 px-3 py-2 text-center text-sm font-medium text-white dark:bg-blue-600"
                   >
                     Dashboard
                   </Link>
                   <button
                     type="button"
                     onClick={handleLogout}
-                    className="flex-1 rounded-lg border border-slate-600 px-3 py-2 text-center text-sm font-medium text-white"
+                    className="flex-1 rounded-lg border border-stone-300 px-3 py-2 text-center text-sm font-medium text-stone-800 dark:border-slate-600 dark:text-white"
                   >
                     Logout
                   </button>
@@ -315,14 +321,14 @@ export default function Navbar() {
                 <Link
                   href="/sign-in"
                   onClick={() => setMobileOpen(false)}
-                  className="flex-1 rounded-lg border border-slate-600 px-3 py-2 text-center text-sm font-medium text-white"
+                  className="flex-1 rounded-lg border border-stone-300 bg-[#fffdf9] px-3 py-2 text-center text-sm font-medium text-stone-800 dark:border-slate-600 dark:bg-transparent dark:text-white"
                 >
                   Sign In
                 </Link>
                 <Link
                   href="/sign-up"
                   onClick={() => setMobileOpen(false)}
-                  className="flex-1 rounded-lg bg-blue-600 px-3 py-2 text-center text-sm font-medium text-white"
+                  className="flex-1 rounded-lg bg-amber-700 px-3 py-2 text-center text-sm font-medium text-white dark:bg-blue-600"
                 >
                   Sign Up
                 </Link>

@@ -58,34 +58,34 @@ function PaymentSuccessContent() {
   }, [sessionId]);
 
   return (
-    <div className="flex min-h-[70vh] items-center justify-center px-4 py-16">
-      <div className="max-w-md rounded-2xl border border-slate-200 bg-white p-8 text-center shadow-sm dark:border-slate-800 dark:bg-slate-900">
+    <div className="flex min-h-[70vh] items-center justify-center bg-transparent px-4 py-16">
+      <div className="w-full max-w-md rounded-2xl border border-stone-200/90 bg-[#fffdf9]/92 p-8 text-center shadow-xs backdrop-blur-xs dark:border-slate-800 dark:bg-slate-900/90">
         {verifying ? (
           <div className="flex flex-col items-center gap-3">
-            <Loader2 className="h-10 w-10 animate-spin text-blue-600" />
-            <h1 className="text-xl font-bold text-slate-900 dark:text-white">
+            <Loader2 className="h-10 w-10 animate-spin text-amber-700 dark:text-blue-600" />
+            <h1 className="text-xl font-bold text-stone-900 dark:text-white">
               Verifying your payment...
             </h1>
           </div>
         ) : (
           <div className="flex flex-col items-center gap-3">
-            <CheckCircle2 className="h-12 w-12 text-emerald-500" />
-            <h1 className="text-2xl font-bold text-slate-900 dark:text-white">
+            <CheckCircle2 className="h-12 w-12 text-emerald-600 dark:text-emerald-500" />
+            <h1 className="text-2xl font-bold text-stone-900 dark:text-white">
               {verified ? "Payment Successful!" : "Payment Received"}
             </h1>
-            <p className="text-sm text-slate-600 dark:text-slate-400">
+            <p className="text-sm leading-relaxed text-stone-600 dark:text-slate-400">
               Your MentorLagbe account has been upgraded to the Pro plan.
             </p>
-            <div className="mt-4 flex gap-3">
+            <div className="mt-4 flex flex-wrap items-center justify-center gap-3">
               <Link
                 href="/dashboard"
-                className="rounded-xl bg-blue-600 px-5 py-2.5 text-sm font-semibold text-white hover:bg-blue-700"
+                className="rounded-xl bg-amber-700 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-amber-800 dark:bg-blue-600 dark:hover:bg-blue-500"
               >
                 Go to Dashboard
               </Link>
               <Link
                 href="/tuitions"
-                className="rounded-xl border border-slate-300 px-5 py-2.5 text-sm font-semibold text-slate-800 dark:border-slate-700 dark:text-slate-200"
+                className="rounded-xl border border-stone-300 bg-[#faf7f2] px-5 py-2.5 text-sm font-semibold text-stone-800 transition hover:border-amber-700 hover:bg-amber-50/70 dark:border-slate-700 dark:bg-slate-950 dark:text-slate-200 dark:hover:border-blue-500 dark:hover:bg-slate-800"
               >
                 Browse Tuitions
               </Link>

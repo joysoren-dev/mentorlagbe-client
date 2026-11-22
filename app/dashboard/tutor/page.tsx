@@ -96,17 +96,17 @@ export default function TutorDashboardPage() {
   const plan = (user?.plan || "free").toUpperCase();
 
   return (
-    <div className="min-h-screen bg-slate-50 py-10 dark:bg-[#070d19]">
+    <div className="min-h-screen bg-transparent py-10">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="flex flex-col justify-between gap-4 rounded-2xl bg-[#06142e] p-6 text-white sm:flex-row sm:items-center sm:p-8">
+        <div className="flex flex-col justify-between gap-4 rounded-2xl border border-stone-800 bg-[#16120e] p-6 text-white shadow-sm dark:border-slate-800 dark:bg-[#06142e] sm:flex-row sm:items-center sm:p-8">
           <div>
-            <p className="text-xs font-semibold uppercase tracking-wider text-blue-400">
+            <p className="text-xs font-semibold uppercase tracking-wider text-amber-300 dark:text-blue-400">
               Tutor Dashboard
             </p>
             <h1 className="mt-1 text-2xl font-bold sm:text-3xl">
               Welcome, {user?.name || "Tutor"}
             </h1>
-            <p className="mt-1 text-sm text-slate-300">
+            <p className="mt-1 text-sm text-stone-300 dark:text-slate-300">
               Plan: <strong className="uppercase">{plan}</strong> · Manage your
               tuition batches and review student applicants.
             </p>
@@ -114,67 +114,67 @@ export default function TutorDashboardPage() {
           <div className="flex flex-wrap gap-3">
             <Link
               href="/dashboard/tutor/post-tuition"
-              className="inline-flex items-center gap-2 rounded-xl bg-blue-600 px-4 py-2.5 text-sm font-semibold text-white hover:bg-blue-500"
+              className="inline-flex items-center gap-2 rounded-xl bg-amber-600 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-amber-500 dark:bg-blue-600 dark:hover:bg-blue-500"
             >
               <PlusCircle className="h-4 w-4" />
               <span>Post Tuition</span>
             </Link>
             <Link
               href="/dashboard/tutor/my-tuitions"
-              className="inline-flex items-center gap-2 rounded-xl border border-slate-700 bg-slate-900 px-4 py-2.5 text-sm font-semibold text-white hover:border-blue-500"
+              className="inline-flex items-center gap-2 rounded-xl border border-stone-700 bg-[#261e16] px-4 py-2.5 text-sm font-semibold text-white transition hover:border-amber-400 dark:border-slate-700 dark:bg-slate-900 dark:hover:border-blue-500"
             >
-              <BookOpen className="h-4 w-4 text-blue-400" />
+              <BookOpen className="h-4 w-4 text-amber-300 dark:text-blue-400" />
               <span>My Tuitions</span>
             </Link>
             <Link
               href="/dashboard/tutor/applicants"
-              className="inline-flex items-center gap-2 rounded-xl border border-slate-700 bg-slate-900 px-4 py-2.5 text-sm font-semibold text-white hover:border-blue-500"
+              className="inline-flex items-center gap-2 rounded-xl border border-stone-700 bg-[#261e16] px-4 py-2.5 text-sm font-semibold text-white transition hover:border-amber-400 dark:border-slate-700 dark:bg-slate-900 dark:hover:border-blue-500"
             >
-              <Users className="h-4 w-4 text-blue-400" />
+              <Users className="h-4 w-4 text-amber-300 dark:text-blue-400" />
               <span>Applicants</span>
             </Link>
           </div>
         </div>
 
         <div className="mt-6 grid grid-cols-1 gap-5 sm:grid-cols-3">
-          <div className="rounded-2xl border border-slate-200 bg-white p-6 dark:border-slate-800 dark:bg-slate-900">
-            <div className="flex items-center justify-between text-slate-500">
+          <div className="rounded-2xl border border-stone-200/90 bg-[#fffdf9]/92 p-6 shadow-xs backdrop-blur-xs dark:border-slate-800 dark:bg-slate-900/90">
+            <div className="flex items-center justify-between text-stone-500 dark:text-slate-400">
               <span className="text-xs font-semibold uppercase">
                 My Batches
               </span>
-              <BookOpen className="h-4 w-4 text-blue-600" />
+              <BookOpen className="h-4 w-4 text-amber-700 dark:text-blue-400" />
             </div>
-            <p className="mt-3 text-3xl font-bold text-slate-900 dark:text-white">
+            <p className="mt-3 text-3xl font-bold text-stone-900 dark:text-white">
               {loading ? "..." : tuitionCount}
             </p>
           </div>
 
-          <div className="rounded-2xl border border-slate-200 bg-white p-6 dark:border-slate-800 dark:bg-slate-900">
-            <div className="flex items-center justify-between text-slate-500">
+          <div className="rounded-2xl border border-stone-200/90 bg-[#fffdf9]/92 p-6 shadow-xs backdrop-blur-xs dark:border-slate-800 dark:bg-slate-900/90">
+            <div className="flex items-center justify-between text-stone-500 dark:text-slate-400">
               <span className="text-xs font-semibold uppercase">
                 Student Applicants
               </span>
-              <Users className="h-4 w-4 text-emerald-500" />
+              <Users className="h-4 w-4 text-emerald-600 dark:text-emerald-400" />
             </div>
-            <p className="mt-3 text-3xl font-bold text-slate-900 dark:text-white">
+            <p className="mt-3 text-3xl font-bold text-stone-900 dark:text-white">
               {loading ? "..." : applicantCount}
             </p>
           </div>
 
-          <div className="rounded-2xl border border-slate-200 bg-white p-6 dark:border-slate-800 dark:bg-slate-900">
-            <div className="flex items-center justify-between text-slate-500">
+          <div className="rounded-2xl border border-stone-200/90 bg-[#fffdf9]/92 p-6 shadow-xs backdrop-blur-xs dark:border-slate-800 dark:bg-slate-900/90">
+            <div className="flex items-center justify-between text-stone-500 dark:text-slate-400">
               <span className="text-xs font-semibold uppercase">
                 Current Tier
               </span>
-              <Crown className="h-4 w-4 text-amber-500" />
+              <Crown className="h-4 w-4 text-amber-600 dark:text-blue-400" />
             </div>
-            <p className="mt-3 text-3xl font-bold text-slate-900 dark:text-white">
+            <p className="mt-3 text-3xl font-bold text-stone-900 dark:text-white">
               {plan}
             </p>
             {plan !== "PRO" && (
               <Link
                 href="/pricing"
-                className="mt-2 inline-block text-xs font-semibold text-blue-600 hover:underline"
+                className="mt-2 inline-block text-xs font-semibold text-amber-800 hover:underline dark:text-blue-400"
               >
                 Upgrade to Tutor Pro →
               </Link>

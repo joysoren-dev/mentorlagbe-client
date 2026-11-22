@@ -157,28 +157,28 @@ export default function PostTuitionPage() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 py-10 dark:bg-[#070d19]">
+    <div className="min-h-screen bg-transparent py-10">
       <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
         <Link
           href="/dashboard/tutor"
-          className="mb-6 inline-flex items-center gap-2 text-sm font-semibold text-blue-600 hover:text-blue-700 dark:text-blue-400"
+          className="mb-6 inline-flex items-center gap-2 text-sm font-semibold text-amber-800 hover:text-amber-900 dark:text-blue-400 dark:hover:text-blue-300"
         >
           <ArrowLeft className="h-4 w-4" />
           <span>Back to Tutor Dashboard</span>
         </Link>
 
-        <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900 sm:p-8">
-          <h1 className="text-2xl font-bold text-slate-900 dark:text-white">
+        <div className="rounded-2xl border border-stone-200/90 bg-[#fffdf9]/92 p-6 shadow-xs backdrop-blur-xs dark:border-slate-800 dark:bg-slate-900/90 sm:p-8">
+          <h1 className="text-2xl font-bold text-stone-900 dark:text-white">
             Create New Tuition Batch
           </h1>
-          <p className="mt-1 text-sm text-slate-600 dark:text-slate-400">
+          <p className="mt-1 text-sm text-stone-600 dark:text-slate-400">
             Publish a batch listing. Once approved by an admin, it goes live in
             the tuition directory.
           </p>
 
           <form onSubmit={handleSubmit} className="mt-6 space-y-5">
             <div>
-              <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300">
+              <label className="block text-xs font-semibold text-stone-700 dark:text-slate-300">
                 Batch Title *
               </label>
               <input
@@ -187,13 +187,13 @@ export default function PostTuitionPage() {
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
                 placeholder="e.g., HSC ICT & Programming Fundamentals Batch"
-                className="mt-1.5 w-full rounded-xl border border-slate-300 bg-slate-50 px-3.5 py-2.5 text-sm text-slate-900 dark:border-slate-700 dark:bg-slate-950 dark:text-white"
+                className="mt-1.5 w-full rounded-xl border border-stone-300 bg-[#faf7f2] px-3.5 py-2.5 text-sm text-stone-900 placeholder-stone-400 focus:border-amber-700 focus:bg-white focus:outline-none dark:border-slate-700 dark:bg-slate-950 dark:text-white dark:focus:border-blue-500"
               />
             </div>
 
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
               <div>
-                <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300">
+                <label className="block text-xs font-semibold text-stone-700 dark:text-slate-300">
                   Subject *
                 </label>
                 <input
@@ -202,12 +202,12 @@ export default function PostTuitionPage() {
                   value={subject}
                   onChange={(e) => setSubject(e.target.value)}
                   placeholder="e.g., ICT or Higher Math"
-                  className="mt-1.5 w-full rounded-xl border border-slate-300 bg-slate-50 px-3.5 py-2.5 text-sm text-slate-900 dark:border-slate-700 dark:bg-slate-950 dark:text-white"
+                  className="mt-1.5 w-full rounded-xl border border-stone-300 bg-[#faf7f2] px-3.5 py-2.5 text-sm text-stone-900 placeholder-stone-400 focus:border-amber-700 focus:bg-white focus:outline-none dark:border-slate-700 dark:bg-slate-950 dark:text-white dark:focus:border-blue-500"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300">
+                <label className="block text-xs font-semibold text-stone-700 dark:text-slate-300">
                   Class Level
                 </label>
                 <input
@@ -215,20 +215,20 @@ export default function PostTuitionPage() {
                   value={classLevel}
                   onChange={(e) => setClassLevel(e.target.value)}
                   placeholder="e.g., HSC / SSC / Class 8"
-                  className="mt-1.5 w-full rounded-xl border border-slate-300 bg-slate-50 px-3.5 py-2.5 text-sm text-slate-900 dark:border-slate-700 dark:bg-slate-950 dark:text-white"
+                  className="mt-1.5 w-full rounded-xl border border-stone-300 bg-[#faf7f2] px-3.5 py-2.5 text-sm text-stone-900 placeholder-stone-400 focus:border-amber-700 focus:bg-white focus:outline-none dark:border-slate-700 dark:bg-slate-950 dark:text-white dark:focus:border-blue-500"
                 />
               </div>
             </div>
 
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
               <div>
-                <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300">
+                <label className="block text-xs font-semibold text-stone-700 dark:text-slate-300">
                   Mode
                 </label>
                 <select
                   value={mode}
                   onChange={(e) => setMode(e.target.value)}
-                  className="mt-1.5 w-full rounded-xl border border-slate-300 bg-slate-50 px-3.5 py-2.5 text-sm text-slate-900 dark:border-slate-700 dark:bg-slate-950 dark:text-white"
+                  className="mt-1.5 w-full rounded-xl border border-stone-300 bg-[#faf7f2] px-3.5 py-2.5 text-sm text-stone-900 focus:border-amber-700 focus:bg-white focus:outline-none dark:border-slate-700 dark:bg-slate-950 dark:text-white dark:focus:border-blue-500"
                 >
                   <option value="Online">Online</option>
                   <option value="Offline">Offline</option>
@@ -236,7 +236,7 @@ export default function PostTuitionPage() {
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300">
+                <label className="block text-xs font-semibold text-stone-700 dark:text-slate-300">
                   Monthly Fee (৳)
                 </label>
                 <input
@@ -244,12 +244,12 @@ export default function PostTuitionPage() {
                   min={0}
                   value={monthlyFee}
                   onChange={(e) => setMonthlyFee(e.target.value)}
-                  className="mt-1.5 w-full rounded-xl border border-slate-300 bg-slate-50 px-3.5 py-2.5 text-sm text-slate-900 dark:border-slate-700 dark:bg-slate-950 dark:text-white"
+                  className="mt-1.5 w-full rounded-xl border border-stone-300 bg-[#faf7f2] px-3.5 py-2.5 text-sm text-stone-900 focus:border-amber-700 focus:bg-white focus:outline-none dark:border-slate-700 dark:bg-slate-950 dark:text-white dark:focus:border-blue-500"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300">
+                <label className="block text-xs font-semibold text-stone-700 dark:text-slate-300">
                   Days / Week
                 </label>
                 <input
@@ -258,16 +258,16 @@ export default function PostTuitionPage() {
                   max={7}
                   value={daysPerWeek}
                   onChange={(e) => setDaysPerWeek(e.target.value)}
-                  className="mt-1.5 w-full rounded-xl border border-slate-300 bg-slate-50 px-3.5 py-2.5 text-sm text-slate-900 dark:border-slate-700 dark:bg-slate-950 dark:text-white"
+                  className="mt-1.5 w-full rounded-xl border border-stone-300 bg-[#faf7f2] px-3.5 py-2.5 text-sm text-stone-900 focus:border-amber-700 focus:bg-white focus:outline-none dark:border-slate-700 dark:bg-slate-950 dark:text-white dark:focus:border-blue-500"
                 />
               </div>
             </div>
 
             {/* Flexible 7-Day + 24-Hour Time Schedule Builder */}
-            <div className="space-y-4 rounded-xl border border-slate-200 bg-slate-50/80 p-4 dark:border-slate-800 dark:bg-slate-950/60">
+            <div className="space-y-4 rounded-xl border border-stone-200/90 bg-[#faf7f2]/85 p-4 dark:border-slate-800 dark:bg-slate-950/60">
               <div className="flex flex-wrap items-center justify-between gap-2">
-                <label className="flex items-center gap-1.5 text-xs font-semibold text-slate-800 dark:text-slate-200">
-                  <Clock className="h-3.5 w-3.5 text-blue-600 dark:text-blue-400" />
+                <label className="flex items-center gap-1.5 text-xs font-semibold text-stone-800 dark:text-slate-200">
+                  <Clock className="h-3.5 w-3.5 text-amber-700 dark:text-blue-400" />
                   <span>Class Days &amp; 24-Hour Time</span>
                 </label>
                 <div className="flex flex-wrap gap-1">
@@ -276,7 +276,7 @@ export default function PostTuitionPage() {
                       key={preset.label}
                       type="button"
                       onClick={() => handleApplyDaySet(preset.days)}
-                      className="rounded-md border border-slate-200 bg-white px-2 py-0.5 text-[11px] font-medium text-slate-600 hover:border-blue-400 hover:text-blue-600 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-300"
+                      className="rounded-md border border-stone-200 bg-[#fffdf9] px-2 py-0.5 text-[11px] font-medium text-stone-700 transition hover:border-amber-600 hover:text-amber-800 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-300 dark:hover:border-blue-400 dark:hover:text-blue-400"
                     >
                       {preset.label}
                     </button>
@@ -286,7 +286,7 @@ export default function PostTuitionPage() {
 
               {/* Manual Day-by-Day Selector */}
               <div>
-                <p className="mb-1.5 text-[11px] font-medium text-slate-500 dark:text-slate-400">
+                <p className="mb-1.5 text-[11px] font-medium text-stone-500 dark:text-slate-400">
                   Choose individual days:
                 </p>
                 <div className="grid grid-cols-7 gap-1.5">
@@ -299,8 +299,8 @@ export default function PostTuitionPage() {
                         onClick={() => handleToggleDay(day.short)}
                         className={`rounded-lg py-2 text-xs font-semibold transition ${
                           active
-                            ? "bg-blue-600 text-white shadow-xs"
-                            : "border border-slate-200 bg-white text-slate-700 hover:border-blue-400 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-300"
+                            ? "bg-amber-700 text-white shadow-xs dark:bg-blue-600"
+                            : "border border-stone-200 bg-[#fffdf9] text-stone-700 hover:border-amber-600 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-300 dark:hover:border-blue-400"
                         }`}
                       >
                         {day.short}
@@ -313,19 +313,19 @@ export default function PostTuitionPage() {
               {/* 24-Hour Exact Time Input + Quick 24h Presets */}
               <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
                 <div>
-                  <label className="mb-1.5 block text-[11px] font-medium text-slate-500 dark:text-slate-400">
+                  <label className="mb-1.5 block text-[11px] font-medium text-stone-500 dark:text-slate-400">
                     Exact Time (24-Hour Clock — Vor / Rat / Anytime):
                   </label>
                   <input
                     type="time"
                     value={time24}
                     onChange={(e) => handleTimeChange(e.target.value)}
-                    className="w-full rounded-xl border border-slate-300 bg-white px-3.5 py-2 text-sm font-medium text-slate-900 dark:border-slate-700 dark:bg-slate-900 dark:text-white"
+                    className="w-full rounded-xl border border-stone-300 bg-[#fffdf9] px-3.5 py-2 text-sm font-medium text-stone-900 focus:border-amber-700 focus:outline-none dark:border-slate-700 dark:bg-slate-900 dark:text-white dark:focus:border-blue-500"
                   />
                 </div>
 
                 <div>
-                  <p className="mb-1.5 text-[11px] font-medium text-slate-500 dark:text-slate-400">
+                  <p className="mb-1.5 text-[11px] font-medium text-stone-500 dark:text-slate-400">
                     Quick time presets:
                   </p>
                   <div className="flex flex-wrap gap-1.5">
@@ -338,8 +338,8 @@ export default function PostTuitionPage() {
                           onClick={() => handleTimeChange(item.value)}
                           className={`rounded-lg px-2 py-1 text-[11px] font-semibold transition ${
                             active
-                              ? "bg-slate-900 text-white dark:bg-blue-500"
-                              : "border border-slate-200 bg-white text-slate-700 hover:border-blue-400 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-300"
+                              ? "bg-amber-800 text-white dark:bg-blue-500"
+                              : "border border-stone-200 bg-[#fffdf9] text-stone-700 hover:border-amber-600 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-300 dark:hover:border-blue-400"
                           }`}
                         >
                           {item.label}
@@ -352,7 +352,7 @@ export default function PostTuitionPage() {
 
               {/* Editable Final Schedule String */}
               <div>
-                <p className="mb-1 text-[11px] font-medium text-slate-500 dark:text-slate-400">
+                <p className="mb-1 text-[11px] font-medium text-stone-500 dark:text-slate-400">
                   Final schedule preview (editable):
                 </p>
                 <input
@@ -360,14 +360,14 @@ export default function PostTuitionPage() {
                   value={schedule}
                   onChange={(e) => setSchedule(e.target.value)}
                   placeholder="Sun / Tue / Thu, 07:00 PM"
-                  className="w-full rounded-xl border border-slate-300 bg-white px-3.5 py-2 text-sm text-slate-900 dark:border-slate-700 dark:bg-slate-900 dark:text-white"
+                  className="w-full rounded-xl border border-stone-300 bg-[#fffdf9] px-3.5 py-2 text-sm text-stone-900 focus:border-amber-700 focus:outline-none dark:border-slate-700 dark:bg-slate-900 dark:text-white dark:focus:border-blue-500"
                 />
               </div>
             </div>
 
             {mode === "Offline" && (
               <div>
-                <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300">
+                <label className="block text-xs font-semibold text-stone-700 dark:text-slate-300">
                   Location
                 </label>
                 <input
@@ -375,13 +375,13 @@ export default function PostTuitionPage() {
                   value={location}
                   onChange={(e) => setLocation(e.target.value)}
                   placeholder="e.g., Rajshahi / Dhanmondi"
-                  className="mt-1.5 w-full rounded-xl border border-slate-300 bg-slate-50 px-3.5 py-2.5 text-sm text-slate-900 dark:border-slate-700 dark:bg-slate-950 dark:text-white"
+                  className="mt-1.5 w-full rounded-xl border border-stone-300 bg-[#faf7f2] px-3.5 py-2.5 text-sm text-stone-900 placeholder-stone-400 focus:border-amber-700 focus:bg-white focus:outline-none dark:border-slate-700 dark:bg-slate-950 dark:text-white dark:focus:border-blue-500"
                 />
               </div>
             )}
 
             <div>
-              <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300">
+              <label className="block text-xs font-semibold text-stone-700 dark:text-slate-300">
                 Description
               </label>
               <textarea
@@ -389,14 +389,14 @@ export default function PostTuitionPage() {
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
                 placeholder="Syllabus coverage, problem solving approach, and batch goals..."
-                className="mt-1.5 w-full rounded-xl border border-slate-300 bg-slate-50 p-3 text-sm text-slate-900 dark:border-slate-700 dark:bg-slate-950 dark:text-white"
+                className="mt-1.5 w-full rounded-xl border border-stone-300 bg-[#faf7f2] p-3 text-sm text-stone-900 placeholder-stone-400 focus:border-amber-700 focus:bg-white focus:outline-none dark:border-slate-700 dark:bg-slate-950 dark:text-white dark:focus:border-blue-500"
               />
             </div>
 
             <button
               type="submit"
               disabled={submitting}
-              className="inline-flex items-center gap-2 rounded-xl bg-blue-600 px-6 py-3 text-sm font-semibold text-white transition hover:bg-blue-700 disabled:opacity-60"
+              className="inline-flex items-center gap-2 rounded-xl bg-amber-700 px-6 py-3 text-sm font-semibold text-white transition hover:bg-amber-800 disabled:opacity-60 dark:bg-blue-600 dark:hover:bg-blue-500"
             >
               {submitting ? (
                 <Loader2 className="h-4 w-4 animate-spin" />

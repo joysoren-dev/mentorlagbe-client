@@ -175,16 +175,16 @@ export default function PricingPage() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 dark:bg-[#070d19]">
-      <section className="bg-[#06142e] py-14 text-white sm:py-20">
+    <div className="min-h-screen bg-transparent">
+      <section className="bg-[#16120e] py-14 text-white dark:bg-[#06142e] sm:py-20">
         <div className="mx-auto max-w-5xl px-4 text-center sm:px-6 lg:px-8">
-          <p className="text-xs font-semibold uppercase tracking-wider text-blue-400">
+          <p className="text-xs font-semibold uppercase tracking-wider text-amber-300 dark:text-blue-400">
             Transparent Plans
           </p>
           <h1 className="mt-2 text-3xl font-bold tracking-tight sm:text-5xl">
             Simple Pricing for Students &amp; Mentors
           </h1>
-          <p className="mx-auto mt-3 max-w-2xl text-sm text-slate-300 sm:text-base">
+          <p className="mx-auto mt-3 max-w-2xl text-sm text-stone-300 dark:text-slate-300 sm:text-base">
             Start free or upgrade to Pro via Stripe for priority student
             features and unlimited tutor batch postings.
           </p>
@@ -206,22 +206,22 @@ export default function PricingPage() {
             return (
               <div
                 key={plan.id}
-                className={`flex h-full flex-col justify-between rounded-2xl border p-7 shadow-sm transition ${
+                className={`flex h-full flex-col justify-between rounded-2xl border p-7 shadow-xs backdrop-blur-xs transition ${
                   plan.highlighted
-                    ? "border-blue-600 bg-white ring-2 ring-blue-600/20 dark:border-blue-500 dark:bg-slate-900"
-                    : "border-slate-200 bg-white dark:border-slate-800 dark:bg-slate-900"
+                    ? "border-amber-600 bg-[#fffdf9]/95 ring-2 ring-amber-600/20 dark:border-blue-500 dark:bg-slate-900/95 dark:ring-blue-500/20"
+                    : "border-stone-200/90 bg-[#fffdf9]/92 dark:border-slate-800 dark:bg-slate-900/90"
                 }`}
               >
                 <div>
                   <div className="flex items-center justify-between gap-2">
-                    <h2 className="text-xl font-bold text-slate-900 dark:text-white">
+                    <h2 className="text-xl font-bold text-stone-900 dark:text-white">
                       {plan.name}
                     </h2>
                     <span
                       className={`inline-flex items-center gap-1 rounded-full px-3 py-1 text-xs font-semibold ${
                         plan.highlighted
-                          ? "bg-blue-600 text-white"
-                          : "bg-slate-100 text-slate-700 dark:bg-slate-800 dark:text-slate-300"
+                          ? "bg-amber-700 text-white dark:bg-blue-600"
+                          : "bg-stone-100 text-stone-700 dark:bg-slate-800 dark:text-slate-300"
                       }`}
                     >
                       {plan.highlighted && <Sparkles className="h-3 w-3" />}
@@ -229,25 +229,25 @@ export default function PricingPage() {
                     </span>
                   </div>
 
-                  <p className="mt-3 text-sm text-slate-600 dark:text-slate-400">
+                  <p className="mt-3 text-sm text-stone-600 dark:text-slate-400">
                     {plan.description}
                   </p>
 
                   <div className="mt-6 flex items-baseline gap-1">
-                    <span className="text-4xl font-bold text-slate-900 dark:text-white">
+                    <span className="text-4xl font-bold text-stone-900 dark:text-white">
                       {plan.priceLabel}
                     </span>
                     {plan.suffix && (
-                      <span className="text-sm text-slate-500 dark:text-slate-400">
+                      <span className="text-sm text-stone-500 dark:text-slate-400">
                         {plan.suffix}
                       </span>
                     )}
                   </div>
 
-                  <ul className="mt-6 space-y-3 border-t border-slate-100 pt-6 text-sm text-slate-700 dark:border-slate-800 dark:text-slate-300">
+                  <ul className="mt-6 space-y-3 border-t border-stone-200/80 pt-6 text-sm text-stone-700 dark:border-slate-800 dark:text-slate-300">
                     {plan.features.map((feat) => (
                       <li key={feat} className="flex items-start gap-2.5">
-                        <Check className="mt-0.5 h-4 w-4 shrink-0 text-blue-600 dark:text-blue-400" />
+                        <Check className="mt-0.5 h-4 w-4 shrink-0 text-amber-700 dark:text-blue-400" />
                         <span>{feat}</span>
                       </li>
                     ))}
@@ -257,7 +257,7 @@ export default function PricingPage() {
                 {!plan.paidForRole ? (
                   <Link
                     href={plan.ctaHref}
-                    className="mt-8 flex w-full items-center justify-center rounded-xl border border-slate-300 bg-slate-50 px-5 py-3 text-sm font-semibold text-slate-900 transition hover:border-blue-500 hover:text-blue-600 dark:border-slate-700 dark:bg-slate-950 dark:text-white dark:hover:border-blue-500"
+                    className="mt-8 flex w-full items-center justify-center rounded-xl border border-stone-300 bg-[#faf7f2] px-5 py-3 text-sm font-semibold text-stone-900 transition hover:border-amber-700 hover:text-amber-800 dark:border-slate-700 dark:bg-slate-950 dark:text-white dark:hover:border-blue-500"
                   >
                     {plan.ctaLabel}
                   </Link>
@@ -276,8 +276,8 @@ export default function PricingPage() {
                     onClick={() => handleStripeCheckout(plan.id)}
                     className={`mt-8 flex w-full items-center justify-center gap-2 rounded-xl px-5 py-3 text-sm font-semibold transition disabled:opacity-60 ${
                       plan.highlighted
-                        ? "bg-blue-600 text-white hover:bg-blue-700"
-                        : "border border-slate-300 bg-slate-50 text-slate-900 hover:border-blue-500 hover:text-blue-600 dark:border-slate-700 dark:bg-slate-950 dark:text-white dark:hover:border-blue-500"
+                        ? "bg-amber-700 text-white hover:bg-amber-800 dark:bg-blue-600 dark:hover:bg-blue-500"
+                        : "border border-stone-300 bg-[#faf7f2] text-stone-900 hover:border-amber-700 hover:text-amber-800 dark:border-slate-700 dark:bg-slate-950 dark:text-white dark:hover:border-blue-500"
                     }`}
                   >
                     {isLoading && <Loader2 className="h-4 w-4 animate-spin" />}
@@ -295,8 +295,8 @@ export default function PricingPage() {
 
         <div className="mx-auto mt-16 max-w-4xl">
           <div className="flex items-center justify-center gap-2 text-center">
-            <HelpCircle className="h-5 w-5 text-blue-600 dark:text-blue-400" />
-            <h2 className="text-2xl font-bold text-slate-900 dark:text-white">
+            <HelpCircle className="h-5 w-5 text-amber-700 dark:text-blue-400" />
+            <h2 className="text-2xl font-bold text-stone-900 dark:text-white">
               Frequently Asked Questions
             </h2>
           </div>
@@ -305,12 +305,12 @@ export default function PricingPage() {
             {FAQS.map((faq) => (
               <div
                 key={faq.question}
-                className="rounded-2xl border border-slate-200 bg-white p-5 dark:border-slate-800 dark:bg-slate-900"
+                className="rounded-2xl border border-stone-200/90 bg-[#fffdf9]/92 p-5 shadow-xs backdrop-blur-xs dark:border-slate-800 dark:bg-slate-900/90"
               >
-                <h3 className="text-base font-bold text-slate-900 dark:text-white">
+                <h3 className="text-base font-bold text-stone-900 dark:text-white">
                   {faq.question}
                 </h3>
-                <p className="mt-2 text-sm leading-relaxed text-slate-600 dark:text-slate-400">
+                <p className="mt-2 text-sm leading-relaxed text-stone-600 dark:text-slate-400">
                   {faq.answer}
                 </p>
               </div>

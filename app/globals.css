@@ -1,25 +1,29 @@
 @import "tailwindcss";
 
+@custom-variant dark (&:where(.dark, .dark *));
+
 :root {
-  --bg-page: #f8fafc;
-  --bg-surface: #ffffff;
+  --bg-page: #faf7f2;
+  --bg-surface: #fffdf9;
   --bg-navy: #06142e;
-  --text-primary: #0f172a;
-  --text-secondary: #475569;
-  --accent-primary: #2563eb;
-  --accent-hover: #1d4ed8;
-  --border-subtle: #e2e8f0;
+  --text-primary: #1c1917;
+  --text-secondary: #57534e;
+  --accent-primary: #b45309;
+  --accent-hover: #92400e;
+  --border-subtle: #e7e1d6;
+  --grid-line: rgba(120, 92, 62, 0.14);
 }
 
 .dark {
   --bg-page: #070d19;
   --bg-surface: #0f172a;
-  --bg-navy: #040c1c;
+  --bg-navy: #06142e;
   --text-primary: #f8fafc;
   --text-secondary: #94a3b8;
-  --accent-primary: #3b82f6;
-  --accent-hover: #2563eb;
+  --accent-primary: #2563eb;
+  --accent-hover: #3b82f6;
   --border-subtle: #1e293b;
+  --grid-line: rgba(226, 232, 240, 0.12);
 }
 
 html {
@@ -30,4 +34,15 @@ body {
   background-color: var(--bg-page);
   color: var(--text-primary);
   overflow-x: hidden;
+  transition:
+    background-color 200ms ease,
+    color 200ms ease;
+}
+
+.theme-grid-bg {
+  background-color: var(--bg-page);
+  background-image:
+    linear-gradient(to right, var(--grid-line) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--grid-line) 1px, transparent 1px);
+  background-size: 32px 32px;
 }

@@ -81,30 +81,30 @@ export default function SignUpPage() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 py-12 dark:bg-[#070d19] sm:py-16">
+    <div className="min-h-screen bg-transparent py-12 sm:py-16">
       <div className="mx-auto max-w-md px-4 sm:px-6">
-        <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900 sm:p-8">
+        <div className="rounded-2xl border border-stone-200/90 bg-[#fffdf9]/92 p-6 shadow-xs backdrop-blur-xs dark:border-slate-800 dark:bg-slate-900/90 sm:p-8">
           <div className="text-center">
-            <p className="text-xs font-semibold uppercase tracking-wider text-blue-600 dark:text-blue-400">
+            <p className="text-xs font-semibold uppercase tracking-wider text-amber-800 dark:text-blue-400">
               Join MentorLagbe
             </p>
-            <h1 className="mt-1.5 text-2xl font-bold text-slate-900 dark:text-white">
+            <h1 className="mt-1.5 text-2xl font-bold text-stone-900 dark:text-white">
               Create Your Account
             </h1>
-            <p className="mt-1.5 text-sm text-slate-600 dark:text-slate-400">
+            <p className="mt-1.5 text-sm text-stone-600 dark:text-slate-400">
               Sign up as a student or mentor to get started.
             </p>
           </div>
 
           {/* Role Selector */}
-          <div className="mt-6 grid grid-cols-2 gap-2.5 rounded-xl bg-slate-100 p-1.5 dark:bg-slate-950">
+          <div className="mt-6 grid grid-cols-2 gap-2.5 rounded-xl border border-stone-200/80 bg-[#faf7f2] p-1.5 dark:border-slate-800 dark:bg-slate-950">
             <button
               type="button"
               onClick={() => setRole("student")}
               className={`flex items-center justify-center gap-2 rounded-lg py-2.5 text-xs font-semibold transition sm:text-sm ${
                 role === "student"
-                  ? "bg-white text-blue-600 shadow-sm dark:bg-slate-900 dark:text-blue-400"
-                  : "text-slate-600 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white"
+                  ? "bg-white text-amber-800 shadow-xs dark:bg-slate-900 dark:text-blue-400"
+                  : "text-stone-600 hover:text-stone-900 dark:text-slate-400 dark:hover:text-white"
               }`}
             >
               <GraduationCap className="h-4 w-4" />
@@ -116,8 +116,8 @@ export default function SignUpPage() {
               onClick={() => setRole("tutor")}
               className={`flex items-center justify-center gap-2 rounded-lg py-2.5 text-xs font-semibold transition sm:text-sm ${
                 role === "tutor"
-                  ? "bg-white text-blue-600 shadow-sm dark:bg-slate-900 dark:text-blue-400"
-                  : "text-slate-600 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white"
+                  ? "bg-white text-amber-800 shadow-xs dark:bg-slate-900 dark:text-blue-400"
+                  : "text-stone-600 hover:text-stone-900 dark:text-slate-400 dark:hover:text-white"
               }`}
             >
               <UserCheck className="h-4 w-4" />
@@ -127,56 +127,56 @@ export default function SignUpPage() {
 
           <form onSubmit={handleSubmit} className="mt-6 space-y-4">
             <div>
-              <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300">
+              <label className="block text-xs font-semibold text-stone-700 dark:text-slate-300">
                 Full Name
               </label>
               <div className="relative mt-1.5">
-                <User className="pointer-events-none absolute top-1/2 left-3.5 h-4 w-4 -translate-y-1/2 text-slate-400" />
+                <User className="pointer-events-none absolute top-1/2 left-3.5 h-4 w-4 -translate-y-1/2 text-stone-400 dark:text-slate-400" />
                 <input
                   type="text"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                   placeholder="Enter your full name"
-                  className="w-full rounded-xl border border-slate-300 bg-slate-50 py-2.5 pr-4 pl-10 text-sm text-slate-900 placeholder-slate-400 focus:border-blue-600 focus:bg-white focus:outline-none dark:border-slate-700 dark:bg-slate-950 dark:text-white"
+                  className="w-full rounded-xl border border-stone-300 bg-[#faf7f2] py-2.5 pr-4 pl-10 text-sm text-stone-900 placeholder-stone-400 focus:border-amber-700 focus:bg-white focus:outline-none dark:border-slate-700 dark:bg-slate-950 dark:text-white dark:placeholder-slate-400 dark:focus:border-blue-500"
                 />
               </div>
             </div>
 
             <div>
-              <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300">
+              <label className="block text-xs font-semibold text-stone-700 dark:text-slate-300">
                 Email Address
               </label>
               <div className="relative mt-1.5">
-                <Mail className="pointer-events-none absolute top-1/2 left-3.5 h-4 w-4 -translate-y-1/2 text-slate-400" />
+                <Mail className="pointer-events-none absolute top-1/2 left-3.5 h-4 w-4 -translate-y-1/2 text-stone-400 dark:text-slate-400" />
                 <input
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="you@example.com"
-                  className="w-full rounded-xl border border-slate-300 bg-slate-50 py-2.5 pr-4 pl-10 text-sm text-slate-900 placeholder-slate-400 focus:border-blue-600 focus:bg-white focus:outline-none dark:border-slate-700 dark:bg-slate-950 dark:text-white"
+                  className="w-full rounded-xl border border-stone-300 bg-[#faf7f2] py-2.5 pr-4 pl-10 text-sm text-stone-900 placeholder-stone-400 focus:border-amber-700 focus:bg-white focus:outline-none dark:border-slate-700 dark:bg-slate-950 dark:text-white dark:placeholder-slate-400 dark:focus:border-blue-500"
                 />
               </div>
             </div>
 
             <div>
-              <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300">
+              <label className="block text-xs font-semibold text-stone-700 dark:text-slate-300">
                 Password
               </label>
               <div className="relative mt-1.5">
-                <Lock className="pointer-events-none absolute top-1/2 left-3.5 h-4 w-4 -translate-y-1/2 text-slate-400" />
+                <Lock className="pointer-events-none absolute top-1/2 left-3.5 h-4 w-4 -translate-y-1/2 text-stone-400 dark:text-slate-400" />
                 <input
                   type={showPassword ? "text" : "password"}
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="Create a password (min. 6 characters)"
-                  className="w-full rounded-xl border border-slate-300 bg-slate-50 py-2.5 pr-11 pl-10 text-sm text-slate-900 placeholder-slate-400 focus:border-blue-600 focus:bg-white focus:outline-none dark:border-slate-700 dark:bg-slate-950 dark:text-white"
+                  className="w-full rounded-xl border border-stone-300 bg-[#faf7f2] py-2.5 pr-11 pl-10 text-sm text-stone-900 placeholder-stone-400 focus:border-amber-700 focus:bg-white focus:outline-none dark:border-slate-700 dark:bg-slate-950 dark:text-white dark:placeholder-slate-400 dark:focus:border-blue-500"
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword((prev) => !prev)}
                   aria-label={showPassword ? "Hide password" : "Show password"}
                   aria-pressed={showPassword}
-                  className="absolute top-1/2 right-3 -translate-y-1/2 rounded-md p-1 text-slate-400 transition hover:text-slate-700 focus:outline-none dark:hover:text-slate-200"
+                  className="absolute top-1/2 right-3 -translate-y-1/2 rounded-md p-1 text-stone-400 transition hover:text-stone-700 focus:outline-none dark:text-slate-400 dark:hover:text-slate-200"
                 >
                   {showPassword ? (
                     <EyeOff className="h-4 w-4" />
@@ -190,7 +190,7 @@ export default function SignUpPage() {
             <button
               type="submit"
               disabled={submitting}
-              className="mt-2 flex w-full items-center justify-center gap-2 rounded-xl bg-blue-600 px-5 py-3 text-sm font-semibold text-white transition hover:bg-blue-700 disabled:opacity-60"
+              className="mt-2 flex w-full items-center justify-center gap-2 rounded-xl bg-amber-700 px-5 py-3 text-sm font-semibold text-white transition hover:bg-amber-800 disabled:opacity-60 dark:bg-blue-600 dark:hover:bg-blue-500"
             >
               <span>
                 {submitting ? "Creating Account..." : "Create Account"}
@@ -201,18 +201,18 @@ export default function SignUpPage() {
 
           {/* Divider */}
           <div className="my-5 flex items-center gap-3">
-            <div className="h-px flex-1 bg-slate-200 dark:bg-slate-800" />
-            <span className="text-xs font-medium uppercase text-slate-400">
+            <div className="h-px flex-1 bg-stone-200 dark:bg-slate-800" />
+            <span className="text-xs font-medium uppercase text-stone-400 dark:text-slate-500">
               or
             </span>
-            <div className="h-px flex-1 bg-slate-200 dark:bg-slate-800" />
+            <div className="h-px flex-1 bg-stone-200 dark:bg-slate-800" />
           </div>
 
           {/* Sign up with Google */}
           <button
             type="button"
             onClick={handleGoogleSignUp}
-            className="flex w-full items-center justify-center gap-2.5 rounded-xl border border-slate-300 bg-white px-5 py-3 text-sm font-semibold text-slate-800 transition hover:bg-slate-50 dark:border-slate-700 dark:bg-slate-950 dark:text-slate-200 dark:hover:bg-slate-800"
+            className="flex w-full items-center justify-center gap-2.5 rounded-xl border border-stone-300 bg-[#faf7f2] px-5 py-3 text-sm font-semibold text-stone-800 transition hover:border-amber-700 hover:bg-amber-50/70 dark:border-slate-700 dark:bg-slate-950 dark:text-slate-200 dark:hover:border-blue-500 dark:hover:bg-slate-800"
           >
             <svg className="h-4 w-4" viewBox="0 0 24 24" aria-hidden="true">
               <path
@@ -235,11 +235,11 @@ export default function SignUpPage() {
             <span>Continue with Google</span>
           </button>
 
-          <p className="mt-6 text-center text-xs text-slate-600 dark:text-slate-400 sm:text-sm">
+          <p className="mt-6 text-center text-xs text-stone-600 dark:text-slate-400 sm:text-sm">
             Already have an account?{" "}
             <Link
               href="/sign-in"
-              className="font-semibold text-blue-600 hover:text-blue-700 dark:text-blue-400"
+              className="font-semibold text-amber-800 hover:text-amber-900 dark:text-blue-400 dark:hover:text-blue-300"
             >
               Sign In
             </Link>

@@ -104,39 +104,41 @@ export default function AdminTuitionsModerationPage() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 py-10 dark:bg-[#070d19]">
+    <div className="min-h-screen bg-transparent py-10">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <Link
           href="/dashboard/admin"
-          className="mb-6 inline-flex items-center gap-2 text-sm font-semibold text-blue-600 hover:text-blue-700 dark:text-blue-400"
+          className="mb-6 inline-flex items-center gap-2 text-sm font-semibold text-amber-800 transition hover:text-amber-900 dark:text-blue-400 dark:hover:text-blue-300"
         >
           <ArrowLeft className="h-4 w-4" />
           <span>Back to Admin Dashboard</span>
         </Link>
 
-        <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900">
-          <h1 className="text-2xl font-bold text-slate-900 dark:text-white">
-            Tuition Moderation Queue
-          </h1>
-          <p className="mt-1 text-sm text-slate-600 dark:text-slate-400">
-            Approve tutor batches to make them visible on the public tuition
-            page, or reject inappropriate listings.
-          </p>
+        <div className="rounded-2xl border border-stone-200/90 bg-[#fffdf9]/92 p-6 shadow-xs backdrop-blur-xs sm:p-8 dark:border-slate-800 dark:bg-slate-900/90">
+          <div className="border-b border-stone-200/80 pb-5 dark:border-slate-800">
+            <h1 className="text-2xl font-bold tracking-tight text-stone-900 dark:text-white">
+              Tuition Moderation Queue
+            </h1>
+            <p className="mt-1 text-sm text-stone-600 dark:text-slate-400">
+              Approve tutor batches to make them visible on the public tuition
+              page, or reject inappropriate listings.
+            </p>
+          </div>
 
           {loading ? (
             <div className="flex items-center justify-center py-12">
-              <Loader2 className="h-7 w-7 animate-spin text-blue-600" />
+              <Loader2 className="h-7 w-7 animate-spin text-amber-700 dark:text-blue-600" />
             </div>
           ) : tuitions.length === 0 ? (
-            <div className="mt-8 rounded-xl border border-dashed border-slate-300 p-10 text-center dark:border-slate-700">
-              <p className="text-sm text-slate-600 dark:text-slate-400">
+            <div className="mt-8 rounded-xl border border-dashed border-stone-300 bg-[#faf7f2]/80 p-10 text-center dark:border-slate-700 dark:bg-slate-950/60">
+              <p className="text-sm text-stone-600 dark:text-slate-400">
                 No tuition batches found.
               </p>
             </div>
           ) : (
             <div className="mt-6 overflow-x-auto">
               <table className="w-full text-left text-sm">
-                <thead className="border-b border-slate-200 text-xs uppercase text-slate-500 dark:border-slate-800">
+                <thead className="border-b border-stone-200 text-xs uppercase text-stone-500 dark:border-slate-800 dark:text-slate-400">
                   <tr>
                     <th className="py-3 pr-4">Batch</th>
                     <th className="py-3 pr-4">Tutor</th>
@@ -146,7 +148,7 @@ export default function AdminTuitionsModerationPage() {
                     <th className="py-3 text-right">Moderation</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
+                <tbody className="divide-y divide-stone-200/70 dark:divide-slate-800">
                   {tuitions.map((t, idx) => {
                     const id = String(t._id || t.id || idx);
                     const statusLower = (
@@ -154,18 +156,25 @@ export default function AdminTuitionsModerationPage() {
                     ).toLowerCase();
 
                     return (
-                      <tr key={id}>
-                        <td className="py-4 pr-4 font-semibold text-slate-900 dark:text-white">
+                      <tr
+                        key={id}
+                        className="transition-colors hover:bg-[#faf7f2]/80 dark:hover:bg-slate-800/40"
+                      >
+                        <td className="py-4 pr-4 font-semibold text-stone-900 dark:text-white">
                           {t.title}
                         </td>
-                        <td className="py-4 pr-4 text-xs text-slate-600 dark:text-slate-300">
-                          <div>{t.tutorName || "Tutor"}</div>
-                          <div className="text-slate-400">{t.tutorEmail}</div>
+                        <td className="py-4 pr-4 text-xs text-stone-600 dark:text-slate-300">
+                          <div className="font-medium text-stone-800 dark:text-slate-200">
+                            {t.tutorName || "Tutor"}
+                          </div>
+                          <div className="text-stone-500 dark:text-slate-400">
+                            {t.tutorEmail}
+                          </div>
                         </td>
-                        <td className="py-4 pr-4 text-slate-600 dark:text-slate-300">
+                        <td className="py-4 pr-4 text-stone-600 dark:text-slate-300">
                           {t.subject} · {t.classLevel || "General"}
                         </td>
-                        <td className="py-4 pr-4 font-medium text-slate-900 dark:text-white">
+                        <td className="py-4 pr-4 font-medium text-stone-900 dark:text-white">
                           ৳{Number(t.monthlyFee || 0).toLocaleString()}
                         </td>
                         <td className="py-4 pr-4">
@@ -175,7 +184,7 @@ export default function AdminTuitionsModerationPage() {
                                 ? "bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300"
                                 : statusLower === "rejected"
                                   ? "bg-rose-100 text-rose-800 dark:bg-rose-950 dark:text-rose-300"
-                                  : "bg-amber-100 text-amber-800 dark:bg-amber-950 dark:text-amber-300"
+                                  : "bg-amber-100 text-amber-900 dark:bg-amber-950 dark:text-amber-300"
                             }`}
                           >
                             {t.approvalStatus || "pending"}
@@ -187,7 +196,7 @@ export default function AdminTuitionsModerationPage() {
                               type="button"
                               disabled={updatingId === id}
                               onClick={() => handleApproval(id, "approved")}
-                              className="inline-flex items-center gap-1 rounded-lg bg-emerald-600 px-3 py-1.5 text-xs font-semibold text-white hover:bg-emerald-700 disabled:opacity-50"
+                              className="inline-flex items-center gap-1 rounded-lg bg-emerald-600 px-3 py-1.5 text-xs font-semibold text-white transition hover:bg-emerald-700 disabled:opacity-50"
                             >
                               <Check className="h-3.5 w-3.5" />
                               <span>Approve</span>
@@ -196,7 +205,7 @@ export default function AdminTuitionsModerationPage() {
                               type="button"
                               disabled={updatingId === id}
                               onClick={() => handleApproval(id, "rejected")}
-                              className="inline-flex items-center gap-1 rounded-lg bg-rose-600 px-3 py-1.5 text-xs font-semibold text-white hover:bg-rose-700 disabled:opacity-50"
+                              className="inline-flex items-center gap-1 rounded-lg bg-rose-600 px-3 py-1.5 text-xs font-semibold text-white transition hover:bg-rose-700 disabled:opacity-50"
                             >
                               <X className="h-3.5 w-3.5" />
                               <span>Reject</span>

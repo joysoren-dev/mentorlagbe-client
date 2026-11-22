@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { Loader2 } from "lucide-react";
 import { toast } from "sonner";
 
 export default function AuthCallbackPage() {
@@ -44,10 +45,11 @@ export default function AuthCallbackPage() {
   }, []);
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-slate-50 text-slate-900 dark:bg-[#070d19] dark:text-slate-100 px-4">
-      <div className="text-center space-y-2">
-        <p className="text-base font-medium">{statusMessage}</p>
-        <p className="text-xs text-slate-500 dark:text-slate-400">
+    <div className="flex min-h-screen items-center justify-center bg-transparent px-4 text-stone-900 dark:text-slate-100">
+      <div className="w-full max-w-sm rounded-2xl border border-stone-200/90 bg-[#fffdf9]/92 p-7 text-center shadow-xs backdrop-blur-xs dark:border-slate-800 dark:bg-slate-900/90">
+        <Loader2 className="mx-auto h-7 w-7 animate-spin text-amber-700 dark:text-blue-400" />
+        <p className="mt-3 text-base font-semibold">{statusMessage}</p>
+        <p className="mt-1 text-xs text-stone-500 dark:text-slate-400">
           Please wait a moment...
         </p>
       </div>

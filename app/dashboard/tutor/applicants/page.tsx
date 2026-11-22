@@ -96,18 +96,18 @@ export default function TutorApplicantsPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#faf8f5] py-10 dark:bg-[#0b101b]">
+    <div className="min-h-screen bg-transparent py-10">
       <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
         <Link
           href="/dashboard/tutor"
-          className="mb-6 inline-flex items-center gap-2 text-sm font-semibold text-blue-700 transition hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300"
+          className="mb-6 inline-flex items-center gap-2 text-sm font-semibold text-amber-800 transition hover:text-amber-900 dark:text-blue-400 dark:hover:text-blue-300"
         >
           <ArrowLeft className="h-4 w-4" />
           <span>Back to Tutor Dashboard</span>
         </Link>
 
-        <div className="rounded-2xl border border-stone-200/90 bg-white p-6 shadow-sm sm:p-8 dark:border-slate-800 dark:bg-slate-900">
-          <div className="border-b border-stone-100 pb-5 dark:border-slate-800">
+        <div className="rounded-2xl border border-stone-200/90 bg-[#fffdf9]/92 p-6 shadow-xs backdrop-blur-xs sm:p-8 dark:border-slate-800 dark:bg-slate-900/90">
+          <div className="border-b border-stone-200/80 pb-5 dark:border-slate-800">
             <h1 className="text-2xl font-bold tracking-tight text-stone-900 dark:text-white">
               Student Applicants
             </h1>
@@ -119,10 +119,10 @@ export default function TutorApplicantsPage() {
 
           {loading ? (
             <div className="flex items-center justify-center py-14">
-              <Loader2 className="h-7 w-7 animate-spin text-blue-600" />
+              <Loader2 className="h-7 w-7 animate-spin text-amber-700 dark:text-blue-600" />
             </div>
           ) : applicants.length === 0 ? (
-            <div className="mt-8 rounded-xl border border-dashed border-stone-300 bg-stone-50/60 p-10 text-center dark:border-slate-700 dark:bg-slate-950/40">
+            <div className="mt-8 rounded-xl border border-dashed border-stone-300 bg-[#faf7f2]/80 p-10 text-center dark:border-slate-700 dark:bg-slate-950/40">
               <p className="text-sm text-stone-600 dark:text-slate-400">
                 No student applications received yet.
               </p>
@@ -139,7 +139,7 @@ export default function TutorApplicantsPage() {
                     <th className="w-[14%] py-3.5 pl-4 text-left">Actions</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-stone-100 dark:divide-slate-800/80">
+                <tbody className="divide-y divide-stone-200/70 dark:divide-slate-800/80">
                   {applicants.map((app, idx) => {
                     const id = String(app.id || app._id || idx);
                     const statusLower = (app.status || "pending").toLowerCase();
@@ -147,7 +147,7 @@ export default function TutorApplicantsPage() {
                     return (
                       <tr
                         key={id}
-                        className="align-top transition-colors hover:bg-stone-50/80 dark:hover:bg-slate-800/40"
+                        className="align-top transition-colors hover:bg-[#faf7f2]/80 dark:hover:bg-slate-800/40"
                       >
                         <td className="py-5 pr-4 text-left whitespace-normal break-words">
                           <div className="font-semibold text-stone-900 dark:text-white">
@@ -174,7 +174,7 @@ export default function TutorApplicantsPage() {
                                 ? "bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300"
                                 : statusLower === "rejected"
                                   ? "bg-rose-100 text-rose-800 dark:bg-rose-950 dark:text-rose-300"
-                                  : "bg-amber-100 text-amber-800 dark:bg-amber-950 dark:text-amber-300"
+                                  : "bg-amber-100 text-amber-900 dark:bg-amber-950 dark:text-amber-300"
                             }`}
                           >
                             {app.status || "pending"}
