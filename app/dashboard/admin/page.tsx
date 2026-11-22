@@ -2,7 +2,14 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { BookOpen, CheckCircle2, Clock, Shield, UserCheck } from "lucide-react";
+import {
+  BookOpen,
+  CheckCircle2,
+  Clock,
+  CreditCard,
+  Shield,
+  UserCheck,
+} from "lucide-react";
 import { apiRequest } from "@/lib/api";
 
 interface AdminTuitionSummary {
@@ -136,6 +143,13 @@ export default function AdminDashboardOverview() {
             >
               <UserCheck className="h-4 w-4 text-blue-400" />
               <span>Manage Users</span>
+            </Link>
+            <Link
+              href="/dashboard/admin/payments"
+              className="inline-flex items-center gap-2 rounded-xl border border-slate-700 bg-slate-900 px-4 py-2.5 text-sm font-semibold text-white hover:border-blue-500"
+            >
+              <CreditCard className="h-4 w-4 text-emerald-400" />
+              <span>Payments</span>
             </Link>
           </div>
         </div>
