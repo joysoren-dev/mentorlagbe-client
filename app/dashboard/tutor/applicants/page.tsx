@@ -129,11 +129,11 @@ export default function TutorApplicantsPage() {
               <table className="w-full text-left text-sm">
                 <thead className="border-b border-slate-200 text-xs uppercase text-slate-500 dark:border-slate-800">
                   <tr>
-                    <th className="py-3 pr-4">Student</th>
-                    <th className="py-3 pr-4">Batch</th>
-                    <th className="py-3 pr-4">Details</th>
-                    <th className="py-3 pr-4">Status</th>
-                    <th className="py-3 text-right">Actions</th>
+                    <th className="py-3 pr-4 text-left">Student</th>
+                    <th className="py-3 pr-4 text-left">Batch</th>
+                    <th className="py-3 pr-4 text-left">Details</th>
+                    <th className="py-3 pr-4 text-left">Status</th>
+                    <th className="py-3 text-left">Actions</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
@@ -142,8 +142,8 @@ export default function TutorApplicantsPage() {
                     const statusLower = (app.status || "pending").toLowerCase();
 
                     return (
-                      <tr key={id}>
-                        <td className="py-4 pr-4">
+                      <tr key={id} className="align-top">
+                        <td className="py-4 pr-4 text-left">
                           <div className="font-semibold text-slate-900 dark:text-white">
                             {app.studentName || "Student"}
                           </div>
@@ -151,13 +151,13 @@ export default function TutorApplicantsPage() {
                             {app.studentEmail}
                           </div>
                         </td>
-                        <td className="py-4 pr-4 font-medium text-slate-800 dark:text-slate-200">
+                        <td className="py-4 pr-4 text-left font-medium text-slate-800 dark:text-slate-200">
                           {app.tuitionTitle || "Tuition Batch"}
                         </td>
-                        <td className="py-4 pr-4 text-xs text-slate-600 dark:text-slate-400">
+                        <td className="py-4 pr-4 text-left text-xs text-slate-600 dark:text-slate-400">
                           {app.message || "—"}
                         </td>
-                        <td className="py-4 pr-4">
+                        <td className="py-4 pr-4 text-left">
                           <span
                             className={`inline-flex rounded-full px-2.5 py-1 text-xs font-semibold capitalize ${
                               statusLower === "approved" ||
@@ -171,13 +171,13 @@ export default function TutorApplicantsPage() {
                             {app.status || "pending"}
                           </span>
                         </td>
-                        <td className="py-4 text-right">
-                          <div className="inline-flex items-center gap-2">
+                        <td className="py-4 text-left">
+                          <div className="flex flex-col items-start gap-1.5">
                             <button
                               type="button"
                               disabled={updatingId === id}
                               onClick={() => handleStatus(id, "approved")}
-                              className="inline-flex items-center gap-1 rounded-lg bg-emerald-600 px-3 py-1.5 text-xs font-semibold text-white hover:bg-emerald-700 disabled:opacity-50"
+                              className="inline-flex w-24 items-center justify-center gap-1 rounded-lg bg-emerald-600 px-3 py-1.5 text-xs font-semibold text-white hover:bg-emerald-700 disabled:opacity-50"
                             >
                               <Check className="h-3.5 w-3.5" />
                               <span>Approve</span>
@@ -186,7 +186,7 @@ export default function TutorApplicantsPage() {
                               type="button"
                               disabled={updatingId === id}
                               onClick={() => handleStatus(id, "rejected")}
-                              className="inline-flex items-center gap-1 rounded-lg bg-rose-600 px-3 py-1.5 text-xs font-semibold text-white hover:bg-rose-700 disabled:opacity-50"
+                              className="inline-flex w-24 items-center justify-center gap-1 rounded-lg bg-rose-600 px-3 py-1.5 text-xs font-semibold text-white hover:bg-rose-700 disabled:opacity-50"
                             >
                               <X className="h-3.5 w-3.5" />
                               <span>Reject</span>
