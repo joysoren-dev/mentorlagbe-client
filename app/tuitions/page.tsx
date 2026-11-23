@@ -43,12 +43,39 @@ interface TuitionItem {
   isActive?: boolean;
 }
 
+function cleanSubjectLabel(rawSubject?: string): string {
+  if (!rawSubject) return "";
+  return rawSubject
+    .replace(/^subject\s*:\s*/i, "")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+function matchesSubjectFilter(
+  item: TuitionItem,
+  selectedSubject: string,
+): boolean {
+  if (selectedSubject === "All") return true;
+
+  const target = cleanSubjectLabel(selectedSubject).toLowerCase();
+  const itemSubj = cleanSubjectLabel(item.subject).toLowerCase();
+  const itemTitle = (item.title || "").toLowerCase();
+
+  if (!target) return true;
+  if (itemSubj === target) return true;
+  if (itemSubj.includes(target) || target.includes(itemSubj)) return true;
+  if (itemTitle.includes(target)) return true;
+
+  return false;
+}
+
 function matchesModeFilter(item: TuitionItem, selectedMode: string): boolean {
   if (selectedMode === "All") return true;
 
   const rawMode = (item.mode || "").trim().toLowerCase();
   const textBlob =
-    `${item.title || ""} ${item.description || ""}`.toLowerCase();
+    `${item.title || ""} ${item.description || ""} ${item.subject || ""}`.toLowerCase();
+
   const hasOneOnOne =
     rawMode.includes("1-on-1") ||
     rawMode.includes("1 on 1") ||
@@ -77,7 +104,7 @@ function matchesModeFilter(item: TuitionItem, selectedMode: string): boolean {
     return rawMode === "1-on-1 session (offline)" || (hasOneOnOne && isOffline);
   }
 
-  return rawMode === selectedMode.toLowerCase();
+  return rawMode.includes(selectedMode.toLowerCase());
 }
 
 function TuitionsCatalogContent() {
@@ -130,13 +157,12 @@ function TuitionsCatalogContent() {
         if (isMounted) {
           setTuitions(approvedOnly);
           if (initialSubjectParam.trim()) {
+            const target = cleanSubjectLabel(initialSubjectParam).toLowerCase();
             const matched = approvedOnly.find((t) =>
-              t.subject
-                ?.toLowerCase()
-                .includes(initialSubjectParam.trim().toLowerCase()),
+              cleanSubjectLabel(t.subject).toLowerCase().includes(target),
             );
             if (matched?.subject) {
-              setSelectedSubject(matched.subject);
+              setSelectedSubject(cleanSubjectLabel(matched.subject));
             } else {
               setSearchQuery((prev) => prev || initialSubjectParam.trim());
             }
@@ -161,29 +187,35 @@ function TuitionsCatalogContent() {
   }, [initialSubjectParam]);
 
   const subjects = useMemo(() => {
-    const unique = new Set<string>();
+    const map = new Map<string, string>();
     tuitions.forEach((t) => {
-      if (t.subject?.trim()) unique.add(t.subject.trim());
+      const cleaned = cleanSubjectLabel(t.subject);
+      if (cleaned) {
+        const key = cleaned.toLowerCase();
+        if (!map.has(key)) {
+          map.set(key, cleaned);
+        }
+      }
     });
-    return ["All", ...Array.from(unique)];
+    return ["All", ...Array.from(map.values())];
   }, [tuitions]);
 
   const filteredTuitions = useMemo(() => {
     const q = searchQuery.trim().toLowerCase();
 
     const list = tuitions.filter((item) => {
+      const cleanedSubj = cleanSubjectLabel(item.subject).toLowerCase();
       const matchesSearch =
         !q ||
         item.title?.toLowerCase().includes(q) ||
+        item.description?.toLowerCase().includes(q) ||
         item.subject?.toLowerCase().includes(q) ||
+        cleanedSubj.includes(q) ||
         item.classLevel?.toLowerCase().includes(q) ||
         item.mode?.toLowerCase().includes(q) ||
         item.location?.toLowerCase().includes(q);
 
-      const matchesSubject =
-        selectedSubject === "All" ||
-        item.subject?.toLowerCase() === selectedSubject.toLowerCase();
-
+      const matchesSubject = matchesSubjectFilter(item, selectedSubject);
       const matchesMode = matchesModeFilter(item, selectedMode);
 
       return matchesSearch && matchesSubject && matchesMode;
@@ -243,8 +275,8 @@ function TuitionsCatalogContent() {
             </span>
           </h1>
           <p className="mt-2 max-w-2xl text-sm text-stone-300 dark:text-slate-300 sm:text-base">
-            Filter verified mentorship batches or 1-on-1 sessions by subject,
-            class level, online or offline mode, and monthly fee.
+            Filter verified batches or 1-on-1 sessions across academic subjects,
+            custom topics, online/offline modes, and monthly fees.
           </p>
         </MotionSection>
       </section>
@@ -260,7 +292,7 @@ function TuitionsCatalogContent() {
                 type="text"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder="Search title, subject, class, or location..."
+                placeholder="Search any subject, topic, class, or area..."
                 className="w-full rounded-xl border border-stone-300 bg-[#faf7f2] py-2.5 pr-4 pl-10 text-sm text-stone-900 placeholder-stone-400 transition focus:border-amber-700 focus:bg-white focus:outline-none dark:border-slate-700 dark:bg-slate-950 dark:text-white dark:placeholder-slate-400 dark:focus:border-blue-500 dark:focus:bg-slate-900"
               />
             </div>
@@ -378,6 +410,8 @@ function TuitionsCatalogContent() {
               const scheduleText =
                 item.schedule ||
                 (item.daysPerWeek ? `${item.daysPerWeek} days/week` : "");
+              const displaySubject =
+                cleanSubjectLabel(item.subject) || "General";
 
               return (
                 <MotionCard
@@ -394,7 +428,7 @@ function TuitionsCatalogContent() {
                     <div className="flex items-center justify-between gap-2">
                       <span className="inline-flex items-center gap-1.5 rounded-full border border-amber-500/20 bg-amber-100/90 px-3 py-1 text-xs font-semibold text-amber-900 dark:border-blue-400/20 dark:bg-blue-950/80 dark:text-blue-300">
                         <BookOpen className="h-3.5 w-3.5" />
-                        <span>{item.subject}</span>
+                        <span>{displaySubject}</span>
                       </span>
 
                       <span
@@ -476,20 +510,28 @@ function TuitionsCatalogContent() {
             </h2>
             <p className="mx-auto mt-2 max-w-md text-sm text-stone-600 dark:text-slate-400">
               {hasActiveFilters
-                ? "Try adjusting your search keywords, subject, or study mode filters."
+                ? "No published batch matches this exact combination yet. Try clearing filters or request a custom mentor in your dashboard."
                 : "Approved tuition listings from verified tutors will appear here once published."}
             </p>
             <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
               {hasActiveFilters ? (
-                <MotionButton>
-                  <button
-                    type="button"
-                    onClick={handleResetFilters}
-                    className="rounded-xl bg-gradient-to-r from-amber-700 to-orange-600 px-5 py-2.5 text-sm font-semibold text-white shadow-xs transition hover:brightness-110 dark:from-blue-600 dark:to-indigo-500"
+                <>
+                  <MotionButton>
+                    <button
+                      type="button"
+                      onClick={handleResetFilters}
+                      className="rounded-xl bg-gradient-to-r from-amber-700 to-orange-600 px-5 py-2.5 text-sm font-semibold text-white shadow-xs transition hover:brightness-110 dark:from-blue-600 dark:to-indigo-500"
+                    >
+                      Clear All Filters
+                    </button>
+                  </MotionButton>
+                  <Link
+                    href="/dashboard/student"
+                    className="rounded-xl border border-stone-300 bg-[#faf7f2] px-5 py-2.5 text-sm font-semibold text-stone-800 transition hover:border-amber-700 dark:border-slate-700 dark:bg-slate-950 dark:text-slate-200 dark:hover:border-blue-400"
                   >
-                    Clear All Filters
-                  </button>
-                </MotionButton>
+                    Request Custom Mentor
+                  </Link>
+                </>
               ) : (
                 <MotionButton>
                   <Link

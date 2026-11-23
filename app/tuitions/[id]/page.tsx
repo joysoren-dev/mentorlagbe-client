@@ -3,6 +3,7 @@
 import { FormEvent, useEffect, useState } from "react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
+import { motion } from "framer-motion";
 import {
   ArrowLeft,
   BookOpen,
@@ -267,7 +268,21 @@ export default function TuitionDetailsPage() {
     }
   };
 
-  const isOnline = tuition?.mode?.toLowerCase() === "online";
+  const modeLower = (tuition?.mode || "").toLowerCase();
+  const isOnline =
+    modeLower.includes("online") ||
+    (!modeLower.includes("offline") && modeLower === "online");
+  const isOneOnOne =
+    (tuition?.title || "").toLowerCase().includes("1-on-1") ||
+    (tuition?.description || "").toLowerCase().includes("1-on-1") ||
+    modeLower.includes("1-on-1");
+
+  const modeDisplayLabel = tuition?.mode
+    ? isOneOnOne && !modeLower.includes("1-on-1")
+      ? `${tuition.mode} · 1-on-1`
+      : tuition.mode
+    : "Online";
+
   const scheduleText =
     tuition?.schedule ||
     (tuition?.daysPerWeek ? `${tuition.daysPerWeek} days/week` : "Flexible");
@@ -280,8 +295,10 @@ export default function TuitionDetailsPage() {
     <div className="min-h-screen bg-transparent">
       {/* Top Header */}
       <section className="relative overflow-hidden bg-[#16120e] py-10 text-white dark:bg-[#06142e] sm:py-14">
-        <div
+        <motion.div
           aria-hidden="true"
+          animate={{ opacity: [0.35, 0.7, 0.35] }}
+          transition={{ duration: 4.2, repeat: Infinity, ease: "easeInOut" }}
           className="pointer-events-none absolute -top-24 left-1/4 h-72 w-72 rounded-full bg-amber-500/20 blur-3xl dark:bg-blue-600/25"
         />
         <div
@@ -311,11 +328,11 @@ export default function TuitionDetailsPage() {
                   ) : (
                     <MapPin className="h-3.5 w-3.5" />
                   )}
-                  <span>{tuition.mode || "Online"}</span>
+                  <span>{modeDisplayLabel}</span>
                 </span>
               </div>
 
-              <h1 className="text-2xl font-bold tracking-tight sm:text-4xl">
+              <h1 className="text-2xl font-extrabold tracking-tight text-white sm:text-4xl">
                 {tuition.title}
               </h1>
             </div>
@@ -371,8 +388,8 @@ export default function TuitionDetailsPage() {
                   className="pointer-events-none absolute inset-x-0 top-0 h-16 bg-gradient-to-b from-white/70 via-white/15 to-transparent dark:from-white/5 dark:to-transparent"
                 />
                 <div className="relative">
-                  <h2 className="text-lg font-bold tracking-tight text-stone-900 dark:text-white">
-                    Batch Overview
+                  <h2 className="text-lg font-extrabold tracking-tight text-stone-900 dark:text-white">
+                    Batch &amp; Session Overview
                   </h2>
                   <p className="mt-3 text-sm leading-relaxed text-stone-600 dark:text-slate-300 sm:text-base">
                     {tuition.description?.trim() ||
@@ -411,9 +428,9 @@ export default function TuitionDetailsPage() {
                           Location / Mode
                         </p>
                         <p className="text-sm font-semibold text-stone-900 dark:text-white">
-                          {isOnline
+                          {isOnline && !tuition.location
                             ? "Online Session"
-                            : tuition.location || "Local Batch"}
+                            : tuition.location || modeDisplayLabel}
                         </p>
                       </div>
                     </div>
@@ -592,7 +609,7 @@ export default function TuitionDetailsPage() {
                             type="time"
                             value={time24}
                             onChange={(e) => handleTimeChange(e.target.value)}
-                            className="rounded-lg border border-stone-300 bg-[#fffdf9] px-2.5 py-1.5 text-xs font-medium text-stone-900 transition focus:border-amber-700 focus:outline-none dark:border-slate-700 dark:bg-slate-900 dark:text-white dark:focus:border-blue-500"
+                            className="rounded-lg border border-stone-300 bg-[#fffdf9] px-2.5 py-1.5 text-xs font-medium text-stone-900 transition focus:border-amber-700 focus:outline-none dark:border-slate-700 dark:bg-slate-900 dark:text-white dark:focus:border-blue-500 dark:focus:bg-slate-900"
                           />
                         </div>
 
@@ -601,7 +618,7 @@ export default function TuitionDetailsPage() {
                           value={preferredSchedule}
                           onChange={(e) => setPreferredSchedule(e.target.value)}
                           placeholder="e.g., Sun / Tue / Thu, 6:00 PM"
-                          className="w-full rounded-xl border border-stone-300 bg-[#fffdf9] px-3.5 py-2 text-sm text-stone-900 placeholder-stone-400 transition focus:border-amber-700 focus:outline-none dark:border-slate-700 dark:bg-slate-900 dark:text-white dark:focus:border-blue-500"
+                          className="w-full rounded-xl border border-stone-300 bg-[#fffdf9] px-3.5 py-2 text-sm text-stone-900 placeholder-stone-400 transition focus:border-amber-700 focus:outline-none dark:border-slate-700 dark:bg-slate-900 dark:text-white dark:focus:border-blue-500 dark:focus:bg-slate-900"
                         />
                       </div>
 
