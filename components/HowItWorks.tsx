@@ -10,8 +10,15 @@ import {
   GraduationCap,
   Layers,
   Search,
+  Sparkles,
   UserCheck,
 } from "lucide-react";
+import {
+  AutoList,
+  MotionButton,
+  MotionCard,
+  MotionSection,
+} from "@/components/MotionPrimitives";
 
 interface StepItem {
   stepNumber: string;
@@ -92,16 +99,25 @@ export default function HowItWorks() {
   return (
     <section
       id="how-it-works"
-      className="scroll-mt-16 border-t border-stone-200/80 bg-transparent py-16 dark:border-slate-800/80 sm:py-20"
+      className="relative scroll-mt-16 overflow-hidden border-t border-stone-200/80 bg-transparent py-16 dark:border-slate-800/80 sm:py-20"
     >
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="flex flex-col justify-between gap-6 lg:flex-row lg:items-end">
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute -top-24 left-1/3 h-72 w-72 rounded-full bg-amber-400/15 blur-3xl dark:bg-blue-600/15"
+      />
+
+      <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <MotionSection className="flex flex-col justify-between gap-6 lg:flex-row lg:items-end">
           <div className="space-y-2">
-            <p className="text-xs font-semibold uppercase tracking-wider text-amber-800 dark:text-blue-400">
+            <p className="text-xs font-bold uppercase tracking-widest text-amber-800 dark:text-blue-400">
               Simple Process
             </p>
             <h2 className="text-2xl font-bold tracking-tight text-stone-900 dark:text-white sm:text-3xl">
-              How MentorLagbe Works
+              How{" "}
+              <span className="bg-gradient-to-r from-amber-700 via-orange-600 to-amber-800 bg-clip-text text-transparent dark:from-blue-400 dark:via-sky-300 dark:to-indigo-400">
+                MentorLagbe
+              </span>{" "}
+              Works
             </h2>
             <p className="max-w-2xl text-sm text-stone-600 dark:text-slate-300 sm:text-base">
               A clear, role-focused workflow designed for both students
@@ -109,13 +125,13 @@ export default function HowItWorks() {
             </p>
           </div>
 
-          <div className="inline-flex self-start rounded-xl border border-stone-300/90 bg-[#fffdf9]/90 p-1 backdrop-blur-xs dark:border-slate-700 dark:bg-slate-900/90 lg:self-auto">
+          <div className="inline-flex self-start rounded-xl border border-stone-300/90 bg-[#fffdf9]/95 p-1 shadow-xs backdrop-blur-xs dark:border-slate-700 dark:bg-slate-900/95 lg:self-auto">
             <button
               type="button"
               onClick={() => setActiveTab("student")}
               className={`inline-flex items-center gap-2 rounded-lg px-4 py-2 text-xs font-semibold transition sm:text-sm ${
                 activeTab === "student"
-                  ? "bg-amber-700 text-white shadow-xs dark:bg-blue-600"
+                  ? "bg-gradient-to-r from-amber-700 to-orange-600 text-white shadow-xs dark:from-blue-600 dark:to-indigo-500"
                   : "text-stone-700 hover:text-stone-900 dark:text-slate-300 dark:hover:text-white"
               }`}
             >
@@ -127,7 +143,7 @@ export default function HowItWorks() {
               onClick={() => setActiveTab("tutor")}
               className={`inline-flex items-center gap-2 rounded-lg px-4 py-2 text-xs font-semibold transition sm:text-sm ${
                 activeTab === "tutor"
-                  ? "bg-amber-700 text-white shadow-xs dark:bg-blue-600"
+                  ? "bg-gradient-to-r from-amber-700 to-orange-600 text-white shadow-xs dark:from-blue-600 dark:to-indigo-500"
                   : "text-stone-700 hover:text-stone-900 dark:text-slate-300 dark:hover:text-white"
               }`}
             >
@@ -135,25 +151,31 @@ export default function HowItWorks() {
               <span>For Tutors</span>
             </button>
           </div>
-        </div>
+        </MotionSection>
 
-        <div className="mt-10 grid grid-cols-1 gap-6 md:grid-cols-3">
-          {steps.map((item) => (
-            <article
+        <AutoList className="mt-10 grid grid-cols-1 gap-6 md:grid-cols-3">
+          {steps.map((item, idx) => (
+            <MotionCard
               key={`${activeTab}-${item.stepNumber}`}
-              className="flex h-full flex-col justify-between rounded-2xl border border-stone-200/90 bg-[#fffdf9]/92 p-6 backdrop-blur-xs transition hover:border-amber-600/60 hover:shadow-md dark:border-slate-800 dark:bg-slate-900/85 dark:hover:border-blue-500/60"
+              index={idx}
+              className="group relative flex h-full flex-col justify-between overflow-hidden rounded-2xl border border-stone-200/90 bg-gradient-to-b from-[#fffdf9] via-[#fffdf9] to-amber-50/40 p-6 shadow-xs backdrop-blur-xs transition-all duration-300 hover:border-amber-600/70 hover:shadow-lg dark:border-slate-800 dark:from-slate-900 dark:via-slate-900/95 dark:to-blue-950/35 dark:hover:border-blue-500/70 dark:hover:shadow-blue-950/40"
             >
-              <div>
+              <div
+                aria-hidden="true"
+                className="pointer-events-none absolute inset-x-0 top-0 h-20 bg-gradient-to-b from-white/70 via-white/15 to-transparent dark:from-white/5 dark:to-transparent"
+              />
+
+              <div className="relative">
                 <div className="flex items-center justify-between">
-                  <span className="inline-flex h-11 w-11 items-center justify-center rounded-xl bg-amber-700 text-white dark:bg-blue-600">
+                  <span className="inline-flex h-11 w-11 items-center justify-center rounded-xl bg-gradient-to-br from-amber-700 to-orange-600 text-white shadow-sm transition-transform duration-300 group-hover:scale-105 dark:from-blue-600 dark:to-indigo-500">
                     <StepIcon name={item.icon} />
                   </span>
-                  <span className="text-2xl font-extrabold tracking-tight text-stone-300 dark:text-slate-700">
+                  <span className="bg-gradient-to-b from-stone-300 to-stone-200 bg-clip-text text-3xl font-black tracking-tight text-transparent transition-colors duration-300 group-hover:from-amber-500/70 group-hover:to-orange-400/50 dark:from-slate-700 dark:to-slate-800 dark:group-hover:from-blue-400/60 dark:group-hover:to-indigo-500/40">
                     {item.stepNumber}
                   </span>
                 </div>
 
-                <h3 className="mt-5 text-lg font-bold text-stone-900 dark:text-white">
+                <h3 className="mt-5 text-lg font-bold tracking-tight text-stone-900 dark:text-white">
                   {item.title}
                 </h3>
 
@@ -162,16 +184,19 @@ export default function HowItWorks() {
                 </p>
               </div>
 
-              <div className="mt-6 border-t border-stone-200/80 pt-4 text-xs font-semibold text-amber-800 dark:border-slate-800 dark:text-blue-400">
-                {activeTab === "student" ? "Student Step" : "Tutor Step"} ·{" "}
-                {item.stepNumber}
+              <div className="relative mt-6 flex items-center justify-between border-t border-stone-200/80 pt-4 text-xs font-semibold text-amber-800 dark:border-slate-800 dark:text-blue-400">
+                <span>
+                  {activeTab === "student" ? "Student Step" : "Tutor Step"} ·{" "}
+                  {item.stepNumber}
+                </span>
+                <Sparkles className="h-3.5 w-3.5 opacity-60 transition-opacity duration-300 group-hover:opacity-100" />
               </div>
-            </article>
+            </MotionCard>
           ))}
-        </div>
+        </AutoList>
 
-        <div className="mt-10 flex flex-col items-start justify-between gap-4 rounded-2xl border border-stone-200/90 bg-[#fffdf9]/92 p-6 backdrop-blur-xs dark:border-slate-800 dark:bg-slate-900/85 sm:flex-row sm:items-center">
-          <div>
+        <MotionSection className="relative mt-10 flex flex-col items-start justify-between gap-4 overflow-hidden rounded-2xl border border-amber-500/30 bg-gradient-to-r from-[#fffdf9] via-[#fffaf2] to-amber-100/50 p-6 shadow-xs backdrop-blur-xs dark:border-blue-500/30 dark:from-slate-900 dark:via-slate-900/95 dark:to-blue-950/50 sm:flex-row sm:items-center">
+          <div className="relative">
             <h3 className="text-base font-bold text-stone-900 dark:text-white">
               {activeTab === "student"
                 ? "Ready to find a batch that matches your goals?"
@@ -184,24 +209,30 @@ export default function HowItWorks() {
             </p>
           </div>
 
-          <div className="flex flex-wrap items-center gap-3">
-            <Link
-              href={activeTab === "student" ? "/tuitions" : "/pricing"}
-              className="inline-flex items-center gap-2 rounded-xl bg-amber-700 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-amber-800 dark:bg-blue-600 dark:hover:bg-blue-500"
-            >
-              <span>
-                {activeTab === "student" ? "Browse Tuitions" : "View Pro Plans"}
-              </span>
-              <ArrowRight className="h-4 w-4" />
-            </Link>
-            <Link
-              href="/sign-up"
-              className="inline-flex items-center justify-center rounded-xl border border-stone-300 bg-[#fffdf9] px-4 py-2.5 text-sm font-semibold text-stone-800 transition hover:bg-stone-100 dark:border-slate-700 dark:bg-slate-950 dark:text-slate-200 dark:hover:bg-slate-800"
-            >
-              Get Started
-            </Link>
+          <div className="relative flex flex-wrap items-center gap-3">
+            <MotionButton>
+              <Link
+                href={activeTab === "student" ? "/tuitions" : "/pricing"}
+                className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-amber-700 to-orange-600 px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:brightness-110 dark:from-blue-600 dark:to-indigo-500"
+              >
+                <span>
+                  {activeTab === "student"
+                    ? "Browse Tuitions"
+                    : "View Pro Plans"}
+                </span>
+                <ArrowRight className="h-4 w-4" />
+              </Link>
+            </MotionButton>
+            <MotionButton>
+              <Link
+                href="/sign-up"
+                className="inline-flex items-center justify-center rounded-xl border border-stone-300 bg-[#fffdf9] px-4 py-2.5 text-sm font-semibold text-stone-800 transition hover:border-amber-700 hover:bg-stone-100 dark:border-slate-700 dark:bg-slate-950 dark:text-slate-200 dark:hover:border-blue-500 dark:hover:bg-slate-800"
+              >
+                Get Started
+              </Link>
+            </MotionButton>
           </div>
-        </div>
+        </MotionSection>
       </div>
     </section>
   );
