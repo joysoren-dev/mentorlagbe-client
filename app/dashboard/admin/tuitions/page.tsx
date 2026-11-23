@@ -5,6 +5,7 @@ import Link from "next/link";
 import { ArrowLeft, Check, Loader2, X } from "lucide-react";
 import { toast } from "sonner";
 import { apiRequest } from "@/lib/api";
+import { MotionCard, MotionSection } from "@/components/MotionPrimitives";
 
 interface AdminTuition {
   _id?: string;
@@ -104,41 +105,52 @@ export default function AdminTuitionsModerationPage() {
   };
 
   return (
-    <div className="min-h-screen bg-transparent py-10">
+    <div className="min-h-screen bg-transparent py-8 sm:py-10">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <Link
-          href="/dashboard/admin"
-          className="mb-6 inline-flex items-center gap-2 text-sm font-semibold text-amber-800 transition hover:text-amber-900 dark:text-blue-400 dark:hover:text-blue-300"
-        >
-          <ArrowLeft className="h-4 w-4" />
-          <span>Back to Admin Dashboard</span>
-        </Link>
+        <MotionSection className="mb-6">
+          <Link
+            href="/dashboard/admin"
+            className="inline-flex items-center gap-2 text-sm font-semibold text-amber-800 transition hover:text-amber-900 dark:text-blue-400 dark:hover:text-blue-300"
+          >
+            <ArrowLeft className="h-4 w-4" />
+            <span>Back to Admin Dashboard</span>
+          </Link>
+        </MotionSection>
 
-        <div className="rounded-2xl border border-stone-200/90 bg-[#fffdf9]/92 p-6 shadow-xs backdrop-blur-xs sm:p-8 dark:border-slate-800 dark:bg-slate-900/90">
+        <MotionCard
+          index={0}
+          className="rounded-2xl border border-stone-200/90 bg-[#fffdf9] p-6 shadow-xs backdrop-blur-xs sm:p-8 dark:border-slate-700/80 dark:bg-slate-900"
+        >
           <div className="border-b border-stone-200/80 pb-5 dark:border-slate-800">
-            <h1 className="text-2xl font-bold tracking-tight text-stone-900 dark:text-white">
-              Tuition Moderation Queue
+            <p className="text-xs font-bold uppercase tracking-widest text-amber-800 dark:text-blue-400">
+              Batch &amp; Session Verification
+            </p>
+            <h1 className="mt-1 text-2xl font-extrabold tracking-tight text-stone-900 dark:text-white">
+              Tuition{" "}
+              <span className="bg-gradient-to-r from-amber-700 to-orange-600 bg-clip-text text-transparent dark:from-blue-400 dark:to-sky-300">
+                Moderation Queue
+              </span>
             </h1>
-            <p className="mt-1 text-sm text-stone-600 dark:text-slate-400">
-              Approve tutor batches to make them visible on the public tuition
-              page, or reject inappropriate listings.
+            <p className="mt-1 text-sm text-stone-600 dark:text-slate-300">
+              Approve tutor batches or sessions to make them visible on the
+              public tuition page, or reject inappropriate listings.
             </p>
           </div>
 
           {loading ? (
             <div className="flex items-center justify-center py-12">
-              <Loader2 className="h-7 w-7 animate-spin text-amber-700 dark:text-blue-600" />
+              <Loader2 className="h-7 w-7 animate-spin text-amber-700 dark:text-blue-400" />
             </div>
           ) : tuitions.length === 0 ? (
-            <div className="mt-8 rounded-xl border border-dashed border-stone-300 bg-[#faf7f2]/80 p-10 text-center dark:border-slate-700 dark:bg-slate-950/60">
-              <p className="text-sm text-stone-600 dark:text-slate-400">
+            <div className="mt-8 rounded-xl border border-dashed border-stone-300 bg-[#faf7f2] p-10 text-center dark:border-slate-700 dark:bg-slate-950">
+              <p className="text-sm text-stone-600 dark:text-slate-300">
                 No tuition batches found.
               </p>
             </div>
           ) : (
             <div className="mt-6 overflow-x-auto">
               <table className="w-full text-left text-sm">
-                <thead className="border-b border-stone-200 text-xs uppercase text-stone-500 dark:border-slate-800 dark:text-slate-400">
+                <thead className="border-b border-stone-200 text-xs uppercase text-stone-600 dark:border-slate-800 dark:text-slate-300">
                   <tr>
                     <th className="py-3 pr-4">Batch</th>
                     <th className="py-3 pr-4">Tutor</th>
@@ -158,23 +170,28 @@ export default function AdminTuitionsModerationPage() {
                     return (
                       <tr
                         key={id}
-                        className="transition-colors hover:bg-[#faf7f2]/80 dark:hover:bg-slate-800/40"
+                        className="transition-colors hover:bg-[#faf7f2] dark:hover:bg-slate-800/40"
                       >
-                        <td className="py-4 pr-4 font-semibold text-stone-900 dark:text-white">
-                          {t.title}
+                        <td className="py-4 pr-4 font-bold text-stone-900 dark:text-white">
+                          <div>{t.title}</div>
+                          {t.mode && (
+                            <div className="mt-0.5 text-xs font-medium text-amber-800 dark:text-blue-300">
+                              {t.mode}
+                            </div>
+                          )}
                         </td>
                         <td className="py-4 pr-4 text-xs text-stone-600 dark:text-slate-300">
-                          <div className="font-medium text-stone-800 dark:text-slate-200">
+                          <div className="font-semibold text-stone-800 dark:text-slate-100">
                             {t.tutorName || "Tutor"}
                           </div>
                           <div className="text-stone-500 dark:text-slate-400">
                             {t.tutorEmail}
                           </div>
                         </td>
-                        <td className="py-4 pr-4 text-stone-600 dark:text-slate-300">
+                        <td className="py-4 pr-4 text-stone-700 dark:text-slate-200">
                           {t.subject} · {t.classLevel || "General"}
                         </td>
-                        <td className="py-4 pr-4 font-medium text-stone-900 dark:text-white">
+                        <td className="py-4 pr-4 font-bold text-stone-900 dark:text-white">
                           ৳{Number(t.monthlyFee || 0).toLocaleString()}
                         </td>
                         <td className="py-4 pr-4">
@@ -219,7 +236,7 @@ export default function AdminTuitionsModerationPage() {
               </table>
             </div>
           )}
-        </div>
+        </MotionCard>
       </div>
     </div>
   );

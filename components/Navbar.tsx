@@ -127,6 +127,7 @@ export default function Navbar() {
   ];
 
   const roleLabel = (user?.role || "student").toUpperCase();
+  const isProfileActive = pathname === "/dashboard/profile";
 
   const renderAvatar = () => {
     if (user?.image && !imgError) {
@@ -174,7 +175,7 @@ export default function Navbar() {
           ))}
         </nav>
 
-        <div className="hidden items-center gap-3 md:flex">
+        <div className="hidden items-center gap-2.5 md:flex">
           <button
             type="button"
             onClick={toggleTheme}
@@ -197,7 +198,15 @@ export default function Navbar() {
 
           {user ? (
             <>
-              <div className="flex items-center gap-2 rounded-lg border border-stone-300 bg-[#fffdf9] px-3 py-1.5 dark:border-slate-700/90 dark:bg-slate-900/85">
+              <Link
+                href="/dashboard/profile"
+                title="Open Profile"
+                className={`flex items-center gap-2 rounded-lg border px-3 py-1.5 transition ${
+                  isProfileActive
+                    ? "border-amber-700 bg-amber-100/80 ring-2 ring-amber-600/15 dark:border-blue-400 dark:bg-blue-950/70 dark:ring-blue-500/20"
+                    : "border-stone-300 bg-[#fffdf9] hover:border-amber-700 hover:bg-amber-50/70 dark:border-slate-700/90 dark:bg-slate-900/85 dark:hover:border-blue-500 dark:hover:bg-slate-800"
+                }`}
+              >
                 {renderAvatar()}
                 <span className="max-w-[130px] truncate text-xs font-semibold text-stone-900 dark:text-white">
                   {user.name}
@@ -205,7 +214,7 @@ export default function Navbar() {
                 <span className="rounded bg-amber-700/15 px-1.5 py-0.5 text-[10px] font-bold tracking-wider text-amber-900 dark:bg-blue-500/20 dark:text-blue-300">
                   {roleLabel}
                 </span>
-              </div>
+              </Link>
 
               <Link
                 href="/dashboard"
@@ -287,7 +296,11 @@ export default function Navbar() {
 
             {user ? (
               <div className="space-y-2.5 border-t border-stone-200 pt-3 dark:border-slate-800">
-                <div className="flex items-center justify-between rounded-lg border border-stone-200 bg-[#fffdf9] px-3 py-2 dark:border-slate-800 dark:bg-slate-900/85">
+                <Link
+                  href="/dashboard/profile"
+                  onClick={() => setMobileOpen(false)}
+                  className="flex items-center justify-between rounded-lg border border-stone-200 bg-[#fffdf9] px-3 py-2 transition hover:border-amber-700 dark:border-slate-800 dark:bg-slate-900/85 dark:hover:border-blue-500"
+                >
                   <div className="flex items-center gap-2">
                     {renderAvatar()}
                     <span className="text-xs font-semibold text-stone-900 dark:text-white">
@@ -297,7 +310,7 @@ export default function Navbar() {
                   <span className="rounded bg-amber-700/15 px-1.5 py-0.5 text-[10px] font-bold text-amber-900 dark:bg-blue-500/20 dark:text-blue-300">
                     {roleLabel}
                   </span>
-                </div>
+                </Link>
 
                 <div className="flex items-center gap-3">
                   <Link
