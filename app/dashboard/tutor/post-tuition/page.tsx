@@ -201,21 +201,49 @@ export default function PostTuitionPage() {
     try {
       setSubmitting(true);
       const session = readSession();
+
+      const isOneOnOne =
+        mode === "1-on-1 Session (Online)" ||
+        mode === "1-on-1 Session (Offline)";
+      const backendMode: "Online" | "Offline" =
+        mode === "Offline" || mode === "1-on-1 Session (Offline)"
+          ? "Offline"
+          : "Online";
+
+      const cleanTitle = title.trim();
+      const finalTitle =
+        isOneOnOne &&
+        !cleanTitle.toLowerCase().includes("1-on-1") &&
+        !cleanTitle.toLowerCase().includes("one-on-one")
+          ? `${cleanTitle} (1-on-1 Session)`
+          : cleanTitle;
+
+      const cleanSubject = subject.trim();
+      const cleanLevel = classLevel.trim() || "General";
+      const cleanDesc = description.trim();
+      const finalDescription =
+        cleanDesc ||
+        (isOneOnOne
+          ? `1-on-1 mentorship session (${backendMode}) for ${cleanSubject} (${cleanLevel}).`
+          : `${backendMode} batch for ${cleanSubject} (${cleanLevel}).`);
+
       await apiRequest("/api/tuitions", {
         method: "POST",
         headers: session.token
           ? { Authorization: `Bearer ${session.token}` }
           : {},
         body: JSON.stringify({
-          title: title.trim(),
-          subject: subject.trim(),
-          classLevel: classLevel.trim(),
-          mode,
-          location: requiresLocation ? location.trim() : "Online Session",
+          title: finalTitle,
+          subject: cleanSubject,
+          classLevel: cleanLevel,
+          mode: backendMode,
+          location: requiresLocation
+            ? location.trim() || "Local Area"
+            : "Online Session",
           monthlyFee: Number(monthlyFee) || 0,
           daysPerWeek: Number(daysPerWeek) || 3,
-          schedule: schedule.trim(),
-          description: description.trim(),
+          schedule: schedule.trim() || "Sun / Tue / Thu, 07:00 PM",
+          description: finalDescription,
           approvalStatus: "pending",
           isActive: true,
         }),

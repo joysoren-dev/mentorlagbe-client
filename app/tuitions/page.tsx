@@ -3,6 +3,7 @@
 import { Suspense, useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
+import { motion } from "framer-motion";
 import {
   ArrowRight,
   BookOpen,
@@ -28,6 +29,7 @@ interface TuitionItem {
   _id?: string;
   id?: string;
   title: string;
+  description?: string;
   subject: string;
   classLevel: string;
   mode: "Online" | "Offline" | string;
@@ -39,6 +41,43 @@ interface TuitionItem {
   status?: string;
   approvalStatus?: string;
   isActive?: boolean;
+}
+
+function matchesModeFilter(item: TuitionItem, selectedMode: string): boolean {
+  if (selectedMode === "All") return true;
+
+  const rawMode = (item.mode || "").trim().toLowerCase();
+  const textBlob =
+    `${item.title || ""} ${item.description || ""}`.toLowerCase();
+  const hasOneOnOne =
+    rawMode.includes("1-on-1") ||
+    rawMode.includes("1 on 1") ||
+    rawMode.includes("one-on-one") ||
+    textBlob.includes("1-on-1") ||
+    textBlob.includes("1 on 1") ||
+    textBlob.includes("one-on-one");
+
+  const isOffline = rawMode.includes("offline");
+  const isOnline =
+    rawMode.includes("online") || (!isOffline && rawMode === "online");
+
+  if (selectedMode === "Online") {
+    return rawMode === "online" || (isOnline && !hasOneOnOne);
+  }
+  if (selectedMode === "Offline") {
+    return rawMode === "offline" || (isOffline && !hasOneOnOne);
+  }
+  if (selectedMode === "1-on-1 Session (Online)") {
+    return (
+      rawMode === "1-on-1 session (online)" ||
+      (hasOneOnOne && (isOnline || !isOffline))
+    );
+  }
+  if (selectedMode === "1-on-1 Session (Offline)") {
+    return rawMode === "1-on-1 session (offline)" || (hasOneOnOne && isOffline);
+  }
+
+  return rawMode === selectedMode.toLowerCase();
 }
 
 function TuitionsCatalogContent() {
@@ -138,15 +177,14 @@ function TuitionsCatalogContent() {
         item.title?.toLowerCase().includes(q) ||
         item.subject?.toLowerCase().includes(q) ||
         item.classLevel?.toLowerCase().includes(q) ||
+        item.mode?.toLowerCase().includes(q) ||
         item.location?.toLowerCase().includes(q);
 
       const matchesSubject =
         selectedSubject === "All" ||
         item.subject?.toLowerCase() === selectedSubject.toLowerCase();
 
-      const matchesMode =
-        selectedMode === "All" ||
-        item.mode?.toLowerCase() === selectedMode.toLowerCase();
+      const matchesMode = matchesModeFilter(item, selectedMode);
 
       return matchesSearch && matchesSubject && matchesMode;
     });
@@ -183,8 +221,10 @@ function TuitionsCatalogContent() {
     <div className="min-h-screen bg-transparent">
       {/* Page Header Banner */}
       <section className="relative overflow-hidden bg-[#16120e] py-12 text-white dark:bg-[#06142e] sm:py-16">
-        <div
+        <motion.div
           aria-hidden="true"
+          animate={{ opacity: [0.35, 0.7, 0.35] }}
+          transition={{ duration: 4.2, repeat: Infinity, ease: "easeInOut" }}
           className="pointer-events-none absolute -top-24 left-1/4 h-72 w-72 rounded-full bg-amber-500/20 blur-3xl dark:bg-blue-600/25"
         />
         <div
@@ -196,15 +236,15 @@ function TuitionsCatalogContent() {
           <p className="text-xs font-bold uppercase tracking-widest text-amber-300 dark:text-blue-400">
             Mentorship Directory
           </p>
-          <h1 className="mt-2 text-2xl font-bold tracking-tight sm:text-4xl">
+          <h1 className="mt-2 text-2xl font-extrabold tracking-tight text-white sm:text-4xl">
             Browse Active Tuitions &amp;{" "}
             <span className="bg-gradient-to-r from-amber-300 via-orange-300 to-amber-200 bg-clip-text text-transparent dark:from-blue-400 dark:via-sky-300 dark:to-indigo-300">
               Batches
             </span>
           </h1>
           <p className="mt-2 max-w-2xl text-sm text-stone-300 dark:text-slate-300 sm:text-base">
-            Filter verified mentorship batches by subject, class level, online
-            or local mode, and monthly fee.
+            Filter verified mentorship batches or 1-on-1 sessions by subject,
+            class level, online or offline mode, and monthly fee.
           </p>
         </MotionSection>
       </section>
@@ -214,7 +254,7 @@ function TuitionsCatalogContent() {
         <MotionSection className="rounded-2xl border border-stone-200/90 bg-[#fffdf9]/92 p-4 shadow-xs backdrop-blur-xs dark:border-slate-800 dark:bg-slate-900/90 sm:p-5">
           <div className="grid grid-cols-1 gap-3 md:grid-cols-12">
             {/* Search Box */}
-            <div className="relative md:col-span-5">
+            <div className="relative md:col-span-4">
               <Search className="pointer-events-none absolute top-1/2 left-3.5 h-4 w-4 -translate-y-1/2 text-stone-400 dark:text-slate-400" />
               <input
                 type="text"
@@ -231,7 +271,7 @@ function TuitionsCatalogContent() {
                 aria-label="Filter by subject"
                 value={selectedSubject}
                 onChange={(e) => setSelectedSubject(e.target.value)}
-                className="w-full rounded-xl border border-stone-300 bg-[#faf7f2] px-3.5 py-2.5 text-sm text-stone-900 transition focus:border-amber-700 focus:bg-white focus:outline-none dark:border-slate-700 dark:bg-slate-950 dark:text-white dark:focus:border-blue-500 dark:focus:bg-slate-900"
+                className="w-full rounded-xl border border-stone-300 bg-[#faf7f2] px-3.5 py-2.5 text-sm font-medium text-stone-900 transition focus:border-amber-700 focus:bg-white focus:outline-none dark:border-slate-700 dark:bg-slate-950 dark:text-white dark:focus:border-blue-500 dark:focus:bg-slate-900"
               >
                 {subjects.map((sub) => (
                   <option key={sub} value={sub}>
@@ -242,16 +282,22 @@ function TuitionsCatalogContent() {
             </div>
 
             {/* Mode Filter */}
-            <div className="md:col-span-2">
+            <div className="md:col-span-3">
               <select
                 aria-label="Filter by study mode"
                 value={selectedMode}
                 onChange={(e) => setSelectedMode(e.target.value)}
-                className="w-full rounded-xl border border-stone-300 bg-[#faf7f2] px-3.5 py-2.5 text-sm text-stone-900 transition focus:border-amber-700 focus:bg-white focus:outline-none dark:border-slate-700 dark:bg-slate-950 dark:text-white dark:focus:border-blue-500 dark:focus:bg-slate-900"
+                className="w-full rounded-xl border border-stone-300 bg-[#faf7f2] px-3.5 py-2.5 text-sm font-medium text-stone-900 transition focus:border-amber-700 focus:bg-white focus:outline-none dark:border-slate-700 dark:bg-slate-950 dark:text-white dark:focus:border-blue-500 dark:focus:bg-slate-900"
               >
                 <option value="All">All Modes</option>
                 <option value="Online">Online</option>
                 <option value="Offline">Offline</option>
+                <option value="1-on-1 Session (Online)">
+                  1-on-1 Session (Online)
+                </option>
+                <option value="1-on-1 Session (Offline)">
+                  1-on-1 Session (Offline)
+                </option>
               </select>
             </div>
 
@@ -261,7 +307,7 @@ function TuitionsCatalogContent() {
                 aria-label="Sort by monthly fee"
                 value={sortOrder}
                 onChange={(e) => setSortOrder(e.target.value)}
-                className="w-full rounded-xl border border-stone-300 bg-[#faf7f2] px-3.5 py-2.5 text-sm text-stone-900 transition focus:border-amber-700 focus:bg-white focus:outline-none dark:border-slate-700 dark:bg-slate-950 dark:text-white dark:focus:border-blue-500 dark:focus:bg-slate-900"
+                className="w-full rounded-xl border border-stone-300 bg-[#faf7f2] px-3.5 py-2.5 text-sm font-medium text-stone-900 transition focus:border-amber-700 focus:bg-white focus:outline-none dark:border-slate-700 dark:bg-slate-950 dark:text-white dark:focus:border-blue-500 dark:focus:bg-slate-900"
               >
                 <option value="default">Sort: Latest</option>
                 <option value="fee-asc">Fee: Low to High</option>
@@ -275,7 +321,10 @@ function TuitionsCatalogContent() {
             <span className="inline-flex items-center gap-1.5 font-medium">
               <Filter className="h-3.5 w-3.5 text-amber-700 dark:text-blue-400" />
               <span>
-                Showing {filteredTuitions.length}{" "}
+                Showing{" "}
+                <strong className="font-extrabold text-amber-800 dark:text-blue-300">
+                  {filteredTuitions.length}
+                </strong>{" "}
                 {filteredTuitions.length === 1 ? "listing" : "listings"}
               </span>
             </span>
@@ -322,7 +371,10 @@ function TuitionsCatalogContent() {
           <AutoList className="mt-8 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {filteredTuitions.map((item, idx) => {
               const itemId = item._id || item.id || String(idx);
-              const isOnline = item.mode?.toLowerCase() === "online";
+              const modeLower = (item.mode || "").toLowerCase();
+              const isOnlineLike =
+                modeLower.includes("online") ||
+                (!modeLower.includes("offline") && modeLower === "online");
               const scheduleText =
                 item.schedule ||
                 (item.daysPerWeek ? `${item.daysPerWeek} days/week` : "");
@@ -347,12 +399,12 @@ function TuitionsCatalogContent() {
 
                       <span
                         className={`inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-xs font-semibold ${
-                          isOnline
+                          isOnlineLike
                             ? "bg-emerald-100/85 text-emerald-800 dark:bg-emerald-950/70 dark:text-emerald-300"
                             : "bg-orange-100/90 text-orange-800 dark:bg-sky-950/70 dark:text-sky-300"
                         }`}
                       >
-                        {isOnline ? (
+                        {isOnlineLike ? (
                           <Laptop className="h-3 w-3" />
                         ) : (
                           <MapPin className="h-3 w-3" />
@@ -361,7 +413,7 @@ function TuitionsCatalogContent() {
                       </span>
                     </div>
 
-                    <h2 className="mt-4 line-clamp-2 text-lg font-bold tracking-tight text-stone-900 dark:text-white">
+                    <h2 className="mt-4 line-clamp-2 text-lg font-extrabold tracking-tight text-stone-900 dark:text-white">
                       {item.title}
                     </h2>
 
@@ -376,7 +428,7 @@ function TuitionsCatalogContent() {
                           <span className="line-clamp-1">{scheduleText}</span>
                         </p>
                       )}
-                      {!isOnline && item.location && (
+                      {!isOnlineLike && item.location && (
                         <p className="flex items-center gap-2">
                           <MapPin className="h-4 w-4 shrink-0 text-amber-700 dark:text-blue-400" />
                           <span className="line-clamp-1">{item.location}</span>
@@ -390,7 +442,7 @@ function TuitionsCatalogContent() {
                       <p className="text-[11px] font-semibold uppercase tracking-wider text-stone-500 dark:text-slate-400">
                         Monthly Fee
                       </p>
-                      <p className="text-lg font-extrabold tracking-tight text-stone-900 dark:text-white">
+                      <p className="bg-gradient-to-r from-stone-900 via-amber-900 to-stone-800 bg-clip-text text-lg font-extrabold tracking-tight text-transparent dark:from-white dark:via-blue-200 dark:to-sky-300">
                         ৳{Number(item.monthlyFee || 0).toLocaleString()}
                       </p>
                     </div>
